@@ -1,6 +1,6 @@
 # api.webmaker.org
 
-This is where we'll build the service for saving, publishing, and searching projects created by the Webmaker Android application.
+This is where we'll build Webmaker services.
 
 ## Authentication Requirements
 
