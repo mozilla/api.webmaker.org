@@ -27,14 +27,19 @@ This is where we'll build the service for saving, publishing, and searching proj
 - should be able to set "banned/removed" or "featured" status on `Project`s
 
 ## Data Model
-- basic unit is a `Project`
+- basic units are `Project`s, which are collections of `Page`s
 - `Project`s:
   - are associated with a user (the creator)
   - contain **metadata** fields such as date created, date updated, title, description, etc.
-  - contain **content**, which is a list of "blocks", each containing metadata
-  - have a **version**, indicating whether metadata and the metadata of each block are compatible with the current version of the app, which is auto-generated and read-only
+  - have a **version**, indicating whether metadata is compatible with the current version of the app, which is auto-generated and read-only
   - have **privileged metadata**, such as featured or banned status, that is only editable by admin level accounts
-- if possible, `Project`s should be able to be migrated based on their version numbers.
+  - are associated with a number of `Page`s
+- `Page`s:
+  - are associated with a `Project`
+  - contain **metadata** fields indicating position, title, etc.
+  - have **content**, which is a list of blocks.
+  - have a **version** indicating whether metadata and  metadata of each block are compatible with the current version of the app, which is auto-generated and read-only
+- if possible, `Project`s and `Page`s should be able to be migrated based on their version numbers.
 - a more specific definition of this data model needs to be determined once design is finalized.
 
 ## API Requirements
@@ -42,7 +47,7 @@ This is where we'll build the service for saving, publishing, and searching proj
 ### Projects API
 
 Basic needs: retrieve and edit projects belonging to a user
-Authentication: unauthed: no acess; authed: read-write; admin: read-write
+Authentication: unauthed: no access; authed: read-write; admin: read-write
 
 ### Create/Read/Update/Delete projects
 - create a new `Project`, return an ID
