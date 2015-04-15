@@ -44,20 +44,28 @@ This is where we'll build Webmaker services.
 
 ## API Requirements
 
-### Projects API
+### Project and Page API
 
 Basic needs: retrieve and edit projects belonging to a user
 Authentication: unauthed: no access; authed: read-write; admin: read-write
 
-### Create/Read/Update/Delete projects
+#### Project: Create/Read/Update/Delete/Copy projects
 - create a new `Project`, return an ID
-- read/update/delete a `Project` by ID
-- should implement "soft delete"
+- retrieve a `Project` by ID, including all associated `Page`s
+- update/delete a `Project` by ID
+- we need to be able to undo deletions, but this could be handled by the front end. needs to be discussed.
 - should store a "version" to ensure expected data fields exist for current state of App UI
+- copy a `Project` including all associated `Page`s and associate with a new user ID
 
-### List projects
+#### Page: Create/Read/Update/Delete/Copy
+- create a new `Page`
+- read/update/delete a `Page`
+- should store a "version" to ensure expected data fields exist for current state of App UI
+- copy a `Page` from one `Project` ID to another `Project` ID
+
+#### List projects
 - users should be able to retrieve a list of their `Project`s sorted on any field
-- should only return metadata, not project content
+- does not need to return associated `Page`s
 - should support pagination
 - could be part of the Discovery/Search API (see below)
 
