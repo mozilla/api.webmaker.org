@@ -103,23 +103,26 @@ More detail is needed here.
 ## Technical Decisions
 
 #### Database
-- what database? (mysql, postgres, ?)
+- Postgre
 - how do we handle migrations?
 
 #### Server architecture
-- what version of nodejs (0.10.x, 0.12.x, io.js)
+- 0.12.x or iojs
 - SQL strategy if needed (ORM, raw sql, etc.)
-- framework?
-- error handling?
+- Hapi
+- Boom
 
 #### Tests/CI
--
+- [Lab](https://www.npmjs.com/package/lab), [Code](https://www.npmjs.com/package/code)
+- Travis CI
 
 #### Monitoring/Analytics
--
+- TBD, nodetime (metrics)?
+- Log aggregation, TBD
+- health monitoring, TBD
 
 ### Ops
-- production infrastructure needed
-- dev infrastructure needed
+- production infrastructure needed (Heroku)
+- dev infrastructure needed (Heroku)
 
 (Add more)
