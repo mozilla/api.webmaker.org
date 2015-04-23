@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "blankie": "^1.1.0",
-    "boom": "^2.6.1",
+    "boom": "^2.7.1",
     "bucker": "^1.1.0",
     "habitat": "^3.1.2",
     "hapi": "^8.4.0",
@@ -27,6 +27,7 @@
     "joi": "^6.0.8",
     "lout": "^6.2.2",
     "object-assign": "^2.0.0",
+    "pg": "^4.3.0",
     "replify": "^1.2.0",
     "scooter": "^2.0.1"
   },

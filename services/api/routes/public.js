@@ -9,11 +9,11 @@ var publicRouteConfig = {
 
 var routes = [
   {
-    path: '/api/skittles',
+    path: '/api/skittles/{id}',
     method: 'GET',
     handler: require('../handlers/skittles'),
     config: {
-      description: 'Returns all the skittles',
+      description: 'Returns the skittle with the given id',
       notes: 'taste the rainbow'
     }
   }, {

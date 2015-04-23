@@ -31,10 +31,13 @@ server.register(require('./adapters/plugins'), function(err) {
   }
 });
 
-server.register(require('./adapters/logger'), function(err) {
+server.register([
+  require('./adapters/logger'),
+  require('./adapters/postgre')
+], function(err) {
   if ( err ) {
     server.log('error', {
-      message: 'Error registering logger',
+      message: 'Error registering adapters',
       error: err
     });
     throw err;
