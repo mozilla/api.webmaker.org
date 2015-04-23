@@ -2,7 +2,8 @@ var objectAssign = require('object-assign');
 
 var publicRouteConfig = {
   config: {
-    auth: false
+    auth: false,
+    cors: true
   }
 };
 
@@ -19,7 +20,7 @@ var routes = [
     path: '/docs/css/style.css',
     method: 'GET',
     handler: {
-      file: "./node_modules/lout/public/css/style.css"
+      file: './node_modules/lout/public/css/style.css'
     },
     config: {
       plugins: {

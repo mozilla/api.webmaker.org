@@ -22,9 +22,9 @@ var connection = {
 
 server.connection(connection);
 
-server.register(require('./adapters/plugins'), function(err){ Hoek.assert(!err, err); });
+server.register(require('./adapters/plugins'), function(err) { Hoek.assert(!err, err); });
 
-replify({ name: 'www-'+process.env.PORT }, server);
+replify({ name: 'www-' + process.env.PORT }, server);
 
 server.register(require('./services'), function(err) {
   Hoek.assert(!err, err);

@@ -4,7 +4,12 @@
   "description": "Services for Webmaker",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "npm run test:api && npm run lint",
+    "test:api": "lab --verbose --colors --assert code --timeout 5000",
+    "lint": "npm run jshint && npm run jscs",
+    "jshint": "jshint -c node_modules/mofo-style/linters/.jshintrc adapters lib services test server.js",
+    "jscs": "jscs -c node_modules/mofo-style/linters/.jscsrc adapters lib services test server.js"
   },
   "author": "Mozilla Foundation",
   "license": "MPL 2.0",
@@ -26,7 +31,6 @@
   },
   "devDependencies": {
     "code": "^1.3.0",
-    "js-beautify": "^1.5.5",
     "jscs": "^1.11.3",
     "jshint": "^2.6.3",
     "lab": "^5.5.0",

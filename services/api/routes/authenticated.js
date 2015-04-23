@@ -1,6 +1,13 @@
 var Joi = require('joi');
+var objectAssign = require('object-assign');
 
-module.exports = [
+var authRouteConfig = {
+  config: {
+    cors: true
+  }
+};
+
+var routes = [
   {
     path: '/api/skittles',
     method: 'POST',
@@ -15,3 +22,9 @@ module.exports = [
     }
   }
 ];
+
+routes = routes.map(function(route) {
+  return objectAssign({}, authRouteConfig, route);
+});
+
+module.exports = routes;

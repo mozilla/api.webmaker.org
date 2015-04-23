@@ -1,8 +1,8 @@
-var public = require('./public');
+var pub = require('./public');
 var authenticated = require('./authenticated');
 var routes = [];
 
-public.concat(authenticated).forEach(function(route) {
+pub.concat(authenticated).forEach(function(route) {
   routes.push(route);
 });
 

@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/mozilla/api.webmaker.org.svg)](https://travis-ci.org/mozilla/api.webmaker.org)
+
 # api.webmaker.org
 
 This is where we'll build Webmaker services.

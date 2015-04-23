@@ -1,7 +1,4 @@
-var Hoek = require('hoek');
-
 exports.register = function api(server, options, next) {
-
   var plugins = require('./adapters/plugins');
   server.register(plugins, function(err) {
     if ( err ) {
