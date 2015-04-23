@@ -20,6 +20,7 @@
   "dependencies": {
     "blankie": "^1.1.0",
     "boom": "^2.6.1",
+    "bucker": "^1.1.0",
     "habitat": "^3.1.2",
     "hapi": "^8.4.0",
     "hoek": "^2.11.0",

@@ -4,5 +4,9 @@ module.exports = [
     register: require('blankie'),
     options: require('../lib/csp')
   },
-  require('lout')
+  require('lout'),
+  {
+    register: require('bucker'),
+    options: require('../lib/log-config')
+  }
 ];

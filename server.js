@@ -1,7 +1,6 @@
 require('habitat').load();
 
 var Hapi = require('hapi'),
-    Hoek = require('hoek'),
     replify = require('replify');
 
 var server = new Hapi.Server({
@@ -22,15 +21,39 @@ var connection = {
 
 server.connection(connection);
 
-server.register(require('./adapters/plugins'), function(err) { Hoek.assert(!err, err); });
+server.register(require('./adapters/plugins'), function(err) {
+  if ( err ) {
+    server.log('error', {
+      message: 'Error registering plugins',
+      error: err
+    });
+    throw err;
+  }
+});
+
+server.register(require('./adapters/logger'), function(err) {
+  if ( err ) {
+    server.log('error', {
+      message: 'Error registering logger',
+      error: err
+    });
+    throw err;
+  }
+});
 
 replify({ name: 'www-' + process.env.PORT }, server);
 
 server.register(require('./services'), function(err) {
-  Hoek.assert(!err, err);
+  if ( err ) {
+    server.log('error', {
+      message: 'Error registering services',
+      error: err
+    });
+    throw err;
+  }
 
   server.start(function() {
-    console.info('Server started @ ' + server.info.uri);
+    server.log('info', 'Server started @ ' + server.info.uri);
   });
 });
 
