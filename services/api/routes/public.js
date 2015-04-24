@@ -8,19 +8,34 @@ var publicRouteConfig = {
   }
 };
 
+var skittlesHandler = require('../handlers/skittles');
+
 var routes = [
   {
     path: '/api/skittles/{id}',
-    method: 'GET',
-    handler: require('../handlers/skittles'),
+    method: ['GET', 'OPTIONS'],
+    handler: skittlesHandler,
     config: {
       validate: {
         params: {
           id: Joi.number().required()
         }
       },
+      cors: {
+        methods: ['GET', 'PATCH', 'DELETE', 'OPTIONS']
+      },
       description: 'Returns the skittle with the given id',
       notes: 'taste the rainbow'
+    }
+  }, {
+    path: '/api/skittles',
+    method: 'OPTIONS',
+    handler: skittlesHandler,
+    config: {
+      cors: {
+        methods: ['POST', 'OPTIONS']
+      },
+      description: 'CORS options for /api/skittles'
     }
   }, {
     path: '/docs/css/style.css',
@@ -31,7 +46,8 @@ var routes = [
     config: {
       plugins: {
         lout: false
-      }
+      },
+      cors: false
     }
   }, {
     path: '/',
@@ -42,7 +58,8 @@ var routes = [
     config: {
       plugins: {
         lout: false
-      }
+      },
+      cors: false
     }
   }
 ];

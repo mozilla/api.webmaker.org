@@ -106,5 +106,7 @@ module.exports = function(request, reply) {
         );
       }
     );
+  } else if (request.method === 'options') {
+    reply();
   }
 };

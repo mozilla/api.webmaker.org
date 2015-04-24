@@ -3,32 +3,37 @@ var _ = require('lodash');
 
 var authRouteConfig = {
   config: {
-    cors: true,
     auth: {
       mode: 'required',
       strategies: ['token'],
       scope: 'skittles'
-    }
+    },
+    cors: true
   }
 };
+
+var skittlesHandler = require('../handlers/skittles');
 
 var routes = [
   {
     path: '/api/skittles',
-    method: 'post',
-    handler: require('../handlers/skittles'),
+    method: 'POST',
+    handler: skittlesHandler,
     config: {
       validate: {
         payload: {
           color: Joi.string().required()
         }
       },
+      cors: {
+        methods: ['POST', 'OPTIONS']
+      },
       description: 'Create a skittle of your favorite color!'
     }
   }, {
     path: '/api/skittles/{id}',
     method: 'patch',
-    handler: require('../handlers/skittles'),
+    handler: skittlesHandler,
     config: {
       validate: {
         payload: {
@@ -38,17 +43,23 @@ var routes = [
           id: Joi.number().required()
         }
       },
+      cors: {
+        methods: ['GET', 'PATCH', 'DELETE', 'OPTIONS']
+      },
       description: 'Change a skittle\'s color'
     }
   }, {
     path: '/api/skittles/{id}',
     method: 'delete',
-    handler: require('../handlers/skittles'),
+    handler: skittlesHandler,
     config: {
       validate: {
         params: {
           id: Joi.number().required()
         }
+      },
+      cors: {
+        methods: ['GET', 'PATCH', 'DELETE', 'OPTIONS']
       },
       description: 'Eat a skittle'
     }
