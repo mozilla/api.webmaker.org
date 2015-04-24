@@ -18,7 +18,7 @@ var routes = [
           color: Joi.string().required()
         }
       },
-      description: 'Create a skittle of your favorite color!',
+      description: 'Create a skittle of your favorite color!'
     }
   }, {
     path: '/api/skittles/{id}',
@@ -45,7 +45,7 @@ var routes = [
           id: Joi.number().required()
         }
       },
-      description: 'Eat a skittle',
+      description: 'Eat a skittle'
     }
   }
 ];

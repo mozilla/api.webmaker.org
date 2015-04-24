@@ -28,6 +28,9 @@ logLevel = LOG_LEVELS[logLevel] ? LOG_LEVELS[logLevel] : LOG_LEVELS.info.level;
 exports.register = function logger(server, options, next) {
   server.method('log', function(level, data) {
     if ( logLevel >= LOG_LEVELS[level] ) {
+      if ( typeof data !== 'string' ) {
+        data = JSON.stringify(data, null, 2);
+      }
       server.log(level, data);
     }
   }, { callback: false });
