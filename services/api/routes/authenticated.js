@@ -13,19 +13,18 @@ var routes = [
     method: 'post',
     handler: require('../handlers/skittles'),
     config: {
-      description: 'create a skittle',
       validate: {
         payload: {
           color: Joi.string().required()
         }
-      }
+      },
+      description: 'Create a skittle of your favorite color!',
     }
   }, {
     path: '/api/skittles/{id}',
     method: 'patch',
     handler: require('../handlers/skittles'),
     config: {
-      description: 'Update a skittle\'s color',
       validate: {
         payload: {
           color: Joi.string().required()
@@ -33,19 +32,20 @@ var routes = [
         params: {
           id: Joi.number().required()
         }
-      }
+      },
+      description: 'Change a skittle\'s color'
     }
   }, {
     path: '/api/skittles/{id}',
     method: 'delete',
     handler: require('../handlers/skittles'),
     config: {
-      description: 'Eat a skittle',
       validate: {
         params: {
           id: Joi.number().required()
         }
-      }
+      },
+      description: 'Eat a skittle',
     }
   }
 ];

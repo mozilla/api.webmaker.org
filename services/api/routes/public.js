@@ -14,13 +14,13 @@ var routes = [
     method: 'GET',
     handler: require('../handlers/skittles'),
     config: {
-      description: 'Returns the skittle with the given id',
-      notes: 'taste the rainbow',
       validate: {
         params: {
           id: Joi.number().required()
         }
-      }
+      },
+      description: 'Returns the skittle with the given id',
+      notes: 'taste the rainbow'
     }
   }, {
     path: '/docs/css/style.css',
