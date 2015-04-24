@@ -7,6 +7,6 @@ module.exports = [
   require('lout'),
   {
     register: require('bucker'),
-    options: require('../lib/log-config')
+    options: require('../lib/log-config')()
   }
 ];
