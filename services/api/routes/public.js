@@ -1,3 +1,4 @@
+var Joi = require('joi');
 var objectAssign = require('object-assign');
 
 var publicRouteConfig = {
@@ -14,7 +15,12 @@ var routes = [
     handler: require('../handlers/skittles'),
     config: {
       description: 'Returns the skittle with the given id',
-      notes: 'taste the rainbow'
+      notes: 'taste the rainbow',
+      validate: {
+        params: {
+          id: Joi.number().required()
+        }
+      }
     }
   }, {
     path: '/docs/css/style.css',

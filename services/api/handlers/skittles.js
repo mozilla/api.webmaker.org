@@ -18,7 +18,7 @@ module.exports = function(request, reply) {
         reply(result.rows[0]);
       }
     );
-  } else {
+  } else if (request.method === 'post') {
     request.server.methods.db.executeQuery(
       queries.createSkittle,
       [request.payload.color],
@@ -28,6 +28,38 @@ module.exports = function(request, reply) {
         }
 
         reply('created');
+      }
+    );
+  } else if (request.method === 'patch') {
+    request.server.methods.db.executeQuery(
+      queries.updateSkittleById,
+      [request.payload.color, request.params.id],
+      function(err, result) {
+        if ( err ) {
+          return reply(err);
+        }
+
+        if ( !result.rowCount ) {
+          return reply(Boom.notFound('Can\'t find skittle'));
+        }
+
+        reply('updated');
+      }
+    );
+  } else if (request.method === 'delete') {
+    request.server.methods.db.executeQuery(
+      queries.deleteSkittleById,
+      [request.params.id],
+      function(err, result) {
+        if ( err ) {
+          return reply(err);
+        }
+
+        if ( !result.rowCount ) {
+          return reply(Boom.notFound('Can\'t find skittle'));
+        }
+
+        reply('deleted');
       }
     );
   }

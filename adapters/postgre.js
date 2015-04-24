@@ -1,14 +1,13 @@
 var Hoek = require('hoek');
 var pg = require('pg');
+var format = require('util').format;
 var connString = process.env.POSTGRE_CONNECTION_STRING;
 
-Hoek.assert(connString, "You must provide a connection string to postgre");
+Hoek.assert(connString, 'You must provide a connection string to postgre');
 
 exports.register = function(server, options, done) {
-
-  server.method('db.executeQuery', executeQuery, {});
-
   function executeQuery(text, values, callback) {
+    server.methods.log('debug', format('Executing Query: %s - params: %s', text, values.join(', ')));
     pg.connect(connString, function(err, client, release) {
       if ( err ) {
         return callback(err);
@@ -27,6 +26,8 @@ exports.register = function(server, options, done) {
       });
     });
   }
+
+  server.method('db.executeQuery', executeQuery, {});
 };
 
 exports.register.attributes = {
