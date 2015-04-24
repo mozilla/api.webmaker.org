@@ -1,6 +1,7 @@
 require('habitat').load();
 
 var Hapi = require('hapi'),
+    Hoek = require('hoek'),
     replify = require('replify');
 
 var server = new Hapi.Server({
@@ -14,9 +15,12 @@ var server = new Hapi.Server({
   }
 });
 
+Hoek.assert(process.env.API_HOST, 'Must define API_HOST');
+Hoek.assert(process.env.PORT, 'Must define PORT');
+
 var connection = {
-  host: process.env.HOST || 'localhost',
-  port: process.env.PORT || '2015'
+  host: process.env.API_HOST,
+  port: process.env.PORT
 };
 
 server.connection(connection);
