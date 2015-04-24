@@ -8,5 +8,9 @@ module.exports = [
   {
     register: require('bucker'),
     options: require('../lib/log-config')()
+  },
+  {
+    register: require('hapi-auth-bearer-token'),
+    options: require('../lib/auth-config')
   }
 ];

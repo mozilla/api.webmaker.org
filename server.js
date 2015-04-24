@@ -33,6 +33,8 @@ server.register(require('./adapters/plugins'), function(err) {
     });
     throw err;
   }
+
+  server.auth.strategy('token', 'bearer-access-token', require('./lib/auth-config'));
 });
 
 server.register([

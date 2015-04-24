@@ -1,5 +1,5 @@
 var Joi = require('joi');
-var objectAssign = require('object-assign');
+var _ = require('lodash');
 
 var publicRouteConfig = {
   config: {
@@ -37,7 +37,7 @@ var routes = [
 ];
 
 routes = routes.map(function(route) {
-  return objectAssign({}, publicRouteConfig, route);
+  return _.merge({}, publicRouteConfig, route);
 });
 
 module.exports = routes;

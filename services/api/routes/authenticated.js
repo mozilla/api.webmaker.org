@@ -1,9 +1,14 @@
 var Joi = require('joi');
-var objectAssign = require('object-assign');
+var _ = require('lodash');
 
 var authRouteConfig = {
   config: {
-    cors: true
+    cors: true,
+    auth: {
+      mode: 'required',
+      strategies: ['token'],
+      scope: 'skittles'
+    }
   }
 };
 
@@ -51,7 +56,7 @@ var routes = [
 ];
 
 routes = routes.map(function(route) {
-  return objectAssign({}, authRouteConfig, route);
+  return _.merge({}, authRouteConfig, route);
 });
 
 module.exports = routes;
