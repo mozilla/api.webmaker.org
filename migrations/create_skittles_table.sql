@@ -7,4 +7,3 @@ CREATE TABLE skittles
 );
 
 CREATE INDEX  skittles_id_index ON skittles (id);
-CREATE INDEX  skittles_id_user_index ON skittles (id, user_id);

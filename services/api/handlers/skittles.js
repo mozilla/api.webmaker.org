@@ -21,7 +21,10 @@ module.exports = function(request, reply) {
   } else if (request.method === 'post') {
     request.server.methods.db.executeQuery(
       queries.createSkittle,
-      [request.payload.color],
+      [
+        request.payload.color,
+        request.auth.credentials.user_id
+      ],
       function(err, result) {
         if ( err ) {
           return reply(err);
@@ -31,35 +34,76 @@ module.exports = function(request, reply) {
       }
     );
   } else if (request.method === 'patch') {
-    request.server.methods.db.executeQuery(
-      queries.updateSkittleById,
-      [request.payload.color, request.params.id],
+    request.server.methods.db.executeQuery( // TODO: promisify
+      queries.findSkittleById,
+      [request.params.id],
       function(err, result) {
+        var skittle;
+
         if ( err ) {
           return reply(err);
         }
 
-        if ( !result.rowCount ) {
+        if ( !result.rows.length ) {
           return reply(Boom.notFound('Can\'t find skittle'));
         }
 
-        reply('updated');
+        skittle = result.rows[0];
+        console.log( skittle );
+        console.log( request.auth.credentials.user_id );
+        if ( skittle.user_id !== request.auth.credentials.user_id ) {
+          return reply(Boom.unauthorized('Not your skittle'));
+        }
+
+        request.server.methods.db.executeQuery(
+          queries.updateSkittleById,
+          [
+            request.payload.color,
+            request.params.id
+          ],
+          function(err, result) {
+            if ( err ) {
+              return reply(err);
+            }
+
+            reply('updated');
+          }
+        );
       }
     );
   } else if (request.method === 'delete') {
-    request.server.methods.db.executeQuery(
-      queries.deleteSkittleById,
+    request.server.methods.db.executeQuery( // TODO: promisify
+      queries.findSkittleById,
       [request.params.id],
       function(err, result) {
+        var skittle;
+
         if ( err ) {
           return reply(err);
         }
 
-        if ( !result.rowCount ) {
+        if ( !result.rows.length ) {
           return reply(Boom.notFound('Can\'t find skittle'));
         }
 
-        reply('deleted');
+        skittle = result.rows[0];
+        if ( skittle.user_id !== request.auth.credentials.user_id ) {
+          return reply(Boom.unauthorized('Can\'t eat someone else\'s skittle'));
+        }
+
+        request.server.methods.db.executeQuery(
+          queries.deleteSkittleById,
+          [
+            request.params.id
+          ],
+          function(err, result) {
+            if ( err ) {
+              return reply(err);
+            }
+
+            reply('deleted');
+          }
+        );
       }
     );
   }
