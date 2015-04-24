@@ -33,6 +33,17 @@ var routes = [
         lout: false
       }
     }
+  }, {
+    path: '/',
+    method: 'GET',
+    handler: function(request, reply) {
+      reply.redirect('/docs');
+    },
+    config: {
+      plugins: {
+        lout: false
+      }
+    }
   }
 ];
 
