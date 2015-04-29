@@ -23,7 +23,6 @@ experiment('Logging Configuration', function() {
       expect(conf.level).to.equal('info');
       expect(conf.console).to.exist();
       expect(conf.console.color).to.equal(true);
-      expect(conf.file).to.not.exist();
       done();
     });
   });
@@ -53,43 +52,6 @@ experiment('Logging Configuration', function() {
       var conf = logConfig();
       expect(conf.level).to.equal('info');
       expect(conf.console).to.not.exist();
-      done();
-    });
-  });
-
-  experiment('File logging', function() {
-    before(function(done) {
-      process.env.LOG_FILE_PATH = '/var/logs/';
-      process.env.LOG_FILENAME = 'api.webmaker.org.log';
-      done();
-    });
-
-    test('Can be enabled', function(done) {
-      var conf = logConfig();
-      expect(conf.level).to.equal('info');
-      expect(conf.console).to.be.undefined();
-      expect(conf.app).to.equal('api.webmaker.org.log');
-      expect(conf.error).to.be.undefined();
-      expect(conf.file).to.exist();
-      expect(conf.file.filename).to.equal('/var/logs/');
-      expect(conf.file.format).to.equal(':level :time :data');
-      expect(conf.file.timestamp).to.equal('HH:mm:ss');
-      expect(conf.file.accessFormat).to.equal(':time :level :method :status :url');
-      done();
-    });
-
-    test('Can be enabled, logging errors separately', function(done) {
-      process.env.ERROR_FILENAME = 'api.webmaker.org.error.log';
-      var conf = logConfig();
-      expect(conf.level).to.equal('info');
-      expect(conf.console).to.be.undefined();
-      expect(conf.app).to.equal('api.webmaker.org.log');
-      expect(conf.error).to.equal('api.webmaker.org.error.log');
-      expect(conf.file).to.exist();
-      expect(conf.file.filename).to.equal('/var/logs/');
-      expect(conf.file.format).to.equal(':level :time :data');
-      expect(conf.file.timestamp).to.equal('HH:mm:ss');
-      expect(conf.file.accessFormat).to.equal(':time :level :method :status :url');
       done();
     });
   });

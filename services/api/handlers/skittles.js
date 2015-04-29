@@ -49,8 +49,7 @@ module.exports = function(request, reply) {
         }
 
         skittle = result.rows[0];
-        console.log( skittle );
-        console.log( request.auth.credentials.user_id );
+
         if ( skittle.user_id !== request.auth.credentials.user_id ) {
           return reply(Boom.unauthorized('Not your skittle'));
         }
