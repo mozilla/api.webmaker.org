@@ -25,6 +25,21 @@ var connection = {
 
 server.connection(connection);
 
+if ( process.env.DISABLE_LOGGING !== 'true' ) {
+  server.register({
+    register: require('hapi-bunyan'),
+    options: require('./lib/log-config')()
+  }, function(err) {
+    if ( err ) {
+      server.log('error', {
+        message: 'Error registering logger',
+        error: err
+      });
+      throw err;
+    }
+  });
+}
+
 server.register(require('./adapters/plugins'), function(err) {
   if ( err ) {
     server.log('error', {
@@ -38,7 +53,6 @@ server.register(require('./adapters/plugins'), function(err) {
 });
 
 server.register([
-  require('./adapters/logger'),
   require('./adapters/postgre')
 ], function(err) {
   if ( err ) {
@@ -62,7 +76,6 @@ server.register(require('./services'), function(err) {
   }
 
   server.start(function() {
-    server.log('info', 'Server started @ ' + server.info.uri);
+    console.log('Server started @ ' + server.info.uri);
   });
 });
-

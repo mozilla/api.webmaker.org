@@ -7,7 +7,7 @@ Hoek.assert(connString, 'You must provide a connection string to postgre');
 
 exports.register = function(server, options, done) {
   function executeQuery(text, values, callback) {
-    server.methods.log('debug', format('Executing Query: %s - params: %s', text, values.join(', ')));
+    server.log('debug', format('Executing Query: %s - params: %s', text, values.join(', ')));
     pg.connect(connString, function(err, client, release) {
       if ( err ) {
         return callback(err);
