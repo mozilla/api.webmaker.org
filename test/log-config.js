@@ -13,7 +13,7 @@ before(function(done) {
 });
 
 experiment('Logging Configuration', function() {
-  experiment('Defualt', function() {
+  experiment('Default', function() {
     test('sets a default log level', function(done) {
       var conf = logConfig();
       expect(conf.logger).to.exist();
@@ -21,7 +21,7 @@ experiment('Logging Configuration', function() {
     });
   });
 
-  experiment('Defualt', function() {
+  experiment('Default', function() {
     before(function(done) {
       delete process.env.LOG_LEVEL;
       done();
