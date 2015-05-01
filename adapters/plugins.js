@@ -5,8 +5,5 @@ module.exports = [
     options: require('../lib/csp')
   },
   require('lout'),
-  {
-    register: require('hapi-auth-bearer-token'),
-    options: require('../lib/auth-config')
-  }
+  require('hapi-auth-bearer-token')
 ];

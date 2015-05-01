@@ -26,11 +26,11 @@ experiment('Authentication Config', function() {
 
   experiment('Validation Function', function() {
     test('returns true for valid token', function(done) {
-      auth.validateFunc('skittlesToken', function(err, result, tokenData) {
+      auth.validateFunc('validToken', function(err, result, tokenData) {
         expect(result).to.be.true();
         expect(tokenData).to.exist();
-        expect(tokenData.scope).to.equal('skittles');
-        expect(tokenData.user_id).to.equal(123);
+        expect(tokenData.scope).to.equal('user');
+        expect(tokenData.user_id).to.equal(1);
         done();
       });
     });

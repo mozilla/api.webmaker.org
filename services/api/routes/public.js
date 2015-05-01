@@ -3,43 +3,33 @@ var _ = require('lodash');
 
 var publicRouteConfig = {
   config: {
-    auth: false,
-    cors: true
+    auth: false
   }
 };
 
-var skittlesHandler = require('../handlers/skittles');
+var usersHandler = require('../handlers/users');
 
 var routes = [
   {
-    path: '/api/skittles/{id}',
-    method: ['GET', 'OPTIONS'],
-    handler: skittlesHandler,
+    path: '/api/users',
+    method: ['post', 'options'],
+    handler: usersHandler,
     config: {
       validate: {
-        params: {
-          id: Joi.number().required()
+        payload: {
+          username: Joi.string().required(),
+          language: Joi.string().length(2).optional(),
+          country: Joi.string().length(2).optional()
         }
       },
       cors: {
-        methods: ['GET', 'PATCH', 'DELETE', 'OPTIONS']
+        methods: ['post', 'options']
       },
-      description: 'Returns the skittle with the given id',
-      notes: 'taste the rainbow'
-    }
-  }, {
-    path: '/api/skittles',
-    method: 'OPTIONS',
-    handler: skittlesHandler,
-    config: {
-      cors: {
-        methods: ['POST', 'OPTIONS']
-      },
-      description: 'CORS options for /api/skittles'
+      description: 'Create a user account'
     }
   }, {
     path: '/docs/css/style.css',
-    method: 'GET',
+    method: 'get',
     handler: {
       file: './node_modules/lout/public/css/style.css'
     },
@@ -51,7 +41,7 @@ var routes = [
     }
   }, {
     path: '/',
-    method: 'GET',
+    method: 'get',
     handler: function(request, reply) {
       reply.redirect('/docs');
     },
