@@ -34,7 +34,7 @@ experiment('User Handler', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(200);
         expect(resp.result.status).to.equal('created');
-        expect(resp.result.result.id).to.equal(3);
+        expect(resp.result.user.id).to.equal(3);
         done();
       });
     });

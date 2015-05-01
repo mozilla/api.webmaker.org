@@ -36,7 +36,7 @@ module.exports = function(request, reply) {
 
         reply({
           status: 'created',
-          result: result.rows[0]
+          user: result.rows[0]
         });
       }
     );
