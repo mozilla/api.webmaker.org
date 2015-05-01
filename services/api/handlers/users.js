@@ -23,7 +23,7 @@ module.exports = function(request, reply) {
 
         reply({
           status: 'success',
-          user: user
+          user: request.server.methods.utils.formatUser(user)
         });
       }
     );

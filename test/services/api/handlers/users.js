@@ -95,6 +95,9 @@ experiment('User Handler', function() {
         var user = resp.result.user;
         expect(user.id).to.equal(1);
         expect(user.username).to.equal('cade');
+        expect(user.locale).to.be.an.object();
+        expect(user.history).to.be.an.object();
+        expect(user.permissions).to.be.an.object();
         done();
       });
     });

@@ -1,5 +1,8 @@
 exports.register = function api(server, options, next) {
-  server.register(require('./lib/postgre'), function(err) {
+  server.register([
+      require('./lib/postgre'),
+      require('./lib/utils')
+    ], function(err) {
     if ( err ) {
       return next(err);
     }
