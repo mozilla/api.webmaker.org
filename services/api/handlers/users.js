@@ -5,17 +5,25 @@ module.exports = function(request, reply) {
     return request.server.methods.db.findUser(
       [request.params.user],
       function(err, result) {
+        var user;
+
         if ( err ) {
           return reply(err);
         }
 
-        if ( !result.rows.length ) {
+        user = result.rows[0];
+
+        if ( !user ) {
           return reply(Boom.notFound('User not found'));
+        }
+
+        if ( user.id !== request.auth.credentials.user_id ) {
+          return reply(Boom.unauthorized('Insufficient permissions'));
         }
 
         reply({
           status: 'success',
-          user: result.rows[0]
+          user: user
         });
       }
     );

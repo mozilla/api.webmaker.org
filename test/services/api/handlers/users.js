@@ -132,6 +132,23 @@ experiment('User Handler', function() {
         done();
       });
     });
+
+    test('401 if fetching another account', function(done) {
+      var opts = {
+        url: '/api/users/2',
+        method: 'get',
+        headers: {
+          authorization: 'token validToken'
+        }
+      };
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(401);
+        expect(resp.result.error).to.equal('Unauthorized');
+        expect(resp.result.message).to.equal('Insufficient permissions');
+        done();
+      });
+    });
   });
 
   experiment('Patch', function() {
