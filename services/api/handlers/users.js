@@ -1,24 +1,22 @@
-var Boom = require('boom');
+var boom = require('boom');
 
 module.exports = function(request, reply) {
   if (request.method === 'get') {
     return request.server.methods.db.findUser(
       [request.params.user],
       function(err, result) {
-        var user;
-
         if ( err ) {
           return reply(err);
         }
 
-        user = result.rows[0];
+        var user = result.rows[0];
 
         if ( !user ) {
-          return reply(Boom.notFound('User not found'));
+          return reply(boom.notFound('User not found'));
         }
 
         if ( user.id !== request.auth.credentials.user_id ) {
-          return reply(Boom.unauthorized('Insufficient permissions'));
+          return reply(boom.unauthorized('Insufficient permissions'));
         }
 
         reply({
@@ -37,7 +35,7 @@ module.exports = function(request, reply) {
       function(err, result) {
         if ( err ) {
           if ( err.constraint === 'unique_username' ) {
-            return reply(Boom.badRequest('Username taken'));
+            return reply(boom.badRequest('Username taken'));
           }
           return reply(err);
         }
@@ -52,20 +50,18 @@ module.exports = function(request, reply) {
     return request.server.methods.db.findUser( // TODO: promisify
       [request.params.user],
       function(err, result) {
-        var user;
-
         if ( err ) {
           return reply(err);
         }
 
         if ( !result.rows.length ) {
-          return reply(Boom.notFound('User not found'));
+          return reply(boom.notFound('User not found'));
         }
 
-        user = result.rows[0];
+        var user = result.rows[0];
 
         if ( user.id !== request.auth.credentials.user_id ) {
-          return reply(Boom.unauthorized('Insufficient permissions'));
+          return reply(boom.unauthorized('Insufficient permissions'));
         }
 
         if ( request.payload.username ) {
@@ -104,20 +100,18 @@ module.exports = function(request, reply) {
     return request.server.methods.db.findUser(
       [request.params.user],
       function(err, result) {
-        var user;
-
         if ( err ) {
           return reply(err);
         }
 
         if ( !result.rows.length ) {
-          return reply(Boom.notFound('User not found'));
+          return reply(boom.notFound('User not found'));
         }
 
-        user = result.rows[0];
+        var user = result.rows[0];
 
         if ( user.id !== request.auth.credentials.user_id ) {
-          return reply(Boom.unauthorized('Insufficient permissions'));
+          return reply(boom.unauthorized('Insufficient permissions'));
         }
 
         request.server.methods.db.deleteUser(

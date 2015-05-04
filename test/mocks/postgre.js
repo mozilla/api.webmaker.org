@@ -2,6 +2,14 @@ var _ = require('lodash');
 var userFixtures = require('../fixtures/users');
 
 exports.register = function(server, options, done) {
+  function mockErr() {
+    var e = new Error('relation does not exist');
+    e.name = 'error';
+    e.severity = 'ERROR';
+    e.code = '42P01';
+    return e;
+  }
+
   server.method('db.createUser', function(values, done) {
     if ( values[0] === 'cade' ) {
       return done({
@@ -10,7 +18,7 @@ exports.register = function(server, options, done) {
     }
 
     if ( values[0] === 'error' ) {
-      return done(new Error('error from pg'));
+      return done(mockErr());
     }
 
     done(null, {
@@ -22,11 +30,10 @@ exports.register = function(server, options, done) {
 
   server.method('db.findUser', function(values, done) {
     if ( values[0] === 5 ) {
-      return done(new Error('error from pg'));
+      return done(mockErr());
     }
 
     var user = _.findWhere(userFixtures, { id: values[0] });
-
     user = user ? [user] : [];
 
     done(null, {
@@ -36,7 +43,7 @@ exports.register = function(server, options, done) {
 
   server.method('db.updateUser', function(values, done) {
     if ( values[0] === 'error' ) {
-      return done(new Error('error from pg'));
+      return done(mockErr());
     }
 
     done(null, {
@@ -50,7 +57,7 @@ exports.register = function(server, options, done) {
 
   server.method('db.deleteUser', function(values, done) {
     if ( values[0] === 2 ) {
-      return done(new Error('error from pg'));
+      return done(mockErr());
     }
 
     done(null);
