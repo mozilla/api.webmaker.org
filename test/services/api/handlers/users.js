@@ -1,4 +1,5 @@
-var Lab = require('lab'),
+var configs = require('../../../fixtures/configs/user-handlers'),
+  Lab = require('lab'),
   lab = exports.lab = Lab.script(),
   experiment = lab.experiment,
   before = lab.before,
@@ -21,15 +22,7 @@ after(function(done) {
 experiment('User Handler', function() {
   experiment('Create', function() {
     test('Creates a new user', function(done) {
-      var opts = {
-        url: '/api/users',
-        method: 'post',
-        payload: {
-          username: 'newuser',
-          language: 'en',
-          country: 'CA'
-        }
-      };
+      var opts = configs.create.success;
 
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(200);
@@ -40,15 +33,7 @@ experiment('User Handler', function() {
     });
 
     test('Does not allow dupicate usernames', function(done) {
-      var opts = {
-        url: '/api/users',
-        method: 'post',
-        payload: {
-          username: 'cade',
-          language: 'en',
-          country: 'CA'
-        }
-      };
+      var opts = configs.create.duplicateUsername;
 
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
@@ -59,15 +44,7 @@ experiment('User Handler', function() {
     });
 
     test('handles errors from pg', function(done) {
-      var opts = {
-        url: '/api/users',
-        method: 'post',
-        payload: {
-          username: 'error',
-          language: 'en',
-          country: 'CA'
-        }
-      };
+      var opts = configs.create.pgError;
 
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(500);
@@ -80,13 +57,7 @@ experiment('User Handler', function() {
 
   experiment('Get', function() {
     test('Gets user data', function(done) {
-      var opts = {
-        url: '/api/users/1',
-        method: 'get',
-        headers: {
-          authorization: 'token validToken'
-        }
-      };
+      var opts = configs.get.success;
 
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(200);
@@ -103,13 +74,7 @@ experiment('User Handler', function() {
     });
 
     test('404s with invalid id', function(done) {
-      var opts = {
-        url: '/api/users/4',
-        method: 'get',
-        headers: {
-          authorization: 'token validToken'
-        }
-      };
+      var opts = configs.get.invalidId;
 
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(404);
@@ -120,13 +85,7 @@ experiment('User Handler', function() {
     });
 
     test('handles errors from pg', function(done) {
-      var opts = {
-        url: '/api/users/5',
-        method: 'get',
-        headers: {
-          authorization: 'token validToken'
-        }
-      };
+      var opts = configs.get.pgError;
 
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(500);
@@ -137,13 +96,7 @@ experiment('User Handler', function() {
     });
 
     test('401 if fetching another account', function(done) {
-      var opts = {
-        url: '/api/users/2',
-        method: 'get',
-        headers: {
-          authorization: 'token validToken'
-        }
-      };
+      var opts = configs.get.notYourAccount;
 
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(401);
@@ -156,18 +109,7 @@ experiment('User Handler', function() {
 
   experiment('Patch', function() {
     test('Updates user record', function(done) {
-      var opts = {
-        url: '/api/users/1',
-        method: 'patch',
-        headers: {
-          authorization: 'token validToken'
-        },
-        payload: {
-          username: 'changed',
-          language: 'es',
-          country: 'US'
-        }
-      };
+      var opts = configs.patch.updateEverything;
 
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(200);
@@ -180,16 +122,7 @@ experiment('User Handler', function() {
     });
 
     test('Updates only username', function(done) {
-      var opts = {
-        url: '/api/users/1',
-        method: 'patch',
-        headers: {
-          authorization: 'token validToken'
-        },
-        payload: {
-          username: 'changedAgain'
-        }
-      };
+      var opts = configs.patch.username;
 
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(200);
@@ -202,16 +135,7 @@ experiment('User Handler', function() {
     });
 
     test('Updates only language', function(done) {
-      var opts = {
-        url: '/api/users/1',
-        method: 'patch',
-        headers: {
-          authorization: 'token validToken'
-        },
-        payload: {
-          language: 'fr'
-        }
-      };
+      var opts = configs.patch.language;
 
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(200);
@@ -224,18 +148,7 @@ experiment('User Handler', function() {
     });
 
     test('handles errors fetching user', function(done) {
-      var opts = {
-        url: '/api/users/5',
-        method: 'patch',
-        headers: {
-          authorization: 'token validToken'
-        },
-        payload: {
-          username: 'changed',
-          language: 'es',
-          country: 'US'
-        }
-      };
+      var opts = configs.patch.pgFetchError;
 
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(500);
@@ -246,18 +159,7 @@ experiment('User Handler', function() {
     });
 
     test('handles errors updating user', function(done) {
-      var opts = {
-        url: '/api/users/1',
-        method: 'patch',
-        headers: {
-          authorization: 'token validToken'
-        },
-        payload: {
-          username: 'error',
-          language: 'es',
-          country: 'US'
-        }
-      };
+      var opts = configs.patch.pgUpdateError;
 
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(500);
@@ -268,18 +170,7 @@ experiment('User Handler', function() {
     });
 
     test('404s with invalid id', function(done) {
-      var opts = {
-        url: '/api/users/4',
-        method: 'patch',
-        headers: {
-          authorization: 'token validToken'
-        },
-        payload: {
-          username: 'error',
-          language: 'es',
-          country: 'US'
-        }
-      };
+      var opts = configs.patch.userNotFound;
 
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(404);
@@ -290,18 +181,7 @@ experiment('User Handler', function() {
     });
 
     test('401 if updating wrong account', function(done) {
-      var opts = {
-        url: '/api/users/2',
-        method: 'patch',
-        headers: {
-          authorization: 'token validToken'
-        },
-        payload: {
-          username: 'changed',
-          language: 'es',
-          country: 'US'
-        }
-      };
+      var opts = configs.patch.unauthorized;
 
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(401);
@@ -314,13 +194,7 @@ experiment('User Handler', function() {
 
   experiment('Delete', function() {
     test('Deletes user record', function(done) {
-      var opts = {
-        url: '/api/users/1',
-        method: 'delete',
-        headers: {
-          authorization: 'token validToken'
-        }
-      };
+      var opts = configs.del.success;
 
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(200);
@@ -330,13 +204,7 @@ experiment('User Handler', function() {
     });
 
     test('404s if user not found', function(done) {
-      var opts = {
-        url: '/api/users/4',
-        method: 'delete',
-        headers: {
-          authorization: 'token validToken'
-        }
-      };
+      var opts = configs.del.userNotFound;
 
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(404);
@@ -347,13 +215,7 @@ experiment('User Handler', function() {
     });
 
     test('handles errors fetching user', function(done) {
-      var opts = {
-        url: '/api/users/5',
-        method: 'delete',
-        headers: {
-          authorization: 'token validToken'
-        }
-      };
+      var opts = configs.del.pgFetchError;
 
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(500);
@@ -364,13 +226,7 @@ experiment('User Handler', function() {
     });
 
     test('handles errors deleting user', function(done) {
-      var opts = {
-        url: '/api/users/2',
-        method: 'delete',
-        headers: {
-          authorization: 'token validToken2'
-        }
-      };
+      var opts = configs.del.pgDeleteError;
 
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(500);
@@ -381,13 +237,7 @@ experiment('User Handler', function() {
     });
 
     test('Insufficient permissions', function(done) {
-      var opts = {
-        url: '/api/users/1',
-        method: 'delete',
-        headers: {
-          authorization: 'token validToken2'
-        }
-      };
+      var opts = configs.del.unauthorized;
 
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(401);
@@ -399,14 +249,8 @@ experiment('User Handler', function() {
   });
 
   experiment('Options', function() {
-    test('Deletes user record', function(done) {
-      var opts = {
-        url: '/api/users/1',
-        method: 'options',
-        headers: {
-          authorization: 'token validToken'
-        }
-      };
+    test('responds to options requests', function(done) {
+      var opts = configs.options.success;
 
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(200);
