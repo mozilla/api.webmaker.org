@@ -5,69 +5,58 @@ var authRouteConfig = {
   config: {
     auth: {
       mode: 'required',
-      strategies: ['token'],
-      scope: 'skittles'
-    },
-    cors: true
+      strategies: ['token']
+    }
   }
 };
 
-var skittlesHandler = require('../handlers/skittles');
+var usersHandler = require('../handlers/users');
 
 var routes = [
   {
-    path: '/api/skittles',
-    method: 'POST',
-    handler: skittlesHandler,
+    path: '/api/users/{user}',
+    method: ['options', 'get', 'delete'],
+    handler: usersHandler,
     config: {
+      auth: {
+        scope: 'user'
+      },
       validate: {
-        payload: {
-          color: Joi.string().required()
+        params: {
+          user: Joi.number().required()
         }
       },
       cors: {
-        methods: ['POST', 'OPTIONS']
-      },
-      description: 'Create a skittle of your favorite color!'
+        methods: ['options', 'get', 'patch', 'delete']
+      }
     }
   }, {
-    path: '/api/skittles/{id}',
+    path: '/api/users/{user}',
     method: 'patch',
-    handler: skittlesHandler,
+    handler: usersHandler,
     config: {
+      auth: {
+        scope: 'user'
+      },
       validate: {
-        payload: {
-          color: Joi.string().required()
+        params: {
+          user: Joi.number().required()
         },
-        params: {
-          id: Joi.number().required()
+        payload: {
+          username: Joi.string().max(20).optional(),
+          language: Joi.string().length(2).optional(),
+          country: Joi.string().length(2).optional()
         }
       },
       cors: {
-        methods: ['GET', 'PATCH', 'DELETE', 'OPTIONS']
-      },
-      description: 'Change a skittle\'s color'
-    }
-  }, {
-    path: '/api/skittles/{id}',
-    method: 'delete',
-    handler: skittlesHandler,
-    config: {
-      validate: {
-        params: {
-          id: Joi.number().required()
-        }
-      },
-      cors: {
-        methods: ['GET', 'PATCH', 'DELETE', 'OPTIONS']
-      },
-      description: 'Eat a skittle'
+        methods: ['options', 'get', 'patch', 'delete']
+      }
     }
   }
 ];
 
 routes = routes.map(function(route) {
-  return _.merge({}, authRouteConfig, route);
+  return _.merge({}, route, authRouteConfig);
 });
 
 module.exports = routes;

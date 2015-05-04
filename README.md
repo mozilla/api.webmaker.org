@@ -25,7 +25,7 @@ cp env.sample .env
 createdb webmaker
 
 # create tables
-psql -d webmaker -f migrations/create_skittles_table.sql
+psql -d webmaker -f migrations/create_webmaker_db.sql
 ```
 
 ## Run
