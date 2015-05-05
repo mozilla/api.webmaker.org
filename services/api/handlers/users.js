@@ -31,7 +31,6 @@ exports.post = function(request, reply) {
       request.payload.country
     ]
   ).then(function(result) {
-    console.log( result );
     reply({
       status: 'created',
       user: result.rows[0]
