@@ -10,13 +10,13 @@ var authRouteConfig = {
   }
 };
 
-var usersHandler = require('../handlers/users');
+var users = require('../handlers/users');
 
 var routes = [
   {
     path: '/api/users/{user}',
-    method: ['options', 'get', 'delete'],
-    handler: usersHandler,
+    method: 'get',
+    handler: users.get,
     config: {
       auth: {
         scope: 'user'
@@ -33,7 +33,7 @@ var routes = [
   }, {
     path: '/api/users/{user}',
     method: 'patch',
-    handler: usersHandler,
+    handler: users.patch,
     config: {
       auth: {
         scope: 'user'
@@ -50,6 +50,38 @@ var routes = [
       },
       cors: {
         methods: ['options', 'get', 'patch', 'delete']
+      }
+    }
+  }, {
+    path: '/api/users/{user}',
+    method: 'delete',
+    handler: users.del,
+    config: {
+      auth: {
+        scope: 'user'
+      },
+      validate: {
+        params: {
+          user: Joi.number().required()
+        }
+      },
+      cors: {
+        methods: ['options', 'get', 'patch', 'delete']
+      }
+    }
+  }, {
+    path: '/api/users/{user}',
+    method: 'options',
+    handler: users.options,
+    config: {
+      auth: {
+        scope: 'user'
+      },
+      cors: {
+        methods: ['options', 'get', 'patch', 'delete']
+      },
+      plugins: {
+        lout: false
       }
     }
   }

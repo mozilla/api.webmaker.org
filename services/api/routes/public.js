@@ -7,13 +7,13 @@ var publicRouteConfig = {
   }
 };
 
-var usersHandler = require('../handlers/users');
+var users = require('../handlers/users');
 
 var routes = [
   {
     path: '/api/users',
-    method: ['post', 'options'],
-    handler: usersHandler,
+    method: 'post',
+    handler: users.post,
     config: {
       validate: {
         payload: {
@@ -26,6 +26,18 @@ var routes = [
         methods: ['post', 'options']
       },
       description: 'Create a user account'
+    }
+  }, {
+    path: '/api/users',
+    method: 'options',
+    handler: users.options,
+    config: {
+      cors: {
+        methods: ['post', 'options']
+      },
+      plugins: {
+        lout: false
+      }
     }
   }, {
     path: '/docs/css/style.css',
