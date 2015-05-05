@@ -1,3 +1,5 @@
+/* global Promise */
+
 var _ = require('lodash');
 var userFixtures = require('../fixtures/users');
 
@@ -10,57 +12,65 @@ exports.register = function(server, options, done) {
     return e;
   }
 
-  server.method('db.createUser', function(values, done) {
-    if ( values[0] === 'cade' ) {
-      return done({
-        constraint: 'unique_username'
+  server.method('users.create', function(values, done) {
+    return new Promise(function(resolve, reject) {
+      if ( values[0] === 'cade' ) {
+        return reject({
+          constraint: 'unique_username'
+        });
+      }
+
+      if ( values[0] === 'error' ) {
+        return reject(mockErr());
+      }
+
+      resolve({
+        rows:[{
+          id: 3
+        }]
       });
-    }
-
-    if ( values[0] === 'error' ) {
-      return done(mockErr());
-    }
-
-    done(null, {
-      rows:[{
-        id: 3
-      }]
     });
   }, {});
 
-  server.method('db.findUser', function(values, done) {
-    if ( values[0] === 5 ) {
-      return done(mockErr());
-    }
+  server.method('users.find', function(values, done) {
+    return new Promise(function(resolve, reject) {
+      if ( values[0] === 5 ) {
+        return reject(mockErr());
+      }
 
-    var user = _.findWhere(userFixtures, { id: values[0] });
-    user = user ? [user] : [];
+      var user = _.findWhere(userFixtures, { id: values[0] });
+      user = user ? [user] : [];
 
-    done(null, {
-      rows: user
+      resolve({
+        rows: user
+      });
     });
   }, {});
 
-  server.method('db.updateUser', function(values, done) {
-    if ( values[0] === 'error' ) {
-      return done(mockErr());
-    }
+  server.method('users.update', function(values, done) {
+    return new Promise(function(resolve, reject) {
+      if ( values[0] === 'error' ) {
+        return reject(mockErr());
+      }
 
-    done(null, {
-      rows:[{
-        username: values[0] || 'unchanged',
-        language: values[1] || 'en',
-        country: values[2] || 'CA'
-      }]
+      resolve({
+        rows:[{
+          username: values[0] || 'unchanged',
+          language: values[1] || 'en',
+          country: values[2] || 'CA'
+        }]
+      });
     });
   }, {});
 
-  server.method('db.deleteUser', function(values, done) {
-    if ( values[0] === 2 ) {
-      return done(mockErr());
-    }
+  server.method('users.remove', function(values, done) {
+    return new Promise(function(resolve, reject) {
+      if ( values[0] === 2 ) {
+        return reject(mockErr());
+      }
 
-    done(null);
+      resolve();
+    });
   }, {});
 
   done();
