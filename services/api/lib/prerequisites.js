@@ -2,14 +2,6 @@
 
 var boom = require('boom');
 
-exports.ownsResource = function(request, reply) {
-  if ( request.params.user !== request.auth.credentials.user_id ) {
-    return reply(boom.unauthorized('Insufficient permissions'));
-  }
-
-  reply();
-};
-
 exports.calculateOffset = {
   assign: 'offset',
   method: function(request, reply) {
