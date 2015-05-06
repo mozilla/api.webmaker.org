@@ -69,9 +69,7 @@ exports.canModify = function(request, reply) {
   var projectUserId = request.pre.project.user_id;
 
   // use bitwise and to check for equality between user ids
-  var ownsProject = !!(tokenUserId & userId & projectUserId);
-
-  if ( ownsProject ) {
+  if ( !!(tokenUserId & userId & projectUserId) ) {
     return reply();
   }
 
