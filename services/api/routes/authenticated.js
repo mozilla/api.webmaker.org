@@ -10,7 +10,9 @@ var authRouteConfig = {
   }
 };
 
+var prerequisites = require('../lib/prerequisites');
 var users = require('../handlers/users');
+var projects = require('../handlers/projects');
 
 var routes = [
   {
@@ -82,6 +84,129 @@ var routes = [
       },
       plugins: {
         lout: false
+      }
+    }
+  }, {
+    path: '/api/users/{user}/projects',
+    method: 'post',
+    handler: projects.post.create,
+    config: {
+      auth: {
+        scope: 'projects'
+      },
+      validate: {
+        params: {
+          user: Joi.number().required()
+        },
+        payload: {
+          title: Joi.string().required(),
+          remixed_from: Joi.number().optional(),
+          thumbnail: Joi.object().keys({
+            400: Joi.string().optional(),
+            1024: Joi.string().optional()
+          }).default({})
+        }
+      },
+      cors: {
+        methods: ['options', 'post']
+      }
+    }
+  }, {
+    path: '/api/users/{user}/projects/{project}',
+    method: 'patch',
+    handler: projects.patch.update,
+    config: {
+      auth: {
+        scope: 'projects'
+      },
+      validate: {
+        params: {
+          user: Joi.number().required(),
+          project: Joi.number().required()
+        },
+        payload: {
+          title: Joi.string().optional(),
+          thumbnail: Joi.object().keys({
+            400: Joi.string().optional(),
+            1024: Joi.string().optional()
+          }).optional({})
+        }
+      },
+      pre: [
+        prerequisites.getUser,
+        prerequisites.getProject,
+        prerequisites.canModify
+      ],
+      cors: {
+        methods: ['options', 'get', 'patch', 'delete']
+      }
+    }
+  }, {
+    path: '/api/users/{user}/projects/{project}',
+    method: 'delete',
+    handler: projects.del,
+    config: {
+      auth: {
+        scope: 'projects'
+      },
+      validate: {
+        params: {
+          user: Joi.number().required(),
+          project: Joi.number().required()
+        }
+      },
+      pre: [
+        prerequisites.getUser,
+        prerequisites.getProject,
+        prerequisites.canModify
+      ],
+      cors: {
+        methods: ['options', 'get', 'patch', 'delete']
+      }
+    }
+  }, {
+    path: '/api/users/{user}/projects/{project}/remixes',
+    method: 'post',
+    handler: projects.post.remix,
+    config: {
+      auth: {
+        scope: 'projects'
+      },
+      validate: {
+        params: {
+          user: Joi.number().required(),
+          project: Joi.number().required()
+        }
+      },
+      pre: [
+        prerequisites.getUser,
+        prerequisites.getProject
+      ],
+      cors: {
+        methods: ['options', 'get', 'post']
+      }
+    }
+  }, {
+    path: '/api/users/{user}/projects/{project}/feature',
+    method: 'patch',
+    handler: projects.patch.feature,
+    config: {
+      auth: {
+        scope: 'projects'
+      },
+      validate: {
+        params: {
+          user: Joi.number().required(),
+          project: Joi.number().required()
+        }
+      },
+      pre: [
+        prerequisites.getUser,
+        prerequisites.getProject,
+        prerequisites.isMod
+      ],
+      cors: {
+        methods: ['options', 'get', 'post']
       }
     }
   }

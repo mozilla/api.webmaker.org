@@ -10,7 +10,7 @@ exports.register = function(server, options, done) {
     return e;
   }
 
-  server.method('db.createUser', function(values, done) {
+  server.method('users.create', function(values, done) {
     if ( values[0] === 'cade' ) {
       return done({
         constraint: 'unique_username'
@@ -28,7 +28,7 @@ exports.register = function(server, options, done) {
     });
   }, {});
 
-  server.method('db.findUser', function(values, done) {
+  server.method('users.find', function(values, done) {
     if ( values[0] === 5 ) {
       return done(mockErr());
     }
@@ -41,7 +41,7 @@ exports.register = function(server, options, done) {
     });
   }, {});
 
-  server.method('db.updateUser', function(values, done) {
+  server.method('users.update', function(values, done) {
     if ( values[0] === 'error' ) {
       return done(mockErr());
     }
@@ -55,7 +55,7 @@ exports.register = function(server, options, done) {
     });
   }, {});
 
-  server.method('db.deleteUser', function(values, done) {
+  server.method('users.remove', function(values, done) {
     if ( values[0] === 2 ) {
       return done(mockErr());
     }

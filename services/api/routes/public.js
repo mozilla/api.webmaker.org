@@ -7,7 +7,9 @@ var publicRouteConfig = {
   }
 };
 
+var prerequisites = require('../lib/prerequisites');
 var users = require('../handlers/users');
+var projects = require('../handlers/projects');
 
 var routes = [
   {
@@ -37,6 +39,178 @@ var routes = [
       },
       plugins: {
         lout: false
+      }
+    }
+  }, {
+    path: '/api/projects',
+    method: 'get',
+    handler: projects.get.all,
+    config: {
+      validate: {
+        query: {
+          count: Joi.number().min(1).max(100).default(10),
+          page:Joi.number().min(1).default(1)
+        }
+      },
+      pre: [
+        prerequisites.calculateOffset
+      ],
+      cors: {
+        methods: ['get', 'options']
+      }
+    }
+  }, {
+    path: '/api/users/{user}/projects',
+    method: 'get',
+    handler: projects.get.allByUser,
+    config: {
+      validate: {
+        params: {
+          user: Joi.number().required()
+        },
+        query: {
+          count: Joi.number().min(1).max(100).default(10),
+          page:Joi.number().min(1).default(1)
+        }
+      },
+      pre: [
+        prerequisites.getUser,
+        prerequisites.calculateOffset
+      ],
+      cors: {
+        methods: ['get', 'options']
+      }
+    }
+  }, {
+    path: '/api/users/{user}/projects/{project}',
+    method: 'get',
+    handler: projects.get.one,
+    config: {
+      validate: {
+        params: {
+          user: Joi.number().required(),
+          project: Joi.number().required()
+        }
+      },
+      pre: [
+        prerequisites.getUser
+      ],
+      cors: {
+        methods: ['get', 'patch', 'options', 'delete']
+      }
+    }
+  }, {
+    path: '/api/users/{user}/projects/{project}',
+    method: 'options',
+    handler: projects.options,
+    config: {
+      validate: {
+        params: {
+          user: Joi.number().required(),
+          project: Joi.number().required()
+        }
+      },
+      cors: {
+        methods: ['get', 'patch', 'options', 'delete']
+      }
+    }
+  }, {
+    path: '/api/users/{user}/projects',
+    method: 'options',
+    handler: projects.options,
+    config: {
+      validate: {
+        params: {
+          user: Joi.number().required()
+        },
+        query: {
+          count: Joi.number().min(1).max(100).default(10),
+          page:Joi.number().min(1).default(1)
+        }
+      },
+      cors: {
+        methods: ['get', 'options']
+      }
+    }
+  }, {
+    path: '/projects',
+    method: 'options',
+    handler: projects.options,
+    config: {
+      validate: {
+        query: {
+          count: Joi.number().min(1).max(100),
+          page:Joi.number().min(1)
+        }
+      },
+      cors: {
+        methods: ['get', 'options']
+      }
+    }
+  }, {
+    path: '/api/users/{user}/projects/{project}/remixes',
+    method: 'get',
+    handler: projects.get.remixes,
+    config: {
+      validate: {
+        params: {
+          user: Joi.number().required(),
+          project: Joi.number().required()
+        },
+        query: {
+          count: Joi.number().min(1).max(100).default(10),
+          page:Joi.number().min(1).default(1)
+        }
+      },
+      pre: [
+        prerequisites.getUser,
+        prerequisites.getProject,
+        prerequisites.calculateOffset
+      ],
+      cors: {
+        methods: ['get', 'post', 'options']
+      }
+    }
+  }, {
+    path: '/api/discover',
+    method: 'get',
+    handler: projects.get.featured,
+    config: {
+      validate: {
+        query: {
+          count: Joi.number().min(1).max(100).default(10),
+          page:Joi.number().min(1).default(1)
+        }
+      },
+      pre: [
+        prerequisites.calculateOffset
+      ],
+      cors: {
+        methods: ['get', 'options']
+      }
+    }
+  }, {
+    path: '/api/discover',
+    method: 'options',
+    handler: projects.options,
+    config: {
+      cors: {
+        methods: ['get', 'options']
+      }
+    }
+  }, {
+    path: '/api/users/{user}/projects/{project}/remixes',
+    method: 'options',
+    handler: projects.options,
+    config: {
+      validate: {
+        params: {
+          user: Joi.number().required(),
+          project: Joi.number().required()
+        }
+      },
+      cors: {
+        methods: ['get', 'post', 'options']
       }
     }
   }, {
