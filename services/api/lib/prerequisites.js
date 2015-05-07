@@ -2,6 +2,11 @@
 
 var boom = require('boom');
 
+function isOwner(tokenId, userId, projectId) {
+  // use bitwise and to check for equality between user ids
+  return !!(tokenId & userId & projectId);
+}
+
 exports.calculateOffset = {
   assign: 'offset',
   method: function(request, reply) {
@@ -57,19 +62,42 @@ exports.getProject = {
   }
 };
 
-exports.canModify = function(request, reply) {
+exports.canCreate = function(request, reply) {
+  if ( request.auth.credentials.user_id === request.pre.user.id ) {
+    return reply();
+  }
+
+  reply(boom.forbidden('Insufficient permissions'));
+};
+
+exports.canUpdate = function(request, reply) {
+  var ownsProject = isOwner(
+    request.auth.credentials.user_id,
+    request.pre.user.id,
+    request.pre.project.user_id
+  );
+
+  if ( ownsProject ) {
+    return reply();
+  }
+
+  reply(boom.forbidden('Insufficient permissions'));
+};
+
+exports.canDelete = function(request, reply) {
   var isModerator = request.auth.credentials.moderator;
 
   if ( isModerator ) {
     return reply();
   }
 
-  var tokenUserId = request.auth.credentials.user_id;
-  var userId = request.pre.user.id;
-  var projectUserId = request.pre.project.user_id;
+  var ownsProject = isOwner(
+    request.auth.credentials.user_id,
+    request.pre.user.id,
+    request.pre.project.user_id
+  );
 
-  // use bitwise and to check for equality between user ids
-  if ( !!(tokenUserId & userId & projectUserId) ) {
+  if ( ownsProject ) {
     return reply();
   }
 

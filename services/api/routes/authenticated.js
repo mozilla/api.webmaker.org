@@ -107,6 +107,10 @@ var routes = [
           }).default({})
         }
       },
+      pre: [
+        prerequisites.getUser,
+        prerequisites.canCreate
+      ],
       cors: {
         methods: ['options', 'post']
       }
@@ -135,7 +139,7 @@ var routes = [
       pre: [
         prerequisites.getUser,
         prerequisites.getProject,
-        prerequisites.canModify
+        prerequisites.canUpdate
       ],
       cors: {
         methods: ['options', 'get', 'patch', 'delete']
@@ -158,7 +162,7 @@ var routes = [
       pre: [
         prerequisites.getUser,
         prerequisites.getProject,
-        prerequisites.canModify
+        prerequisites.canDelete
       ],
       cors: {
         methods: ['options', 'get', 'patch', 'delete']

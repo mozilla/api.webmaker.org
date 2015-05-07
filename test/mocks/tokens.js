@@ -5,6 +5,12 @@ module.exports = {
     moderator: false,
     staff: false
   },
+  'userToken2': {
+    scope: ['user', 'projects'],
+    user_id: 12,
+    moderator: false,
+    staff: false
+  },
   'moderatorToken': {
     scope: ['user', 'projects'],
     user_id: 2,

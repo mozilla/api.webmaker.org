@@ -49,7 +49,7 @@ var routes = [
       validate: {
         query: {
           count: Joi.number().min(1).max(100).default(10),
-          page:Joi.number().min(1).default(1)
+          page:Joi.number().min(1).max(50).default(1)
         }
       },
       pre: [
@@ -70,7 +70,7 @@ var routes = [
         },
         query: {
           count: Joi.number().min(1).max(100).default(10),
-          page:Joi.number().min(1).default(1)
+          page:Joi.number().min(1).max(50).default(1)
         }
       },
       pre: [
@@ -159,7 +159,7 @@ var routes = [
         },
         query: {
           count: Joi.number().min(1).max(100).default(10),
-          page:Joi.number().min(1).default(1)
+          page:Joi.number().min(1).max(50).default(1)
         }
       },
       pre: [
@@ -179,7 +179,7 @@ var routes = [
       validate: {
         query: {
           count: Joi.number().min(1).max(100).default(10),
-          page:Joi.number().min(1).default(1)
+          page:Joi.number().min(1).max(50).default(1)
         }
       },
       pre: [
@@ -207,8 +207,15 @@ var routes = [
         params: {
           user: Joi.number().required(),
           project: Joi.number().required()
+        },
+        query: {
+          count: Joi.number().min(1).max(100).default(10),
+          page: Joi.number().min(1).max(50).default(1)
         }
       },
+      pre: [
+        prerequisites.calculateOffset
+      ],
       cors: {
         methods: ['get', 'post', 'options']
       }

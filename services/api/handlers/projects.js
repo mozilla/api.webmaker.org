@@ -63,7 +63,7 @@ exports.get = {
 
         reply({
           status: 'success',
-          projects: request.server.methods.utils.formatProject(result.rows[0])
+          project: request.server.methods.utils.formatProject(result.rows[0])
         });
       }
     );
@@ -178,7 +178,7 @@ exports.patch = {
 
         reply({
           status: 'updated',
-          user: result.rows[0]
+          project: result.rows[0]
         });
       }
     );
@@ -196,7 +196,7 @@ exports.patch = {
 
         reply({
           status: 'updated',
-          user: result.rows[0]
+          project: result.rows[0]
         });
       }
     );

@@ -39,7 +39,11 @@ BEGIN
     (jon_id, NULL, 'test', 'test_project_3', thumb_empty, FALSE),
     (jon_id, NULL, 'test', 'test_project_4', thumb_all, TRUE),
     (andrew_id, NULL, 'test', 'test_project_5', thumb_empty, FALSE),
-    (andrew_id, NULL, 'test', 'test_project_6', thumb_large, TRUE);
+    (andrew_id, NULL, 'test', 'test_project_6', thumb_large, TRUE),
+    (chris_id, NULL, 'test', 'test_project_7', thumb_empty, TRUE),
+    (andrew_id, NULL, 'test', 'test_project_8', thumb_empty, TRUE),
+    (jon_id, NULL, 'test', 'test_project_9', thumb_empty, TRUE),
+    (andrew_id, NULL, 'test', 'test_project_10', thumb_empty, TRUE);
 
   -- grab a project id
   remix_id := get_project_id('test_project_1');
@@ -47,6 +51,8 @@ BEGIN
   -- create some remixes
   INSERT INTO projects (user_id, remixed_From, version, title, thumbnail) VALUES
     (jon_id, remix_id, 'test','test_remix_1', thumb_empty),
-    (andrew_id, remix_id, 'test', 'test_remix_2', thumb_empty);
+    (andrew_id, remix_id, 'test', 'test_remix_2', thumb_empty),
+    (jon_id, remix_id, 'test','test_remix_3', thumb_empty),
+    (andrew_id, remix_id, 'test', 'test_remix_4', thumb_empty);
 
 END $$;
