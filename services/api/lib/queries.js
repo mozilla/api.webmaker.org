@@ -24,7 +24,7 @@ module.exports = {
       "FROM users WHERE deleted_at IS NULL AND id = $1;",
     update: "UPDATE users SET (username, language, country) = " +
       "($1, $2, $3) WHERE deleted_at IS NULL AND id = $4 RETURNING username, language, country;",
-    remove: "UPDATE users SET deleted_at) = CURRENT_TIMESTAMP WHERE id = $1;"
+    remove: "UPDATE users SET deleted_at = CURRENT_TIMESTAMP WHERE id = $1;"
   },
   projects: {
     create: "INSERT INTO projects (user_id, remixed_from, version, title, thumbnail)" +

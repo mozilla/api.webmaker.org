@@ -16,7 +16,7 @@ var projects = require('../handlers/projects');
 
 var routes = [
   {
-    path: '/api/users/{user}',
+    path: '/users/{user}',
     method: 'get',
     handler: users.get,
     config: {
@@ -33,7 +33,7 @@ var routes = [
       }
     }
   }, {
-    path: '/api/users/{user}',
+    path: '/users/{user}',
     method: 'patch',
     handler: users.patch,
     config: {
@@ -55,7 +55,7 @@ var routes = [
       }
     }
   }, {
-    path: '/api/users/{user}',
+    path: '/users/{user}',
     method: 'delete',
     handler: users.del,
     config: {
@@ -72,7 +72,7 @@ var routes = [
       }
     }
   }, {
-    path: '/api/users/{user}',
+    path: '/users/{user}',
     method: 'options',
     handler: users.options,
     config: {
@@ -87,7 +87,7 @@ var routes = [
       }
     }
   }, {
-    path: '/api/users/{user}/projects',
+    path: '/users/{user}/projects',
     method: 'post',
     handler: projects.post.create,
     config: {
@@ -112,7 +112,7 @@ var routes = [
       }
     }
   }, {
-    path: '/api/users/{user}/projects/{project}',
+    path: '/users/{user}/projects/{project}',
     method: 'patch',
     handler: projects.patch.update,
     config: {
@@ -142,7 +142,7 @@ var routes = [
       }
     }
   }, {
-    path: '/api/users/{user}/projects/{project}',
+    path: '/users/{user}/projects/{project}',
     method: 'delete',
     handler: projects.del,
     config: {
@@ -165,7 +165,7 @@ var routes = [
       }
     }
   }, {
-    path: '/api/users/{user}/projects/{project}/remixes',
+    path: '/users/{user}/projects/{project}/remixes',
     method: 'post',
     handler: projects.post.remix,
     config: {
@@ -187,7 +187,7 @@ var routes = [
       }
     }
   }, {
-    path: '/api/users/{user}/projects/{project}/feature',
+    path: '/users/{user}/projects/{project}/feature',
     method: 'patch',
     handler: projects.patch.feature,
     config: {

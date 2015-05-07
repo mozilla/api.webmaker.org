@@ -2,7 +2,7 @@ var Hoek = require('hoek');
 var pg = require('pg');
 var format = require('util').format;
 var queries = require('./queries');
-var connString = process.env.POSTGRE_CONNECTION_STRING;
+var connString = process.env.POSTGRE_CONNECTION_STRING || 'postgre://localhost:5432/webmaker_testing';
 
 Hoek.assert(connString, 'You must provide a connection string to postgre');
 

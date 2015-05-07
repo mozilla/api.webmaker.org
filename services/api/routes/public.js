@@ -13,7 +13,7 @@ var projects = require('../handlers/projects');
 
 var routes = [
   {
-    path: '/api/users',
+    path: '/users',
     method: 'post',
     handler: users.post,
     config: {
@@ -30,7 +30,7 @@ var routes = [
       description: 'Create a user account'
     }
   }, {
-    path: '/api/users',
+    path: '/users',
     method: 'options',
     handler: users.options,
     config: {
@@ -42,7 +42,7 @@ var routes = [
       }
     }
   }, {
-    path: '/api/projects',
+    path: '/projects',
     method: 'get',
     handler: projects.get.all,
     config: {
@@ -60,7 +60,7 @@ var routes = [
       }
     }
   }, {
-    path: '/api/users/{user}/projects',
+    path: '/users/{user}/projects',
     method: 'get',
     handler: projects.get.allByUser,
     config: {
@@ -82,7 +82,7 @@ var routes = [
       }
     }
   }, {
-    path: '/api/users/{user}/projects/{project}',
+    path: '/users/{user}/projects/{project}',
     method: 'get',
     handler: projects.get.one,
     config: {
@@ -100,7 +100,7 @@ var routes = [
       }
     }
   }, {
-    path: '/api/users/{user}/projects/{project}',
+    path: '/users/{user}/projects/{project}',
     method: 'options',
     handler: projects.options,
     config: {
@@ -115,7 +115,7 @@ var routes = [
       }
     }
   }, {
-    path: '/api/users/{user}/projects',
+    path: '/users/{user}/projects',
     method: 'options',
     handler: projects.options,
     config: {
@@ -148,7 +148,7 @@ var routes = [
       }
     }
   }, {
-    path: '/api/users/{user}/projects/{project}/remixes',
+    path: '/users/{user}/projects/{project}/remixes',
     method: 'get',
     handler: projects.get.remixes,
     config: {
@@ -172,7 +172,7 @@ var routes = [
       }
     }
   }, {
-    path: '/api/discover',
+    path: '/discover',
     method: 'get',
     handler: projects.get.featured,
     config: {
@@ -190,7 +190,7 @@ var routes = [
       }
     }
   }, {
-    path: '/api/discover',
+    path: '/discover',
     method: 'options',
     handler: projects.options,
     config: {
@@ -199,7 +199,7 @@ var routes = [
       }
     }
   }, {
-    path: '/api/users/{user}/projects/{project}/remixes',
+    path: '/users/{user}/projects/{project}/remixes',
     method: 'options',
     handler: projects.options,
     config: {
