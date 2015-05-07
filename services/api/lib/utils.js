@@ -49,9 +49,16 @@ function formatProject(project) {
   return formatted;
 }
 
+var API_VERSION = process.env.API_VERSION || 'dev';
+
+function version() {
+  return API_VERSION;
+}
+
 exports.register = function(server, options, done) {
   server.method('utils.formatUser', formatUser, { callback: false });
   server.method('utils.formatProject', formatProject, { callback: false });
+  server.method('utils.version', version, { callback: false });
   done();
 };
 

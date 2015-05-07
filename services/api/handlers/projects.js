@@ -6,7 +6,7 @@ exports.post = {
       [
         request.params.user,
         null,
-        request.server.plugins['webmaker-api-service'].version,
+        request.server.methods.utils.version(),
         request.payload.title,
         JSON.stringify(request.payload.thumbnail)
       ],
@@ -27,7 +27,7 @@ exports.post = {
       [
         request.params.user,
         request.params.project,
-        request.server.plugins['webmaker-api-service'].version,
+        request.server.methods.utils.version(),
         'Remix of ' + request.pre.project.title,
         JSON.stringify(request.pre.project.thumbnail)
       ],

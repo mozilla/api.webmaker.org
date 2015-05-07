@@ -7,7 +7,6 @@ exports.register = function api(server, options, next) {
       return next(err);
     }
     server.route(require('./routes'));
-    server.expose('version', process.env.API_VERSION || 'devel');
     next();
   });
 };

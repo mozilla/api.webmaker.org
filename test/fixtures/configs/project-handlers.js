@@ -4,8 +4,10 @@ exports.create = {
       url: '/users/1/projects',
       method: 'post',
       payload: {
-        title: 'create_test',
-
+        title: 'create_test'
+      },
+      headers: {
+        authorization: 'token userToken'
       }
     }
   }

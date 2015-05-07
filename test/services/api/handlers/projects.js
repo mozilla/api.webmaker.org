@@ -20,14 +20,14 @@ after(function(done) {
 });
 
 experiment('Project Handlers', function() {
-  // experiment('Create', function() {
-  //   test('Creates a new project', function(done) {
-  //     var opts = configs.create.success;
+  experiment('Create', function() {
+    test('Creates a new project', function(done) {
+      var opts = configs.create.success.withoutThumbnail;
 
-  //     server.inject(opts, function(resp) {
-  //       expect(resp.statusCode).to.equal(200);
-  //       done();
-  //     });
-  //   });
-  // });
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+        done();
+      });
+    });
+  });
 });
