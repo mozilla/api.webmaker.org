@@ -25,7 +25,7 @@ exports.post = {
   remix: function(request, reply) {
     request.server.methods.projects.create(
       [
-        request.params.user,
+        request.auth.credentials.user_id,
         request.params.project,
         request.server.methods.utils.version(),
         'Remix of ' + request.pre.project.title,

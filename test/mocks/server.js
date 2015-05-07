@@ -1,3 +1,5 @@
+require('habitat').load('tests.env');
+
 var Hapi = require('hapi');
 var TOKENS = require('./tokens');
 

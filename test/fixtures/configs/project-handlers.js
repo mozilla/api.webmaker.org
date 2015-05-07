@@ -268,166 +268,166 @@ exports.get = {
 };
 
 exports.create = {
-  success: {
-    withoutThumbnail: {
-      url: '/users/1/projects',
-      method: 'post',
-      payload: {
-        title: 'create_test'
+  new: {
+    success: {
+      withoutThumbnail: {
+        url: '/users/1/projects',
+        method: 'post',
+        payload: {
+          title: 'create_test'
+        },
+        headers: userToken
       },
-      headers: userToken
+      withThumbnail: {
+        url: '/users/1/projects',
+        method: 'post',
+        payload: {
+          title: 'create_test2',
+          thumbnail: {
+            400: 'https://example.com/image.png'
+          }
+        },
+        headers: userToken
+      }
     },
-    withThumbnail: {
-      url: '/users/1/projects',
-      method: 'post',
+    fail: {
       payload: {
-        title: 'create_test2',
-        thumbnail: {
-          400: 'https://example.com/image.png'
+        title: {
+          url: '/users/1/projects',
+          method: 'post',
+          payload: {
+            title: 123,
+            thumbnail: {
+              400: 'https://example.com/image.png'
+            }
+          },
+          headers: userToken
+        },
+        thumb: {
+          url: '/users/1/projects',
+          method: 'post',
+          payload: {
+            title: 'bad_thumb',
+            thumbnail: 'https://example.com/image.png'
+          },
+          headers: userToken
+        },
+        thumbValue: {
+          url: '/users/1/projects',
+          method: 'post',
+          payload: {
+            title: 'bad_thumb',
+            thumbnail: {
+              400: 123
+            }
+          },
+          headers: userToken
+        },
+        thumbKey: {
+          url: '/users/1/projects',
+          method: 'post',
+          payload: {
+            title: 'bad_thumb',
+            thumbnail: {
+              2048: 'https://example.com/image.png'
+            }
+          },
+          headers: userToken
         }
       },
-      headers: userToken
+      params: {
+        user: {
+          notNumber : {
+            url: '/users/foo/projects',
+            method: 'post',
+            payload: {
+              title: 'bad_param',
+              thumbnail: {
+                400: 'https://example.com/image.png'
+              }
+            },
+            headers: userToken
+          },
+          notFound : {
+            url: '/users/56/projects',
+            method: 'post',
+            payload: {
+              title: 'bad_param',
+              thumbnail: {
+                400: 'https://example.com/image.png'
+              }
+            },
+            headers: userToken
+          }
+        }
+      },
+      auth: {
+        wrongUser: {
+          url: '/users/1/projects',
+          method: 'post',
+          payload: {
+            title: 'bad_param',
+            thumbnail: {
+              400: 'https://example.com/image.png'
+            }
+          },
+          headers: userToken2
+        }
+      }
     }
   },
-  fail: {
-    payload: {
-      title: {
-        url: '/users/1/projects',
+  remix: {
+    success: {
+      remix:{
+        url: '/users/1/projects/2/remixes',
         method: 'post',
-        payload: {
-          title: 123,
-          thumbnail: {
-            400: 'https://example.com/image.png'
-          }
-        },
         headers: userToken
       },
-      thumb: {
-        url: '/users/1/projects',
-        method: 'post',
-        payload: {
-          title: 'bad_thumb',
-          thumbnail: 'https://example.com/image.png'
-        },
-        headers: userToken
-      },
-      thumbValue: {
-        url: '/users/1/projects',
-        method: 'post',
-        payload: {
-          title: 'bad_thumb',
-          thumbnail: {
-            400: 123
-          }
-        },
-        headers: userToken
-      },
-      thumbKey: {
-        url: '/users/1/projects',
-        method: 'post',
-        payload: {
-          title: 'bad_thumb',
-          thumbnail: {
-            2048: 'https://example.com/image.png'
-          }
-        },
-        headers: userToken
+      checkRemix: {
+        url: '/users/1/projects/$1',
+        method: 'get'
       }
     },
-    param: {
-      user: {
-        url: '/users/foo/projects',
-        method: 'post',
-        payload: {
-          title: 'bad_param',
-          thumbnail: {
-            400: 'https://example.com/image.png'
+    fail: {
+      params: {
+        user: {
+          notNumber: {
+            url: '/users/foo/projects/2/remixes',
+            method: 'post',
+            headers: userToken
+          },
+          notFound: {
+            url: '/users/45/projects/2/remixes',
+            method: 'post',
+            headers: userToken
           }
         },
-        headers: userToken
-      }
-    },
-    auth: {
-      wrongUser: {
-        url: '/users/1/projects',
-        method: 'post',
-        payload: {
-          title: 'bad_param',
-          thumbnail: {
-            400: 'https://example.com/image.png'
+        project: {
+          notNumber: {
+            url: '/users/1/projects/foo/remixes',
+            method: 'post',
+            headers: userToken
+          },
+          notFound: {
+            url: '/users/1/projects/2334/remixes',
+            method: 'post',
+            headers: userToken
           }
-        },
-        headers: moderatorToken
+        }
       }
     }
   }
 };
 
+
 exports.patch = {
-  success: {
-    title: {
-      url: '/users/1/projects/1',
-      method: 'patch',
-      payload: {
-        title: 'new'
-      },
-      headers: userToken
-    },
-    thumb: {
-      url: '/users/1/projects/1',
-      method: 'patch',
-      payload: {
-        thumbnail: {
-          '400': 'new'
-        }
-      },
-      headers: userToken
-    },
-    clearThumb: {
-      url: '/users/1/projects/1',
-      method: 'patch',
-      payload: {
-        thumbnail: {}
-      },
-      headers: userToken
-    },
-    all: {
-      url: '/users/1/projects/1',
-      method: 'patch',
-      payload: {
-        title: 'new2',
-        thumbnail: {
-          '400': 'new2'
-        }
-      },
-      headers: userToken
-    }
-  },
-  fail: {
-    param: {
-      user: {
-        url: '/users/cade/projects/1',
-        method: 'patch',
-        payload: {
-          title: 'new2'
-        },
-        headers: userToken
-      },
-      project: {
-        url: '/users/1/projects/wat',
-        method: 'patch',
-        payload: {
-          title: 'new2'
-        },
-        headers: userToken
-      }
-    },
-    payload: {
+  update: {
+    success: {
       title: {
         url: '/users/1/projects/1',
         method: 'patch',
         payload: {
-          title: 123
+          title: 'new'
         },
         headers: userToken
       },
@@ -435,52 +435,217 @@ exports.patch = {
         url: '/users/1/projects/1',
         method: 'patch',
         payload: {
-          thumbnail: 123
-        },
-        headers: userToken
-      },
-      thumbValue: {
-        url: '/users/1/projects/1',
-        method: 'patch',
-        payload: {
           thumbnail: {
-            400: 123
+            '400': 'new'
           }
         },
         headers: userToken
       },
-      thumbKey: {
+      clearThumb: {
         url: '/users/1/projects/1',
         method: 'patch',
         payload: {
+          thumbnail: {}
+        },
+        headers: userToken
+      },
+      all: {
+        url: '/users/1/projects/1',
+        method: 'patch',
+        payload: {
+          title: 'new2',
           thumbnail: {
-            2048: 'new'
+            '400': 'new2'
           }
         },
         headers: userToken
       }
     },
-    auth: {
-      wrongUser: {
-        url: '/users/1/projects/1',
-        method: 'patch',
-        payload: {
-          thumbnail: {
-            400: 'new'
-          }
+    fail: {
+      param: {
+        user: {
+          url: '/users/cade/projects/1',
+          method: 'patch',
+          payload: {
+            title: 'new2'
+          },
+          headers: userToken
         },
-        headers: userToken2
+        project: {
+          url: '/users/1/projects/wat',
+          method: 'patch',
+          payload: {
+            title: 'new2'
+          },
+          headers: userToken
+        }
       },
-      moderatorCanNotDelete: {
-        url: '/users/1/projects/1',
-        method: 'patch',
-        payload: {
-          thumbnail: {
-            400: 'new'
-          }
+      payload: {
+        title: {
+          url: '/users/1/projects/1',
+          method: 'patch',
+          payload: {
+            title: 123
+          },
+          headers: userToken
         },
-        headers: moderatorToken
+        thumb: {
+          url: '/users/1/projects/1',
+          method: 'patch',
+          payload: {
+            thumbnail: 123
+          },
+          headers: userToken
+        },
+        thumbValue: {
+          url: '/users/1/projects/1',
+          method: 'patch',
+          payload: {
+            thumbnail: {
+              400: 123
+            }
+          },
+          headers: userToken
+        },
+        thumbKey: {
+          url: '/users/1/projects/1',
+          method: 'patch',
+          payload: {
+            thumbnail: {
+              2048: 'new'
+            }
+          },
+          headers: userToken
+        }
+      },
+      auth: {
+        wrongUser: {
+          url: '/users/1/projects/1',
+          method: 'patch',
+          payload: {
+            thumbnail: {
+              400: 'new'
+            }
+          },
+          headers: userToken2
+        },
+        moderatorCanNotDelete: {
+          url: '/users/1/projects/1',
+          method: 'patch',
+          payload: {
+            thumbnail: {
+              400: 'new'
+            }
+          },
+          headers: moderatorToken
+        }
       }
     }
+  },
+  feature: {
+    success: {
+      feature: {
+        url: '/users/1/projects/1/feature',
+        method: 'patch',
+        headers: moderatorToken
+      },
+      unfeature: {
+        url: '/users/1/projects/2/feature',
+        method: 'patch',
+        headers: moderatorToken
+      }
+    },
+    fail: {
+      params: {
+        user: {
+          notFound: {
+            url: '/users/90/projects/1/feature',
+            method: 'patch',
+            headers: moderatorToken
+          },
+          notNumber: {
+            url: '/users/foo/projects/1/feature',
+            method: 'patch',
+            headers: moderatorToken
+          }
+        },
+        project: {
+          notFound: {
+            url: '/users/1/projects/90/feature',
+            method: 'patch',
+            headers: moderatorToken
+          },
+          notNumber: {
+            url: '/users/1/projects/foo/feature',
+            method: 'patch',
+            headers: moderatorToken
+          }
+        }
+      },
+      auth: {
+        notMod: {
+          url: '/users/1/projects/1/feature',
+          method: 'patch',
+          headers: userToken
+        }
+      }
+    }
+  }
+};
+
+exports.del = {
+  success: {
+    owner:{
+      url: '/users/1/projects/1',
+      method: 'delete',
+      headers: userToken
+    },
+    moderator: {
+      url: '/users/1/projects/2',
+      method: 'delete',
+      headers: moderatorToken
+    }
+  },
+  fail: {
+    params: {
+      user: {
+        notNumber: {
+          url: '/users/foo/projects/2',
+          method: 'delete',
+          headers: userToken
+        },
+        notFound: {
+          url: '/users/45/projects/2',
+          method: 'delete',
+          headers: userToken
+        }
+      },
+      project: {
+        notNumber: {
+          url: '/users/1/projects/foo',
+          method: 'delete',
+          headers: userToken
+        },
+        notFound: {
+          url: '/users/1/projects/1',
+          method: 'delete',
+          headers: userToken
+        }
+      }
+    },
+    auth: {
+      notOwner: {
+        url: '/users/3/projects/5',
+        method: 'delete',
+        headers: userToken2
+      }
+    }
+  }
+};
+
+exports.options = {
+  success: {
+    url: '/discover',
+    method: 'options'
   }
 };

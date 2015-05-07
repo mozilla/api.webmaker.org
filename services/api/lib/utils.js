@@ -49,7 +49,7 @@ function formatProject(project) {
   return formatted;
 }
 
-var API_VERSION = process.env.API_VERSION || 'dev';
+var API_VERSION = process.env.API_VERSION;
 
 function version() {
   return API_VERSION;
