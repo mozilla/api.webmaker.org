@@ -78,7 +78,7 @@ var routes = [
         prerequisites.calculateOffset
       ],
       cors: {
-        methods: ['get', 'options']
+        methods: ['get', 'post', 'options']
       }
     }
   }, {
@@ -207,15 +207,8 @@ var routes = [
         params: {
           user: Joi.number().required(),
           project: Joi.number().required()
-        },
-        query: {
-          count: Joi.number().min(1).max(100).default(10),
-          page: Joi.number().min(1).max(50).default(1)
         }
       },
-      pre: [
-        prerequisites.calculateOffset
-      ],
       cors: {
         methods: ['get', 'post', 'options']
       }

@@ -112,7 +112,7 @@ var routes = [
         prerequisites.canCreate
       ],
       cors: {
-        methods: ['options', 'post']
+        methods: ['options', 'post', 'get']
       }
     }
   }, {
@@ -210,7 +210,25 @@ var routes = [
         prerequisites.isMod
       ],
       cors: {
-        methods: ['options', 'get', 'post']
+        methods: ['options', 'post']
+      }
+    }
+  }, {
+    path: '/users/{user}/projects/{project}/feature',
+    method: 'options',
+    handler: projects.options,
+    config: {
+      auth: {
+        scope: 'projects'
+      },
+      validate: {
+        params: {
+          user: Joi.number().required(),
+          project: Joi.number().required()
+        }
+      },
+      cors: {
+        methods: ['options', 'post']
       }
     }
   }
