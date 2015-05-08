@@ -11,6 +11,11 @@ var prerequisites = require('../lib/prerequisites');
 var users = require('../handlers/users');
 var projects = require('../handlers/projects');
 
+var numericSchema = Joi.alternatives().try(
+  Joi.number(),
+  Joi.string().regex(/^\d+$/)
+);
+
 var routes = [
   {
     path: '/users',
@@ -66,7 +71,7 @@ var routes = [
     config: {
       validate: {
         params: {
-          user: Joi.number().required()
+          user: numericSchema
         },
         query: {
           count: Joi.number().min(1).max(100).default(10),
@@ -88,8 +93,8 @@ var routes = [
     config: {
       validate: {
         params: {
-          user: Joi.number().required(),
-          project: Joi.number().required()
+          user: numericSchema,
+          project: numericSchema
         }
       },
       pre: [
@@ -106,8 +111,8 @@ var routes = [
     config: {
       validate: {
         params: {
-          user: Joi.number().required(),
-          project: Joi.number().required()
+          user: numericSchema,
+          project: numericSchema
         }
       },
       cors: {
@@ -121,7 +126,7 @@ var routes = [
     config: {
       validate: {
         params: {
-          user: Joi.number().required()
+          user: numericSchema
         },
         query: {
           count: Joi.number().min(1).max(100).default(10),
@@ -154,8 +159,8 @@ var routes = [
     config: {
       validate: {
         params: {
-          user: Joi.number().required(),
-          project: Joi.number().required()
+          user: numericSchema,
+          project: numericSchema
         },
         query: {
           count: Joi.number().min(1).max(100).default(10),
@@ -205,8 +210,8 @@ var routes = [
     config: {
       validate: {
         params: {
-          user: Joi.number().required(),
-          project: Joi.number().required()
+          user: numericSchema,
+          project: numericSchema
         }
       },
       cors: {

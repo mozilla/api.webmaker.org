@@ -14,6 +14,11 @@ var prerequisites = require('../lib/prerequisites');
 var users = require('../handlers/users');
 var projects = require('../handlers/projects');
 
+var numericSchema = Joi.alternatives().try(
+  Joi.number(),
+  Joi.string().regex(/^\d+$/)
+);
+
 var routes = [
   {
     path: '/users/{user}',
@@ -64,7 +69,7 @@ var routes = [
       },
       validate: {
         params: {
-          user: Joi.number().required()
+          user: numericSchema
         }
       },
       cors: {
@@ -96,7 +101,7 @@ var routes = [
       },
       validate: {
         params: {
-          user: Joi.number().required()
+          user: numericSchema
         },
         payload: {
           title: Joi.string().required(),
@@ -125,8 +130,8 @@ var routes = [
       },
       validate: {
         params: {
-          user: Joi.number().required(),
-          project: Joi.number().required()
+          user: numericSchema,
+          project: numericSchema
         },
         payload: {
           title: Joi.string().optional(),
@@ -155,8 +160,8 @@ var routes = [
       },
       validate: {
         params: {
-          user: Joi.number().required(),
-          project: Joi.number().required()
+          user: numericSchema,
+          project: numericSchema
         }
       },
       pre: [
@@ -178,8 +183,8 @@ var routes = [
       },
       validate: {
         params: {
-          user: Joi.number().required(),
-          project: Joi.number().required()
+          user: numericSchema,
+          project: numericSchema
         }
       },
       pre: [
@@ -200,8 +205,8 @@ var routes = [
       },
       validate: {
         params: {
-          user: Joi.number().required(),
-          project: Joi.number().required()
+          user: numericSchema,
+          project: numericSchema
         }
       },
       pre: [
@@ -223,8 +228,8 @@ var routes = [
       },
       validate: {
         params: {
-          user: Joi.number().required(),
-          project: Joi.number().required()
+          user: numericSchema,
+          project: numericSchema
         }
       },
       cors: {
