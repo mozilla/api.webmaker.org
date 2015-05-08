@@ -1,9 +1,9 @@
 exports.post = function(request, reply) {
-  request.server.methods.pages.create(
+  request.server.methods.elements.create(
     [
-      request.pre.project.id,
-      request.payload.x,
-      request.payload.y,
+      request.pre.page.id,
+      request.payload.type,
+      JSON.stringify(request.payload.attributes),
       JSON.stringify(request.payload.styles)
     ],
     function(err, result) {
@@ -13,7 +13,7 @@ exports.post = function(request, reply) {
 
       reply({
         status: 'created',
-        page: result.rows[0]
+        element: result.rows[0]
       });
     }
   );
@@ -21,9 +21,9 @@ exports.post = function(request, reply) {
 
 exports.get = {
   all: function(request, reply) {
-    request.server.methods.pages.findAll(
+    request.server.methods.elements.findAll(
       [
-        request.pre.project.id
+        request.pre.page.id
       ],
       function(err, result) {
         if ( err ) {
@@ -32,15 +32,17 @@ exports.get = {
 
         reply({
           status: 'success',
-          pages: request.server.methods.utils.formatPages(result.rows)
+          elements: result.rows.map(function(el) {
+            return request.server.methods.utils.formatElement(el);
+          })
         });
       }
     );
   },
   one: function(request, reply) {
-    request.server.methods.pages.findOne(
+    request.server.methods.elements.findOne(
       [
-        request.params.page
+        request.params.element
       ],
       function(err, result) {
         if ( err ) {
@@ -49,7 +51,7 @@ exports.get = {
 
         reply({
           status: 'success',
-          page: request.server.methods.utils.formatPage(result.rows)
+          page: request.server.methods.utils.formatElement(result.rows[0])
         });
       }
     );
@@ -57,12 +59,11 @@ exports.get = {
 };
 
 exports.patch = function(request, reply) {
-  request.server.methods.pages.update(
+  request.server.methods.elements.update(
     [
-      request.payload.x,
-      request.payload.y,
+      request.payload.attributes,
       request.payload.styles,
-      request.params.page
+      request.params.element
     ],
     function(err, result) {
       if ( err ) {
@@ -78,9 +79,9 @@ exports.patch = function(request, reply) {
 };
 
 exports.del = function(request, reply) {
-  request.server.methods.pages.remove(
+  request.server.methods.elements.remove(
     [
-      request.params.page
+      request.params.element
     ],
     function(err, result) {
       if ( err ) {

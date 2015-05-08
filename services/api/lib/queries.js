@@ -24,11 +24,12 @@ var pageCols = [
   "pages.created_at",
   "pages.updated_at",
   "pages.styles",
-  "elements.id as elem_id",
+  "elements.id AS elem_id",
+  "elements.type AS elem_type",
   "elements.created_at AS elem_created_at",
   "elements.updated_at AS elem_updated_at",
   "elements.styles AS elem_styles",
-  "elements.attributes as elem_attributes",
+  "elements.attributes as elem_attributes"
 ].join(", ");
 
 module.exports = {
@@ -64,16 +65,18 @@ module.exports = {
       "pages.id = elements.page_id AND pages.deleted_at IS NULL AND elements.deleted_at IS NULL;",
     findOne: "SELECT " + pageCols + " FROM pagesINNER JOIN elements ON pages.id = $1 AND pages.id = elements.page_id" +
       "AND pages.deleted_at IS NULL AND elements.deleted_at IS NULL;",
-    update: "UPDATE pages SET (x, y, styles) = ($1, $2, $3) WHERE id = $4 AND deleted_at IS NULL",
+    update: "UPDATE pages SET (x, y, styles) = ($1, $2, $3) WHERE id = $4 AND deleted_at IS NULL" +
+      " RETURNING x, y, styles;",
     remove: "UPDATE pages SET deleted_at = CURRENT_TIMESTAMP WHERE id = $1 AND deleted_at IS NULL"
   },
   elements: {
-    create: "INSERT into elements (page_id, attributes, styles) VALUES ($1, $2, $3) RETURNING id",
-    findAll: "SELECT id, attributes, styles, created_at, updated_at FROM elements WHERE " +
+    create: "INSERT into elements (page_id, type, attributes, styles) VALUES ($1, $2, $3, $4) RETURNING id",
+    findAll: "SELECT id, type, attributes, styles, created_at, updated_at FROM elements WHERE " +
       "page_id = $1 AND deleted_at IS NULL;",
     findOne: "SELECT id, attributes, styles, created_at, updated_at FROM elements WHERE " +
       "id = $1 AND deleted_at IS NULL;",
-    update: "UPDATE elements SET (styles, attributes) = ($1, $2) WHERE id = $3 AND deleted_at IS NULL;",
+    update: "UPDATE elements SET (styles, attributes) = ($1, $2) WHERE id = $3 AND deleted_at IS NULL" +
+      " RETURNING styles, attributes;",
     remove: "UPDATE elements SET deleted_at = CURRENT_TIMESTAMP WHERE id = $1 AND deleted_at IS NULL"
   }
 };

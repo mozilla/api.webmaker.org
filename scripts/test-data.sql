@@ -72,34 +72,34 @@ BEGIN
 
   page_id := get_page_id(project_id, 1, 1);
 
-  INSERT INTO elements (page_id, attributes, styles) VALUES
-    (page_id, empty_json, empty_json),
-    (page_id, attributes, styles),
-    (page_id, empty_json, styles),
-    (page_id, attributes, empty_json),
-    (page_id, empty_json, styles),
-    (page_id, attributes, empty_json),
-    (page_id, empty_json, styles);
+  INSERT INTO elements (page_id, type, attributes, styles) VALUES
+    (page_id, 'text', empty_json, empty_json),
+    (page_id, 'text', attributes, styles),
+    (page_id, 'text', empty_json, styles),
+    (page_id, 'text', attributes, empty_json),
+    (page_id, 'text', empty_json, styles),
+    (page_id, 'text', attributes, empty_json),
+    (page_id, 'text', empty_json, styles);
 
   page_id := get_page_id(project_id, 1, 0);
 
-  INSERT INTO elements (page_id, attributes, styles) VALUES
-    (page_id, empty_json, empty_json),
-    (page_id, attributes, styles),
-    (page_id, empty_json, styles),
-    (page_id, attributes, empty_json),
-    (page_id, empty_json, styles),
-    (page_id, attributes, empty_json),
-    (page_id, empty_json, styles);
+  INSERT INTO elements (page_id, type, attributes, styles) VALUES
+    (page_id, 'text', empty_json, empty_json),
+    (page_id, 'text', attributes, styles),
+    (page_id, 'text', empty_json, styles),
+    (page_id, 'text', attributes, empty_json),
+    (page_id, 'text', empty_json, styles),
+    (page_id, 'text', attributes, empty_json),
+    (page_id, 'text', empty_json, styles);
 
   page_id := get_page_id(project_id, -1, 0);
 
-  INSERT INTO elements (page_id, attributes, styles) VALUES
-    (page_id, empty_json, empty_json),
-    (page_id, attributes, styles),
-    (page_id, empty_json, styles),
-    (page_id, attributes, empty_json),
-    (page_id, empty_json, styles),
-    (page_id, attributes, empty_json),
-    (page_id, empty_json, styles);
+  INSERT INTO elements (page_id, type, attributes, styles) VALUES
+    (page_id, 'image', empty_json, empty_json),
+    (page_id, 'image', attributes, styles),
+    (page_id, 'image', empty_json, styles),
+    (page_id, 'image', attributes, empty_json),
+    (page_id, 'image', empty_json, styles),
+    (page_id, 'image', attributes, empty_json),
+    (page_id, 'image', empty_json, styles);
 END $$;

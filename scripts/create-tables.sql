@@ -46,6 +46,7 @@ CREATE TABLE IF NOT EXISTS "pages"
 CREATE TABLE IF NOT EXISTS "elements"
 (
   id bigserial NOT NULL,
+  type varchar NOT NULL,
   page_id bigint REFERENCES pages(id),
   created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
