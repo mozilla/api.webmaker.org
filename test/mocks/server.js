@@ -1,3 +1,5 @@
+require('habitat').load('tests.env');
+
 var Hapi = require('hapi');
 var TOKENS = require('./tokens');
 
@@ -22,7 +24,7 @@ module.exports = function(done) {
     });
 
     server.register([
-        require('./postgre'),
+        require('../../services/api/lib/postgre'),
         require('../../services/api/lib/utils')
       ], function() {
       server.route(require('../../services/api/routes'));

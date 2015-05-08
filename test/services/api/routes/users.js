@@ -6,8 +6,8 @@ var Lab = require('lab'),
   routes = require('../../../../services/api/routes');
 
 experiment('users routes', function() {
-  test('applies config to post /api/users', function(done) {
-    var create = routes.at('post /api/users');
+  test('applies config to post /users', function(done) {
+    var create = routes.at('post /users');
     expect(create).to.be.an.object();
     expect(create.method).to.equal('post');
     expect(create.config.auth).to.be.false();
@@ -21,8 +21,8 @@ experiment('users routes', function() {
     done();
   });
 
-  test('applies config to options /api/users', function(done) {
-    var create = routes.at('options /api/users');
+  test('applies config to options /users', function(done) {
+    var create = routes.at('options /users');
     expect(create).to.be.an.object();
     expect(create.method).to.equal('options');
     expect(create.config.auth).to.be.false();
@@ -53,8 +53,8 @@ experiment('users routes', function() {
     done();
   });
 
-  test('applies config to get /api/users/{user}', function(done) {
-    var users = routes.at('get /api/users/{user}');
+  test('applies config to get /users/{user}', function(done) {
+    var users = routes.at('get /users/{user}');
     expect(users).to.be.an.object();
     expect(users.method).to.equal('get');
     expect(users.config.auth).to.be.an.object();
@@ -69,8 +69,8 @@ experiment('users routes', function() {
     done();
   });
 
-  test('applies config to delete /api/users/{user}', function(done) {
-    var users = routes.at('delete /api/users/{user}');
+  test('applies config to delete /users/{user}', function(done) {
+    var users = routes.at('delete /users/{user}');
     expect(users).to.be.an.object();
     expect(users.method).to.equal('delete');
     expect(users.config.auth).to.be.an.object();
@@ -85,8 +85,8 @@ experiment('users routes', function() {
     done();
   });
 
-  test('applies config to options /api/users/{user}', function(done) {
-    var users = routes.at('options /api/users/{user}');
+  test('applies config to options /users/{user}', function(done) {
+    var users = routes.at('options /users/{user}');
     expect(users).to.be.an.object();
     expect(users.method).to.equal('options');
     expect(users.config.auth).to.be.an.object();
@@ -98,8 +98,8 @@ experiment('users routes', function() {
     done();
   });
 
-  test('applies config to patch /api/users/{user}', function(done) {
-    var users = routes.at('patch /api/users/{user}');
+  test('applies config to patch /users/{user}', function(done) {
+    var users = routes.at('patch /users/{user}');
     expect(users).to.be.an.object();
     expect(users.method).to.equal('patch');
     expect(users.config.auth).to.be.an.object();

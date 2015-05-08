@@ -1,6 +1,6 @@
 exports.create = {
   success: {
-    url: '/api/users',
+    url: '/users',
     method: 'post',
     payload: {
       username: 'newuser',
@@ -9,19 +9,10 @@ exports.create = {
     }
   },
   duplicateUsername: {
-    url: '/api/users',
+    url: '/users',
     method: 'post',
     payload: {
-      username: 'cade',
-      language: 'en',
-      country: 'CA'
-    }
-  },
-  pgError: {
-    url: '/api/users',
-    method: 'post',
-    payload: {
-      username: 'error',
+      username: 'newuser',
       language: 'en',
       country: 'CA'
     }
@@ -30,41 +21,34 @@ exports.create = {
 
 exports.get = {
   success: {
-    url: '/api/users/1',
+    url: '/users/1',
     method: 'get',
     headers: {
-      authorization: 'token validToken'
+      authorization: 'token userToken'
     }
   },
   invalidId: {
-    url: '/api/users/4',
+    url: '/users/90',
     method: 'get',
     headers: {
-      authorization: 'token validToken'
-    }
-  },
-  pgError: {
-    url: '/api/users/5',
-    method: 'get',
-    headers: {
-      authorization: 'token validToken'
+      authorization: 'token userToken'
     }
   },
   notYourAccount: {
-    url: '/api/users/2',
+    url: '/users/2',
     method: 'get',
     headers: {
-      authorization: 'token validToken'
+      authorization: 'token userToken'
     }
   }
 };
 
 exports.patch = {
   updateEverything: {
-    url: '/api/users/1',
+    url: '/users/1',
     method: 'patch',
     headers: {
-      authorization: 'token validToken'
+      authorization: 'token userToken'
     },
     payload: {
       username: 'changed',
@@ -73,54 +57,30 @@ exports.patch = {
     }
   },
   username: {
-    url: '/api/users/1',
+    url: '/users/1',
     method: 'patch',
     headers: {
-      authorization: 'token validToken'
+      authorization: 'token userToken'
     },
     payload: {
       username: 'changedAgain'
     }
   },
   language: {
-    url: '/api/users/1',
+    url: '/users/1',
     method: 'patch',
     headers: {
-      authorization: 'token validToken'
+      authorization: 'token userToken'
     },
     payload: {
       language: 'fr'
     }
   },
-  pgFetchError: {
-    url: '/api/users/5',
-    method: 'patch',
-    headers: {
-      authorization: 'token validToken'
-    },
-    payload: {
-      username: 'changed',
-      language: 'es',
-      country: 'US'
-    }
-  },
-  pgUpdateError: {
-    url: '/api/users/1',
-    method: 'patch',
-    headers: {
-      authorization: 'token validToken'
-    },
-    payload: {
-      username: 'error',
-      language: 'es',
-      country: 'US'
-    }
-  },
   userNotFound: {
-    url: '/api/users/4',
+    url: '/users/90',
     method: 'patch',
     headers: {
-      authorization: 'token validToken'
+      authorization: 'token userToken'
     },
     payload: {
       username: 'error',
@@ -129,10 +89,10 @@ exports.patch = {
     }
   },
   unauthorized: {
-    url: '/api/users/2',
+    url: '/users/2',
     method: 'patch',
     headers: {
-      authorization: 'token validToken'
+      authorization: 'token userToken'
     },
     payload: {
       username: 'changed',
@@ -144,48 +104,47 @@ exports.patch = {
 
 exports.del = {
   success: {
-    url: '/api/users/1',
+    url: '/users/1',
     method: 'delete',
     headers: {
-      authorization: 'token validToken'
+      authorization: 'token userToken'
     }
   },
   userNotFound: {
-    url: '/api/users/4',
+    url: '/users/90',
     method: 'delete',
     headers: {
-      authorization: 'token validToken'
-    }
-  },
-  pgFetchError: {
-    url: '/api/users/5',
-    method: 'delete',
-    headers: {
-      authorization: 'token validToken'
-    }
-  },
-  pgDeleteError: {
-    url: '/api/users/2',
-    method: 'delete',
-    headers: {
-      authorization: 'token validToken2'
+      authorization: 'token userToken'
     }
   },
   unauthorized: {
-    url: '/api/users/1',
+    url: '/users/3',
     method: 'delete',
     headers: {
-      authorization: 'token validToken2'
+      authorization: 'token userToken2'
+    }
+  },
+  fail: {
+    url: '/users/2',
+    method: 'delete',
+    headers: {
+      authorization: 'token userToken2'
+    }
+  }, fail2: {
+    url: '/users/3',
+    method: 'delete',
+    headers: {
+      authorization: 'token moderatorToken'
     }
   }
 };
 
 exports.options = {
   success: {
-    url: '/api/users/1',
+    url: '/users/1',
     method: 'options',
     headers: {
-      authorization: 'token validToken'
+      authorization: 'token userToken'
     }
   }
 };

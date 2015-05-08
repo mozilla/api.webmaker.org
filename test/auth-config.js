@@ -29,7 +29,7 @@ experiment('Authentication Config', function() {
       auth.validateFunc('validToken', function(err, result, tokenData) {
         expect(result).to.be.true();
         expect(tokenData).to.exist();
-        expect(tokenData.scope).to.equal('user');
+        expect(tokenData.scope).to.include('user', 'project');
         expect(tokenData.user_id).to.equal(1);
         done();
       });

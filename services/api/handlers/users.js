@@ -1,7 +1,7 @@
 var boom = require('boom');
 
 exports.get = function(request, reply) {
-  request.server.methods.db.findUser(
+  request.server.methods.users.find(
     [request.params.user],
     function(err, result) {
       if ( err ) {
@@ -27,7 +27,7 @@ exports.get = function(request, reply) {
 };
 
 exports.post = function(request, reply) {
-  request.server.methods.db.createUser(
+  request.server.methods.users.create(
     [
       request.payload.username,
       request.payload.language,
@@ -50,7 +50,7 @@ exports.post = function(request, reply) {
 };
 
 exports.patch = function(request, reply) {
-  request.server.methods.db.findUser( // TODO: promisify
+  request.server.methods.users.find(
     [request.params.user],
     function(err, result) {
       if ( err ) {
@@ -79,7 +79,7 @@ exports.patch = function(request, reply) {
         user.country = request.payload.country;
       }
 
-      request.server.methods.db.updateUser(
+      request.server.methods.users.update(
         [
           user.username,
           user.language,
@@ -102,7 +102,7 @@ exports.patch = function(request, reply) {
 };
 
 exports.del = function(request, reply) {
-  request.server.methods.db.findUser(
+  request.server.methods.users.find(
     [request.params.user],
     function(err, result) {
       if ( err ) {
@@ -119,7 +119,7 @@ exports.del = function(request, reply) {
         return reply(boom.unauthorized('Insufficient permissions'));
       }
 
-      request.server.methods.db.deleteUser(
+      request.server.methods.users.remove(
         [
           request.params.user
         ],

@@ -1,14 +1,26 @@
 module.exports = {
-  "validToken": {
-    scope: "user",
-    user_id: 1
+  'userToken': {
+    scope: ['user', 'projects'],
+    user_id: 1,
+    moderator: false,
+    staff: false
   },
-  "validToken2": {
-    scope: "user",
-    user_id: 2
+  'userToken2': {
+    scope: ['user', 'projects'],
+    user_id: 2,
+    moderator: false,
+    staff: false
   },
-  "missingScope": {
-    scope: "projects",
-    user_id: 3
+  'moderatorToken': {
+    scope: ['user', 'projects'],
+    user_id: 3,
+    moderator: true,
+    staff: false
+  },
+  'adminToken': {
+    scope: ['user', 'projects'],
+    user_id: 4,
+    moderator: false,
+    staff: true
   }
 };

@@ -28,21 +28,60 @@ exports.register = function(server, options, done) {
     });
   }
 
-  server.method('db.createUser', function(values, done) {
+  server.method('users.create', function(values, done) {
     executeQuery(queries.users.create, values, done);
   }, {});
 
-  server.method('db.findUser', function(values, done) {
+  server.method('users.find', function(values, done) {
     executeQuery(queries.users.find, values, done);
   }, {});
 
-  server.method('db.updateUser', function(values, done) {
+  server.method('users.update', function(values, done) {
     executeQuery(queries.users.update, values, done);
   }, {});
 
-  server.method('db.deleteUser', function(values, done) {
+  server.method('users.remove', function(values, done) {
     executeQuery(queries.users.remove, values, done);
   }, {});
+
+  server.method('projects.create', function(values, done) {
+    executeQuery(queries.projects.create, values, done);
+  }, {});
+
+  server.method('projects.findAll', function(values, done) {
+    executeQuery(queries.projects.findAll, values, done);
+  }, {});
+
+  server.method('projects.findUsersProjects', function(values, done) {
+    executeQuery(queries.projects.findUsersProjects, values, done);
+  }, {});
+
+  server.method('projects.findOne', function(values, done) {
+    executeQuery(queries.projects.findOne, values, done);
+  }, {});
+
+  server.method('projects.findRemixes', function(values, done) {
+    executeQuery(queries.projects.findRemixes, values, done);
+  }, {});
+
+  server.method('projects.findFeatured', function(values, done) {
+    executeQuery(queries.projects.findFeatured, values, done);
+  }, {});
+
+  server.method('projects.update', function(values, done) {
+    executeQuery(queries.projects.update, values, done);
+  }, {});
+
+  server.method('projects.feature', function(values, done) {
+    executeQuery(queries.projects.feature, values, done);
+  }, {});
+
+  server.method('projects.remove', function(values, done) {
+    executeQuery(queries.projects.remove, values, done);
+  }, {});
+
+  // expose so tests can stub
+  server.expose('pg', pg);
 
   done();
 };

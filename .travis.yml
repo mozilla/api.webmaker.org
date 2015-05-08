@@ -6,3 +6,10 @@ sudo: false
 cache:
   directories:
   - node_modules
+addons:
+  postgresql: "9.4"
+before_script:
+ - psql -c 'create database webmaker_testing' -U postgres
+after_script:
+ - npm run test:reportcoverage
+env: POSTGRE_CONNECTION_STRING='postgres://postgres@localhost:5432/webmaker_testing'
