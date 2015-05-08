@@ -50,6 +50,24 @@ function formatProject(project) {
 }
 
 function formatPage(rows) {
+  var elements = [];
+
+  rows.forEach(function(row) {
+    if ( !row.elem_id ) {
+      return;
+    }
+    elements.push({
+      id: row.elem_id,
+      type: row.elem_type,
+      attributes: row.elem_attributes,
+      styles: row.elem_styles,
+      history: {
+        created_at: row.elem_created_at,
+        updated_at: row.elem_updated_at
+      }
+    });
+  });
+
   return {
     id: rows[0].id,
     x: rows[0].x,
@@ -59,18 +77,7 @@ function formatPage(rows) {
       created_at: rows[0].created_at,
       updated_at: rows[0].updated_at
     },
-    elements: rows.map(function(row) {
-      return {
-        id: row.elem_id,
-        type: row.elem_type,
-        attributes: row.elem_attributes,
-        styles: row.elem_styles,
-        history: {
-          created_at: row.elem_created_at,
-          updated_at: row.elem_updated_at
-        }
-      };
-    })
+    elements: elements
   };
 }
 
@@ -90,17 +97,32 @@ function formatPages(rows) {
   });
 }
 
+function formatElement(el) {
+  return {
+    id: el.id,
+    type: el.type,
+    attributes: el.attributes,
+    styles: el.styles,
+    history: {
+      created_at: el.created_at,
+      updated_at: el.updated_at
+    }
+  };
+}
+
 var API_VERSION = process.env.API_VERSION;
 
 function version() {
   return API_VERSION;
 }
 
+
 exports.register = function(server, options, done) {
   server.method('utils.formatUser', formatUser, { callback: false });
   server.method('utils.formatProject', formatProject, { callback: false });
   server.method('utils.formatPage', formatPage, { callback: false });
   server.method('utils.formatPages', formatPages, { callback: false });
+  server.method('utils.formatElement', formatElement, { callback: false });
   server.method('utils.version', version, { callback: false });
   done();
 };

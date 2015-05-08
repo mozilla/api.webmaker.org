@@ -13,6 +13,8 @@ var authRouteConfig = {
 var prerequisites = require('../lib/prerequisites');
 var users = require('../handlers/users');
 var projects = require('../handlers/projects');
+var pages = require('../handlers/pages');
+var elements = require('../handlers/elements');
 
 var numericSchema = Joi.alternatives().try(
   Joi.number(),
@@ -138,13 +140,13 @@ var routes = [
           thumbnail: Joi.object().keys({
             400: Joi.string().optional(),
             1024: Joi.string().optional()
-          }).optional({})
+          }).default({})
         }
       },
       pre: [
         prerequisites.getUser,
         prerequisites.getProject,
-        prerequisites.canUpdate
+        prerequisites.canWrite
       ],
       cors: {
         methods: ['options', 'get', 'patch', 'delete']
@@ -234,6 +236,64 @@ var routes = [
       },
       cors: {
         methods: ['options', 'post']
+      }
+    }
+  }, {
+    path: '/users/{user}/projects/{project}/pages',
+    method: 'post',
+    handler: pages.post.create,
+    config: {
+      auth: {
+        scope: 'projects'
+      },
+      validate: {
+        params: {
+          user: numericSchema,
+          project: numericSchema
+        },
+        payload: {
+          x: Joi.number().required(),
+          y: Joi.number().required(),
+          styles: Joi.object().default({})
+        }
+      },
+      pre: [
+        prerequisites.getUser,
+        prerequisites.getProject,
+        prerequisites.canWrite
+      ],
+      cors: {
+        methods: ['get', 'post', 'options']
+      }
+    }
+  }, {
+    path: '/users/{user}/projects/{project}/pages/{page}',
+    method: 'patch',
+    handler: pages.patch.update,
+    config: {
+      auth: {
+        scope: 'projects'
+      },
+      validate: {
+        params: {
+          user: numericSchema,
+          project: numericSchema,
+          page: numericSchema
+        },
+        payload: Joi.object().keys({
+          x: Joi.number(),
+          y: Joi.number(),
+          styles: Joi.object()
+        }).or('x', 'y', 'styles')
+      },
+      pre: [
+        prerequisites.getUser,
+        prerequisites.getProject,
+        prerequisites.getPage,
+        prerequisites.canWrite
+      ],
+      cors: {
+        methods: ['get', 'patch', 'delete', 'options']
       }
     }
   }

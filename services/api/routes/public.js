@@ -10,6 +10,8 @@ var publicRouteConfig = {
 var prerequisites = require('../lib/prerequisites');
 var users = require('../handlers/users');
 var projects = require('../handlers/projects');
+var pages = require('../handlers/pages');
+var elements = require('../handlers/elements');
 
 var numericSchema = Joi.alternatives().try(
   Joi.number(),
@@ -216,6 +218,45 @@ var routes = [
       },
       cors: {
         methods: ['get', 'post', 'options']
+      }
+    }
+  }, {
+    path: '/users/{user}/projects/{project}/pages',
+    method: 'get',
+    handler: pages.get.all,
+    config: {
+      validate: {
+        params: {
+          user: numericSchema,
+          project: numericSchema
+        }
+      },
+      pre: [
+        prerequisites.getUser,
+        prerequisites.getProject
+      ],
+      cors: {
+        methods: ['get', 'post', 'options']
+      }
+    }
+  }, {
+    path: '/users/{user}/projects/{project}/pages/{page}',
+    method: 'get',
+    handler: pages.get.one,
+    config: {
+      validate: {
+        params: {
+          user: numericSchema,
+          project: numericSchema,
+          page: numericSchema
+        }
+      },
+      pre: [
+        prerequisites.getUser,
+        prerequisites.getProject
+      ],
+      cors: {
+        methods: ['get', 'put', 'delete', 'options']
       }
     }
   }, {

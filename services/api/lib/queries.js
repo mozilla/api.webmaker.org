@@ -53,7 +53,7 @@ module.exports = {
     update: "UPDATE projects SET (title, thumbnail) = ($1, $2) WHERE deleted_at IS NULL" +
       " AND id = $3 RETURNING id, title, thumbnail;",
     feature: "UPDATE projects SET featured = $1 WHERE deleted_at IS NULL and id = $2 RETURNING id, featured;",
-    remove: "UPDATE projects SET deleted_at = CURRENT_TIMESTAMP WHERE id = $1 AND deleted_at IS NULL",
+    remove: "UPDATE projects SET deleted_at = CURRENT_TIMESTAMP WHERE id = $1 AND deleted_at IS NULL;",
     findRemixes: "SELECT " + projectCols + " FROM projects INNER JOIN users ON projects.deleted_at IS NULL" +
     " AND remixed_from = $1 AND projects.user_id = users.id ORDER BY updated_at ASC LIMIT $2 OFFSET $3;",
     findFeatured: "SELECT " + projectCols + " FROM projects INNER JOIN users ON projects.deleted_at IS NULL" +
@@ -61,13 +61,13 @@ module.exports = {
   },
   pages: {
     create: "INSERT INTO pages (project_id, x, y, styles) VALUES ($1, $2, $3, $4) RETURNING id;",
-    findAll: "SELECT " + pageCols + " FROM pagesINNER JOIN elements ON pages.project_id = $1 AND " +
-      "pages.id = elements.page_id AND pages.deleted_at IS NULL AND elements.deleted_at IS NULL;",
-    findOne: "SELECT " + pageCols + " FROM pagesINNER JOIN elements ON pages.id = $1 AND pages.id = elements.page_id" +
-      "AND pages.deleted_at IS NULL AND elements.deleted_at IS NULL;",
+    findAll: "SELECT " + pageCols + " FROM pages LEFT OUTER JOIN elements ON elements.page_id = pages.id AND " +
+    " elements.deleted_at IS NULL WHERE pages.project_id = $1 AND pages.deleted_at IS NULL;",
+    findOne: "SELECT " + pageCols + " FROM pages LEFT OUTER JOIN elements ON elements.id = $2 AND " +
+    " elements.deleted_at IS NULL WHERE pages.project_id = $1 AND pages.id = $2 AND pages.deleted_at IS NULL",
     update: "UPDATE pages SET (x, y, styles) = ($1, $2, $3) WHERE id = $4 AND deleted_at IS NULL" +
       " RETURNING x, y, styles;",
-    remove: "UPDATE pages SET deleted_at = CURRENT_TIMESTAMP WHERE id = $1 AND deleted_at IS NULL"
+    remove: "UPDATE pages SET deleted_at = CURRENT_TIMESTAMP WHERE id = $1 AND deleted_at IS NULL;"
   },
   elements: {
     create: "INSERT into elements (page_id, type, attributes, styles) VALUES ($1, $2, $3, $4) RETURNING id",
@@ -77,6 +77,6 @@ module.exports = {
       "id = $1 AND deleted_at IS NULL;",
     update: "UPDATE elements SET (styles, attributes) = ($1, $2) WHERE id = $3 AND deleted_at IS NULL" +
       " RETURNING styles, attributes;",
-    remove: "UPDATE elements SET deleted_at = CURRENT_TIMESTAMP WHERE id = $1 AND deleted_at IS NULL"
+    remove: "UPDATE elements SET deleted_at = CURRENT_TIMESTAMP WHERE id = $1 AND deleted_at IS NULL;"
   }
 };
