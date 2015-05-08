@@ -25,7 +25,7 @@ cp env.sample .env
 createdb webmaker
 
 # create tables
-psql -d webmaker -f migrations/create_webmaker_db.sql
+psql -d webmaker -f scripts/create-tables.sql
 ```
 
 ## Run
@@ -35,5 +35,8 @@ Start the server with `npm start`
 You can view documentation by navigating to `http://localhost:2015/docs` in your browser
 
 ## Test
+
+The tests require access to a postgreSQL database named `webmaker_testing`.
+Create it by running the command `createdb webmaker_testing`, the test script will automatically create tables and populate them with data.
 
 Run the tests with `npm test`
