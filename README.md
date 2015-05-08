@@ -4,9 +4,14 @@
 
 Webmaker services API.
 
-## Installation
+## Prerequisites
 
-You will need to run [postgeSQL](http://www.postgresql.org/download/)
+You will need to download and install:
+
+* **[Nodejs >= v0.12.1](https://nodejs.org/download) OR [iojs >= v1.0.0](https://iojs.org)**
+* **[postgreSQL](http://www.postgresql.org/download/)**
+
+## Installation
 
 ```
 # Clone the repo
