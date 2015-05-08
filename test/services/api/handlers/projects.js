@@ -1,4 +1,5 @@
 var configs = require('../../../fixtures/configs/project-handlers'),
+  sinon = require('sinon'),
   Lab = require('lab'),
   lab = exports.lab = Lab.script(),
   experiment = lab.experiment,
@@ -7,6 +8,14 @@ var configs = require('../../../fixtures/configs/project-handlers'),
   test = lab.test,
   expect = require('code').expect,
   server;
+
+function mockErr() {
+  var e = new Error('relation does not exist');
+  e.name = 'error';
+  e.severity = 'ERROR';
+  e.code = '42P01';
+  return e;
+}
 
 before(function(done) {
   require('../../../mocks/server')(function(obj) {
@@ -20,6 +29,52 @@ after(function(done) {
 });
 
 experiment('Project Handlers', function() {
+  experiment('pg plugin error handler', function() {
+    test('Handles errors from postgre adapter', function(done) {
+      var opts = configs.pgAdapter.fail;
+      var stub = sinon.stub(server.plugins['webmaker-postgre-adapter'].pg, 'connect')
+        .callsArgWith(1, mockErr());
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(500);
+        expect(resp.result.error).to.equal('Internal Server Error');
+        expect(resp.result.message).to.equal('An internal server error occurred');
+        stub.restore();
+        done();
+      });
+    });
+  });
+
+  experiment('prequisites errors', function() {
+    test('getUser pg error', function(done) {
+      var opts = configs.prerequisites.fail;
+      var stub = sinon.stub(server.methods.users, 'find')
+        .callsArgWith(1, mockErr());
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(500);
+        expect(resp.result.error).to.equal('Internal Server Error');
+        expect(resp.result.message).to.equal('An internal server error occurred');
+        stub.restore();
+        done();
+      });
+    });
+
+    test('getProject pg error', function(done) {
+      var opts = configs.prerequisites.fail;
+      var stub = sinon.stub(server.methods.projects, 'findOne')
+        .callsArgWith(1, mockErr());
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(500);
+        expect(resp.result.error).to.equal('Internal Server Error');
+        expect(resp.result.message).to.equal('An internal server error occurred');
+        stub.restore();
+        done();
+      });
+    });
+  });
+
   experiment('GET - Discover', function() {
     test('default', function(done) {
       var opts = configs.get.discover.success.default;
@@ -141,6 +196,20 @@ experiment('Project Handlers', function() {
         done();
       });
     });
+
+    test('Handles errors from postgre', function(done) {
+      var opts = configs.get.discover.fail.error;
+      var stub = sinon.stub(server.methods.projects, 'findFeatured')
+        .callsArgWith(1, mockErr());
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(500);
+        expect(resp.result.error).to.equal('Internal Server Error');
+        expect(resp.result.message).to.equal('An internal server error occurred');
+        stub.restore();
+        done();
+      });
+    });
   });
 
   experiment('GET - one project (by user_id & id)', function() {
@@ -197,6 +266,20 @@ experiment('Project Handlers', function() {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
         expect(resp.result.message).to.equal('child "project" fails because ["project" must be a number]');
+        done();
+      });
+    });
+
+    test('Handles errors from postgre', function(done) {
+      var opts = configs.get.one.fail.error;
+      var stub = sinon.stub(server.methods.projects, 'findOne')
+        .callsArgWith(1, mockErr());
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(500);
+        expect(resp.result.error).to.equal('Internal Server Error');
+        expect(resp.result.message).to.equal('An internal server error occurred');
+        stub.restore();
         done();
       });
     });
@@ -323,6 +406,20 @@ experiment('Project Handlers', function() {
         done();
       });
     });
+
+    test('Handles errors from postgre', function(done) {
+      var opts = configs.get.all.fail.error;
+      var stub = sinon.stub(server.methods.projects, 'findAll')
+        .callsArgWith(1, mockErr());
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(500);
+        expect(resp.result.error).to.equal('Internal Server Error');
+        expect(resp.result.message).to.equal('An internal server error occurred');
+        stub.restore();
+        done();
+      });
+    });
   });
 
   experiment('GET - All by user', function() {
@@ -443,6 +540,20 @@ experiment('Project Handlers', function() {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
         expect(resp.result.message).to.equal('child "page" fails because ["page" must be a number]');
+        done();
+      });
+    });
+
+    test('Handles errors from postgre', function(done) {
+      var opts = configs.get.byUser.fail.error;
+      var stub = sinon.stub(server.methods.projects, 'findUsersProjects')
+        .callsArgWith(1, mockErr());
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(500);
+        expect(resp.result.error).to.equal('Internal Server Error');
+        expect(resp.result.message).to.equal('An internal server error occurred');
+        stub.restore();
         done();
       });
     });
@@ -569,6 +680,20 @@ experiment('Project Handlers', function() {
         done();
       });
     });
+
+    test('Handles errors from postgre', function(done) {
+      var opts = configs.get.remixes.fail.error;
+      var stub = sinon.stub(server.methods.projects, 'findRemixes')
+        .callsArgWith(1, mockErr());
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(500);
+        expect(resp.result.error).to.equal('Internal Server Error');
+        expect(resp.result.message).to.equal('An internal server error occurred');
+        stub.restore();
+        done();
+      });
+    });
   });
 
   experiment('Create', function() {
@@ -673,6 +798,20 @@ experiment('Project Handlers', function() {
           done();
         });
       });
+
+      test('handles errors from postgre', function(done) {
+        var opts = configs.create.new.fail.error;
+        var stub = sinon.stub(server.methods.projects, 'create')
+          .callsArgWith(1, mockErr());
+
+        server.inject(opts, function(resp) {
+          expect(resp.statusCode).to.equal(500);
+          expect(resp.result.error).to.equal('Internal Server Error');
+          expect(resp.result.message).to.equal('An internal server error occurred');
+          stub.restore();
+          done();
+        });
+      });
     });
 
     experiment('Remix', function() {
@@ -736,6 +875,20 @@ experiment('Project Handlers', function() {
           expect(resp.statusCode).to.equal(400);
           expect(resp.result.error).to.equal('Bad Request');
           expect(resp.result.message).to.equal('child "project" fails because ["project" must be a number]');
+          done();
+        });
+      });
+
+      test('handles errors from postgre', function(done) {
+        var opts = configs.create.remix.fail.error;
+        var stub = sinon.stub(server.methods.projects, 'create')
+          .callsArgWith(1, mockErr());
+
+        server.inject(opts, function(resp) {
+          expect(resp.statusCode).to.equal(500);
+          expect(resp.result.error).to.equal('Internal Server Error');
+          expect(resp.result.message).to.equal('An internal server error occurred');
+          stub.restore();
           done();
         });
       });
@@ -879,6 +1032,20 @@ experiment('Project Handlers', function() {
         done();
       });
     });
+
+    test('Handles errors from postgre', function(done) {
+      var opts = configs.patch.update.fail.error;
+      var stub = sinon.stub(server.methods.projects, 'update')
+        .callsArgWith(1, mockErr());
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(500);
+        expect(resp.result.error).to.equal('Internal Server Error');
+        expect(resp.result.message).to.equal('An internal server error occurred');
+        stub.restore();
+        done();
+      });
+    });
   });
 
   experiment('Feature', function() {
@@ -960,6 +1127,20 @@ experiment('Project Handlers', function() {
         done();
       });
     });
+
+    test('Handles errors from postgre', function(done) {
+      var opts = configs.patch.feature.fail.error;
+      var stub = sinon.stub(server.methods.projects, 'feature')
+        .callsArgWith(1, mockErr());
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(500);
+        expect(resp.result.error).to.equal('Internal Server Error');
+        expect(resp.result.message).to.equal('An internal server error occurred');
+        stub.restore();
+        done();
+      });
+    });
   });
 
   experiment('Delete', function() {
@@ -1027,13 +1208,27 @@ experiment('Project Handlers', function() {
       });
     });
 
-    test('cant create for different user', function(done) {
+    test('cant delete for different user', function(done) {
       var opts = configs.del.fail.auth.notOwner;
 
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(403);
         expect(resp.result.error).to.equal('Forbidden');
         expect(resp.result.message).to.equal('Insufficient permissions');
+        done();
+      });
+    });
+
+    test('Handles errors from postgre', function(done) {
+      var opts = configs.del.fail.error;
+      var stub = sinon.stub(server.methods.projects, 'remove')
+        .callsArgWith(1, mockErr());
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(500);
+        expect(resp.result.error).to.equal('Internal Server Error');
+        expect(resp.result.message).to.equal('An internal server error occurred');
+        stub.restore();
         done();
       });
     });

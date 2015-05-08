@@ -3,8 +3,8 @@
 var boom = require('boom');
 
 function isOwner(tokenId, userId, projectId) {
-  // use bitwise and to check for equality between user ids
-  return !!(tokenId & userId & projectId);
+  return (tokenId === userId) &&
+    (userId === projectId);
 }
 
 exports.calculateOffset = {
@@ -86,7 +86,6 @@ exports.canUpdate = function(request, reply) {
 
 exports.canDelete = function(request, reply) {
   var isModerator = request.auth.credentials.moderator;
-
   if ( isModerator ) {
     return reply();
   }

@@ -10,6 +10,24 @@ var moderatorToken = {
   authorization: 'token moderatorToken'
 };
 
+exports.pgAdapter = {
+  fail: {
+    url: '/discover',
+    method: 'get'
+  }
+};
+
+exports.prerequisites = {
+  fail: {
+    url: '/users/1/projects/1',
+    method: 'patch',
+    payload: {
+      title: 'new'
+    },
+    headers: userToken
+  }
+};
+
 exports.get = {
   discover: {
     success: {
@@ -58,6 +76,10 @@ exports.get = {
             url: '/discover?page=foo'
           }
         }
+      },
+      error: {
+        url: '/discover',
+        method: 'get'
       }
     }
   },
@@ -88,6 +110,10 @@ exports.get = {
             method: 'get'
           }
         }
+      },
+      error: {
+        url: '/users/1/projects/1',
+        method: 'get'
       }
     }
   },
@@ -138,6 +164,10 @@ exports.get = {
             url: '/projects?page=foo'
           }
         }
+      },
+      error: {
+        url: '/projects',
+        method: 'get'
       }
     }
   },
@@ -200,6 +230,10 @@ exports.get = {
             method: 'get'
           }
         }
+      },
+      error: {
+        url: '/users/1/projects',
+        method: 'get'
       }
     }
   },
@@ -262,6 +296,10 @@ exports.get = {
             method: 'get'
           }
         }
+      },
+      error: {
+        url: '/users/1/projects/1/remixes',
+        method: 'get'
       }
     }
   }
@@ -373,6 +411,14 @@ exports.create = {
           },
           headers: userToken2
         }
+      },
+      error: {
+        url: '/users/1/projects',
+        method: 'post',
+        payload: {
+          title: 'error_test'
+        },
+        headers: userToken
       }
     }
   },
@@ -414,11 +460,15 @@ exports.create = {
             headers: userToken
           }
         }
+      },
+      error: {
+        url: '/users/1/projects/2/remixes',
+        method: 'post',
+        headers: userToken
       }
     }
   }
 };
-
 
 exports.patch = {
   update: {
@@ -539,6 +589,14 @@ exports.patch = {
           },
           headers: moderatorToken
         }
+      },
+      error:  {
+        url: '/users/1/projects/1',
+        method: 'patch',
+        payload: {
+          title: 'new'
+        },
+        headers: userToken
       }
     }
   },
@@ -588,6 +646,11 @@ exports.patch = {
           method: 'patch',
           headers: userToken
         }
+      },
+      error: {
+        url: '/users/1/projects/1/feature',
+        method: 'patch',
+        headers: moderatorToken
       }
     }
   }
@@ -639,6 +702,11 @@ exports.del = {
         method: 'delete',
         headers: userToken2
       }
+    },
+    error: {
+      url: '/users/2/projects/3',
+      method: 'delete',
+      headers: userToken2
     }
   }
 };

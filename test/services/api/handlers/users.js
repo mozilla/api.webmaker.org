@@ -1,4 +1,5 @@
 var configs = require('../../../fixtures/configs/user-handlers'),
+  sinon = require('sinon'),
   Lab = require('lab'),
   lab = exports.lab = Lab.script(),
   experiment = lab.experiment,
@@ -7,6 +8,15 @@ var configs = require('../../../fixtures/configs/user-handlers'),
   test = lab.test,
   expect = require('code').expect,
   server;
+
+function mockErr() {
+  var e = new Error('relation does not exist');
+  e.name = 'error';
+  e.severity = 'ERROR';
+  e.code = '42P01';
+  return e;
+}
+
 
 before(function(done) {
   require('../../../mocks/server')(function(obj) {
@@ -39,6 +49,20 @@ experiment('User Handlers', function() {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
         expect(resp.result.message).to.equal('Username taken');
+        done();
+      });
+    });
+
+    test('create user pg error', function(done) {
+      var opts = configs.create.success;
+      var stub = sinon.stub(server.methods.users, 'create')
+        .callsArgWith(1, mockErr());
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(500);
+        expect(resp.result.error).to.equal('Internal Server Error');
+        expect(resp.result.message).to.equal('An internal server error occurred');
+        stub.restore();
         done();
       });
     });
@@ -82,6 +106,20 @@ experiment('User Handlers', function() {
         expect(resp.statusCode).to.equal(401);
         expect(resp.result.error).to.equal('Unauthorized');
         expect(resp.result.message).to.equal('Insufficient permissions');
+        done();
+      });
+    });
+
+    test('find user pg error', function(done) {
+      var opts = configs.get.success;
+      var stub = sinon.stub(server.methods.users, 'find')
+        .callsArgWith(1, mockErr());
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(500);
+        expect(resp.result.error).to.equal('Internal Server Error');
+        expect(resp.result.message).to.equal('An internal server error occurred');
+        stub.restore();
         done();
       });
     });
@@ -148,6 +186,34 @@ experiment('User Handlers', function() {
         done();
       });
     });
+
+    test('find user pg error', function(done) {
+      var opts = configs.patch.updateEverything;
+      var stub = sinon.stub(server.methods.users, 'find')
+        .callsArgWith(1, mockErr());
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(500);
+        expect(resp.result.error).to.equal('Internal Server Error');
+        expect(resp.result.message).to.equal('An internal server error occurred');
+        stub.restore();
+        done();
+      });
+    });
+
+    test('update user pg error', function(done) {
+      var opts = configs.patch.updateEverything;
+      var stub = sinon.stub(server.methods.users, 'update')
+        .callsArgWith(1, mockErr());
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(500);
+        expect(resp.result.error).to.equal('Internal Server Error');
+        expect(resp.result.message).to.equal('An internal server error occurred');
+        stub.restore();
+        done();
+      });
+    });
   });
 
   experiment('Delete', function() {
@@ -179,6 +245,34 @@ experiment('User Handlers', function() {
         expect(resp.statusCode).to.equal(401);
         expect(resp.result.error).to.equal('Unauthorized');
         expect(resp.result.message).to.equal('Insufficient permissions');
+        done();
+      });
+    });
+
+    test('find user pg error', function(done) {
+      var opts = configs.del.fail;
+      var stub = sinon.stub(server.methods.users, 'find')
+        .callsArgWith(1, mockErr());
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(500);
+        expect(resp.result.error).to.equal('Internal Server Error');
+        expect(resp.result.message).to.equal('An internal server error occurred');
+        stub.restore();
+        done();
+      });
+    });
+
+    test('delete user pg error', function(done) {
+      var opts = configs.del.fail2;
+      var stub = sinon.stub(server.methods.users, 'remove')
+        .callsArgWith(1, mockErr());
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(500);
+        expect(resp.result.error).to.equal('Internal Server Error');
+        expect(resp.result.message).to.equal('An internal server error occurred');
+        stub.restore();
         done();
       });
     });

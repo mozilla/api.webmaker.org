@@ -50,7 +50,7 @@ exports.post = function(request, reply) {
 };
 
 exports.patch = function(request, reply) {
-  request.server.methods.users.find( // TODO: promisify
+  request.server.methods.users.find(
     [request.params.user],
     function(err, result) {
       if ( err ) {

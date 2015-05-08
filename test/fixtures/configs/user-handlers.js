@@ -121,6 +121,19 @@ exports.del = {
     url: '/users/3',
     method: 'delete',
     headers: {
+      authorization: 'token userToken2'
+    }
+  },
+  fail: {
+    url: '/users/2',
+    method: 'delete',
+    headers: {
+      authorization: 'token userToken2'
+    }
+  }, fail2: {
+    url: '/users/3',
+    method: 'delete',
+    headers: {
       authorization: 'token moderatorToken'
     }
   }

@@ -80,6 +80,9 @@ exports.register = function(server, options, done) {
     executeQuery(queries.projects.remove, values, done);
   }, {});
 
+  // expose so tests can stub
+  server.expose('pg', pg);
+
   done();
 };
 
