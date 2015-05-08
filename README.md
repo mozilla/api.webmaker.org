@@ -9,7 +9,7 @@ Webmaker services API.
 You will need to download and install:
 
 * **[Nodejs >= v0.12.1](https://nodejs.org/download) OR [iojs >= v1.0.0](https://iojs.org)**
-* **[postgreSQL](http://www.postgresql.org/download/)**
+* **[postgreSQL >= v9.4](http://www.postgresql.org/download/)**
 
 ## Installation
 
