@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/mozilla/api.webmaker.org.svg)](https://travis-ci.org/mozilla/api.webmaker.org)
-
+[![Coverage Status](https://coveralls.io/repos/mozilla/api.webmaker.org/badge.svg)](https://coveralls.io/r/mozilla/api.webmaker.org)
 # api.webmaker.org
 
 Webmaker services API.
