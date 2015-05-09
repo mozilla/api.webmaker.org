@@ -59,24 +59,37 @@ exports.get = {
   }
 };
 
-exports.patch = function(request, reply) {
-  request.server.methods.elements.update(
-    [
-      request.payload.attributes,
-      request.payload.styles,
-      request.params.element
-    ],
-    function(err, result) {
-      if ( err ) {
-        return reply(err);
-      }
+exports.patch = {
+  update: function(request, reply) {
+    var attributes = request.payload.attributes;
+    var styles = request.payload.styles;
 
-      reply({
-        status: 'updated',
-        page: result.rows[0]
-      });
+    if ( !attributes ) {
+      attributes = request.pre.element.attributes;
     }
-  );
+
+    if ( !styles ) {
+      styles = request.pre.element.styles;
+    }
+
+    request.server.methods.elements.update(
+      [
+        attributes,
+        styles,
+        request.params.element
+      ],
+      function(err, result) {
+        if ( err ) {
+          return reply(err);
+        }
+
+        reply({
+          status: 'updated',
+          page: result.rows[0]
+        });
+      }
+    );
+  }
 };
 
 exports.del = function(request, reply) {

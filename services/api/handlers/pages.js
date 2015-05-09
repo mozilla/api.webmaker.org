@@ -11,7 +11,6 @@ exports.post = {
       ],
       function(err, result) {
         if ( err ) {
-          console.log( err );
           return reply(err);
         }
 
@@ -79,7 +78,7 @@ exports.patch = {
     if ( !y ) {
       y = request.pre.page.y;
     }
-    console.log( styles, request.pre.page );
+
     if ( !styles ) {
       styles = request.pre.page.styles;
     }

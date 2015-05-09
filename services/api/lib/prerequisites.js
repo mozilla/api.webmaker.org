@@ -85,6 +85,29 @@ exports.getPage = {
   }
 };
 
+exports.getElement = {
+  assign: 'element',
+  method: function(request, reply) {
+    request.server.methods.elements.findOne(
+      [
+        request.params.element,
+        request.pre.page.id
+      ],
+      function(err, result) {
+        if ( err ) {
+          return reply(err);
+        }
+
+        if ( !result.rows.length ) {
+          return reply(boom.notFound('Element not found'));
+        }
+
+        reply(result.rows[0]);
+      }
+    );
+  }
+};
+
 exports.canCreate = function(request, reply) {
   if ( request.auth.credentials.user_id === request.pre.user.id ) {
     return reply();

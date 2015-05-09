@@ -313,7 +313,7 @@ var routes = [
     }
   }, {
     path: '/users/{user}/projects/{project}/pages/{page}/elements',
-    method: 'get',
+    method: 'options',
     handler: elements.options,
     config: {
       validate: {
@@ -351,7 +351,7 @@ var routes = [
     }
   }, {
     path: '/users/{user}/projects/{project}/pages/{page}/elements/{element}',
-    method: 'get',
+    method: 'options',
     handler: elements.options,
     config: {
       validate: {

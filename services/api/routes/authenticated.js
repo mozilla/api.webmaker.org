@@ -322,6 +322,94 @@ var routes = [
         methods: ['get', 'patch', 'delete', 'options']
       }
     }
+  }, {
+    path: '/users/{user}/projects/{project}/pages/{page}/elements',
+    method: 'post',
+    handler: elements.post,
+    config: {
+      auth: {
+        scope: 'projects'
+      },
+      validate: {
+        params: {
+          user: numericSchema,
+          project: numericSchema,
+          page: numericSchema
+        },
+        payload: {
+          type: Joi.string().required(),
+          attributes: Joi.object().default({}),
+          styles: Joi.object().default({})
+        }
+      },
+      pre: [
+        prerequisites.getUser,
+        prerequisites.getProject,
+        prerequisites.getPage,
+        prerequisites.canWrite
+      ],
+      cors: {
+        methods: ['get', 'post', 'options']
+      }
+    }
+  }, {
+    path: '/users/{user}/projects/{project}/pages/{page}/elements/{element}',
+    method: 'patch',
+    handler: elements.patch.update,
+    config: {
+      auth: {
+        scope: 'projects'
+      },
+      validate: {
+        params: {
+          user: numericSchema,
+          project: numericSchema,
+          page: numericSchema,
+          element: numericSchema
+        },
+        payload: Joi.object().keys({
+          attributes: Joi.object(),
+          styles: Joi.object()
+        }).or('attributes', 'styles')
+      },
+      pre: [
+        prerequisites.getUser,
+        prerequisites.getProject,
+        prerequisites.getPage,
+        prerequisites.getElement,
+        prerequisites.canWrite
+      ],
+      cors: {
+        methods: ['get', 'patch', 'delete', 'options']
+      }
+    }
+  }, {
+    path: '/users/{user}/projects/{project}/pages/{page}/elements/{element}',
+    method: 'delete',
+    handler: elements.del,
+    config: {
+      auth: {
+        scope: 'projects'
+      },
+      validate: {
+        params: {
+          user: numericSchema,
+          project: numericSchema,
+          page: numericSchema,
+          element: numericSchema
+        }
+      },
+      pre: [
+        prerequisites.getUser,
+        prerequisites.getProject,
+        prerequisites.getPage,
+        prerequisites.getElement,
+        prerequisites.canWrite
+      ],
+      cors: {
+        methods: ['get', 'patch', 'delete', 'options']
+      }
+    }
   }
 ];
 
