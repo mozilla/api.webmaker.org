@@ -271,7 +271,7 @@ var routes = [
         prerequisites.getProject
       ],
       cors: {
-        methods: ['get', 'put', 'delete', 'options']
+        methods: ['get', 'patch', 'delete', 'options']
       }
     }
   }, {
@@ -287,7 +287,7 @@ var routes = [
         }
       },
       cors: {
-        methods: ['get', 'put', 'delete', 'options']
+        methods: ['get', 'patch', 'delete', 'options']
       }
     }
   }, {
@@ -346,7 +346,7 @@ var routes = [
         prerequisites.getPage
       ],
       cors: {
-        methods: ['get', 'put', 'delete', 'options']
+        methods: ['get', 'patch', 'delete', 'options']
       }
     }
   }, {
@@ -363,7 +363,7 @@ var routes = [
         }
       },
       cors: {
-        methods: ['get', 'put', 'delete', 'options']
+        methods: ['get', 'patch', 'delete', 'options']
       }
     }
   }, {
