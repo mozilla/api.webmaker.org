@@ -240,6 +240,21 @@ var routes = [
       }
     }
   }, {
+    path: '/users/{user}/projects/{project}/pages',
+    method: 'options',
+    handler: pages.options,
+    config: {
+      validate: {
+        params: {
+          user: numericSchema,
+          project: numericSchema
+        }
+      },
+      cors: {
+        methods: ['get', 'post', 'options']
+      }
+    }
+  }, {
     path: '/users/{user}/projects/{project}/pages/{page}',
     method: 'get',
     handler: pages.get.one,
@@ -255,6 +270,22 @@ var routes = [
         prerequisites.getUser,
         prerequisites.getProject
       ],
+      cors: {
+        methods: ['get', 'put', 'delete', 'options']
+      }
+    }
+  }, {
+    path: '/users/{user}/projects/{project}/pages/{page}',
+    method: 'options',
+    handler: pages.options,
+    config: {
+      validate: {
+        params: {
+          user: numericSchema,
+          project: numericSchema,
+          page: numericSchema
+        }
+      },
       cors: {
         methods: ['get', 'put', 'delete', 'options']
       }
@@ -281,6 +312,22 @@ var routes = [
       }
     }
   }, {
+    path: '/users/{user}/projects/{project}/pages/{page}/elements',
+    method: 'get',
+    handler: elements.options,
+    config: {
+      validate: {
+        params: {
+          user: numericSchema,
+          project: numericSchema,
+          page: numericSchema
+        }
+      },
+      cors: {
+        methods: ['get', 'post', 'options']
+      }
+    }
+  }, {
     path: '/users/{user}/projects/{project}/pages/{page}/elements/{element}',
     method: 'get',
     handler: elements.get.one,
@@ -298,6 +345,23 @@ var routes = [
         prerequisites.getProject,
         prerequisites.getPage
       ],
+      cors: {
+        methods: ['get', 'put', 'delete', 'options']
+      }
+    }
+  }, {
+    path: '/users/{user}/projects/{project}/pages/{page}/elements/{element}',
+    method: 'get',
+    handler: elements.options,
+    config: {
+      validate: {
+        params: {
+          user: numericSchema,
+          project: numericSchema,
+          page: numericSchema,
+          element: numericSchema
+        }
+      },
       cors: {
         methods: ['get', 'put', 'delete', 'options']
       }
