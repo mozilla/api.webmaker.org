@@ -296,6 +296,32 @@ var routes = [
         methods: ['get', 'patch', 'delete', 'options']
       }
     }
+  },
+  {
+    path: '/users/{user}/projects/{project}/pages/{page}',
+    method: 'delete',
+    handler: pages.del,
+    config: {
+      auth: {
+        scope: 'projects'
+      },
+      validate: {
+        params: {
+          user: numericSchema,
+          project: numericSchema,
+          page: numericSchema
+        }
+      },
+      pre: [
+        prerequisites.getUser,
+        prerequisites.getProject,
+        prerequisites.getPage,
+        prerequisites.canWrite
+      ],
+      cors: {
+        methods: ['get', 'patch', 'delete', 'options']
+      }
+    }
   }
 ];
 

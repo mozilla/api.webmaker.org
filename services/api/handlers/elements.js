@@ -42,7 +42,8 @@ exports.get = {
   one: function(request, reply) {
     request.server.methods.elements.findOne(
       [
-        request.params.element
+        request.params.element,
+        request.pre.page.id
       ],
       function(err, result) {
         if ( err ) {

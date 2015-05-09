@@ -59,6 +59,7 @@ CREATE TABLE IF NOT EXISTS "elements"
 /* Indexes */
 CREATE INDEX user_idx_id_deleted_at ON users (id, deleted_at);
 CREATE INDEX project_id_user_id_deleted_at ON projects (id, user_id, deleted_at);
+CREATE INDEX project_deleted_at_user_id on projects (deleted_at, user_id);
 CREATE INDEX project_id_deleted_at ON pages (project_id, deleted_at);
 CREATE INDEX pages_id_x_y_deleted_at ON pages (id, x, y, deleted_at);
 CREATE INDEX elements_page_is_deleted_at ON elements (id, page_id, deleted_at);

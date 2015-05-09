@@ -260,6 +260,49 @@ var routes = [
       }
     }
   }, {
+    path: '/users/{user}/projects/{project}/pages/{page}/elements',
+    method: 'get',
+    handler: elements.get.all,
+    config: {
+      validate: {
+        params: {
+          user: numericSchema,
+          project: numericSchema,
+          page: numericSchema
+        }
+      },
+      pre: [
+        prerequisites.getUser,
+        prerequisites.getProject,
+        prerequisites.getPage
+      ],
+      cors: {
+        methods: ['get', 'post', 'options']
+      }
+    }
+  }, {
+    path: '/users/{user}/projects/{project}/pages/{page}/elements/{element}',
+    method: 'get',
+    handler: elements.get.one,
+    config: {
+      validate: {
+        params: {
+          user: numericSchema,
+          project: numericSchema,
+          page: numericSchema,
+          element: numericSchema
+        }
+      },
+      pre: [
+        prerequisites.getUser,
+        prerequisites.getProject,
+        prerequisites.getPage
+      ],
+      cors: {
+        methods: ['get', 'put', 'delete', 'options']
+      }
+    }
+  }, {
     path: '/docs/css/style.css',
     method: 'get',
     handler: {

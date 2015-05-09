@@ -239,7 +239,6 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
-        console.log( resp.result.message );
         expect(resp.result.message).to.be.a.string();
         done();
       });
