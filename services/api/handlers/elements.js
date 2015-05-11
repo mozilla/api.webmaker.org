@@ -1,3 +1,5 @@
+var boom = require('boom');
+
 exports.post = function(request, reply) {
   request.server.methods.elements.create(
     [
@@ -50,9 +52,13 @@ exports.get = {
           return reply(err);
         }
 
+        if ( !result.rows.length ) {
+          return reply(boom.notFound('Element not found'));
+        }
+
         reply({
           status: 'success',
-          page: request.server.methods.utils.formatElement(result.rows[0])
+          element: request.server.methods.utils.formatElement(result.rows[0])
         });
       }
     );
@@ -74,8 +80,8 @@ exports.patch = {
 
     request.server.methods.elements.update(
       [
-        attributes,
         styles,
+        attributes,
         request.params.element
       ],
       function(err, result) {
@@ -85,7 +91,7 @@ exports.patch = {
 
         reply({
           status: 'updated',
-          page: result.rows[0]
+          element: result.rows[0]
         });
       }
     );

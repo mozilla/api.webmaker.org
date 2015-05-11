@@ -19,6 +19,7 @@ var projectCols = [
 
 var pageCols = [
   "pages.id",
+  "pages.project_id",
   "pages.x",
   "pages.y",
   "pages.created_at",
@@ -108,7 +109,7 @@ module.exports = {
 
     // Find one page in a project
     // Params: project_id bigint, page_id bigint
-    findOne: "SELECT " + pageCols + " FROM pages LEFT OUTER JOIN elements ON elements.id = $2 AND " +
+    findOne: "SELECT " + pageCols + " FROM pages LEFT OUTER JOIN elements ON elements.page_id = $2 AND " +
     " elements.deleted_at IS NULL WHERE pages.project_id = $1 AND pages.id = $2 AND pages.deleted_at IS NULL",
 
     // Update page
@@ -127,12 +128,12 @@ module.exports = {
 
     // Find all elements in a page
     // Params page_id bigint
-    findAll: "SELECT id, type, attributes, styles, created_at, updated_at FROM elements WHERE " +
+    findAll: "SELECT id, page_id, type, attributes, styles, created_at, updated_at FROM elements WHERE " +
       "page_id = $1 AND deleted_at IS NULL;",
 
     // Find one element by id and page_id
     // Params: element_id bigint, page_id bigint
-    findOne: "SELECT id, attributes, styles, created_at, updated_at FROM elements WHERE " +
+    findOne: "SELECT id, page_id, type, attributes, styles, created_at, updated_at FROM elements WHERE " +
       "id = $1 AND page_id = $2 AND deleted_at IS NULL;",
 
     // Update element

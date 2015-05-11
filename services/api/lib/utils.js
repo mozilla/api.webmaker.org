@@ -70,6 +70,7 @@ function formatPage(rows) {
 
   return {
     id: rows[0].id,
+    project_id: rows[0].project_id,
     x: rows[0].x,
     y: rows[0].y,
     styles: rows[0].styles,
@@ -100,6 +101,7 @@ function formatPages(rows) {
 function formatElement(el) {
   return {
     id: el.id,
+    page_id: el.page_id,
     type: el.type,
     attributes: el.attributes,
     styles: el.styles,

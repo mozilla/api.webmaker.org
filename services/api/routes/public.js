@@ -14,7 +14,7 @@ var pages = require('../handlers/pages');
 var elements = require('../handlers/elements');
 
 var numericSchema = Joi.alternatives().try(
-  Joi.number(),
+  Joi.number().integer(),
   Joi.string().regex(/^\d+$/)
 );
 
@@ -55,8 +55,8 @@ var routes = [
     config: {
       validate: {
         query: {
-          count: Joi.number().min(1).max(100).default(10),
-          page:Joi.number().min(1).max(50).default(1)
+          count: Joi.number().integer().min(1).max(100).default(10),
+          page:Joi.number().integer().min(1).max(50).default(1)
         }
       },
       pre: [
@@ -76,8 +76,8 @@ var routes = [
           user: numericSchema
         },
         query: {
-          count: Joi.number().min(1).max(100).default(10),
-          page:Joi.number().min(1).max(50).default(1)
+          count: Joi.number().integer().min(1).max(100).default(10),
+          page:Joi.number().integer().min(1).max(50).default(1)
         }
       },
       pre: [
@@ -131,8 +131,8 @@ var routes = [
           user: numericSchema
         },
         query: {
-          count: Joi.number().min(1).max(100).default(10),
-          page:Joi.number().min(1).default(1)
+          count: Joi.number().integer().min(1).max(100).default(10),
+          page:Joi.number().integer().min(1).default(1)
         }
       },
       cors: {
@@ -146,8 +146,8 @@ var routes = [
     config: {
       validate: {
         query: {
-          count: Joi.number().min(1).max(100),
-          page:Joi.number().min(1)
+          count: Joi.number().integer().min(1).max(100),
+          page:Joi.number().integer().min(1)
         }
       },
       cors: {
@@ -165,8 +165,8 @@ var routes = [
           project: numericSchema
         },
         query: {
-          count: Joi.number().min(1).max(100).default(10),
-          page:Joi.number().min(1).max(50).default(1)
+          count: Joi.number().integer().min(1).max(100).default(10),
+          page:Joi.number().integer().min(1).max(50).default(1)
         }
       },
       pre: [
@@ -185,8 +185,8 @@ var routes = [
     config: {
       validate: {
         query: {
-          count: Joi.number().min(1).max(100).default(10),
-          page:Joi.number().min(1).max(50).default(1)
+          count: Joi.number().integer().min(1).max(100).default(10),
+          page:Joi.number().integer().min(1).max(50).default(1)
         }
       },
       pre: [

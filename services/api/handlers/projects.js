@@ -160,10 +160,10 @@ exports.patch = {
       project.title = request.payload.title;
     }
 
-    if ( request.payload.thumbnail ) {
-      project.thumbnail[400] = request.payload.thumbnail[400];
-      project.thumbnail[1024] = request.payload.thumbnail[1024];
-    }
+    project.thumbnail = {
+      400: request.payload.thumbnail[400] || '',
+      1024: request.payload.thumbnail[1024] || ''
+    };
 
     request.server.methods.projects.update(
       [

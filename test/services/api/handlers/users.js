@@ -187,6 +187,17 @@ experiment('User Handlers', function() {
       });
     });
 
+    test('Does not allow duplicate usernames', function(done) {
+      var opts = configs.patch.duplicateUsername;
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(400);
+        expect(resp.result.error).to.equal('Bad Request');
+        expect(resp.result.message).to.equal('Username taken');
+        done();
+      });
+    });
+
     test('find user pg error', function(done) {
       var opts = configs.patch.updateEverything;
       var stub = sinon.stub(server.methods.users, 'find')

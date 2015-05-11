@@ -11,6 +11,9 @@ exports.post = {
       ],
       function(err, result) {
         if ( err ) {
+          if ( err.constraint === 'pages_project_id_x_y_key' ) {
+            return reply(boom.badRequest('Duplicate coordinates'));
+          }
           return reply(err);
         }
 
@@ -93,6 +96,9 @@ exports.patch = {
       ],
       function(err, result) {
         if ( err ) {
+          if ( err.constraint === 'pages_project_id_x_y_key' ) {
+            return reply(boom.badRequest('Duplicate coordinates'));
+          }
           return reply(err);
         }
 

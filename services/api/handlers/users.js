@@ -88,6 +88,9 @@ exports.patch = function(request, reply) {
         ],
         function(err, result) {
           if ( err ) {
+            if ( err.constraint === 'unique_username' ) {
+              return reply(boom.badRequest('Username taken'));
+            }
             return reply(err);
           }
 

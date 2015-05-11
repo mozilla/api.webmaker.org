@@ -52,54 +52,60 @@ BEGIN
     (jon_id, NULL, 'test', 'test_project_9', empty_json, TRUE),
     (andrew_id, NULL, 'test', 'test_project_10', empty_json, TRUE);
 
-  -- grab a project id
-  project_id := get_project_id('test_project_1');
-
   -- create some remixes
   INSERT INTO projects (user_id, remixed_From, version, title, thumbnail) VALUES
-    (jon_id, project_id, 'test','test_remix_1', empty_json),
-    (andrew_id, project_id, 'test', 'test_remix_2', empty_json),
-    (jon_id, project_id, 'test','test_remix_3', empty_json),
-    (andrew_id, project_id, 'test', 'test_remix_4', empty_json);
+    (jon_id, 1, 'test','test_remix_1', empty_json),
+    (andrew_id, 1, 'test', 'test_remix_2', empty_json),
+    (jon_id, 1, 'test','test_remix_3', empty_json),
+    (andrew_id, 1, 'test', 'test_remix_4', empty_json);
 
   -- create some pages
   INSERT INTO pages (project_id, x, y, styles) VALUES
-    (project_id, 0, 0, empty_json),
-    (project_id, 0, 1, empty_json),
-    (project_id, 1, 0, styles),
-    (project_id, 1, 1, empty_json),
-    (project_id, -1, 0, styles);
+    (1, 0, 0, empty_json),
+    (1, 0, 1, empty_json),
+    (1, 1, 0, styles),
+    (1, 1, 1, empty_json),
+    (1, -1, 0, styles);
 
-  page_id := get_page_id(project_id, 1, 1);
+  INSERT INTO pages (project_id, x, y, styles) VALUES
+    (7, 0, 0, empty_json);
 
-  INSERT INTO elements (page_id, type, attributes, styles) VALUES
-    (page_id, 'text', empty_json, empty_json),
-    (page_id, 'text', attributes, styles),
-    (page_id, 'text', empty_json, styles),
-    (page_id, 'text', attributes, empty_json),
-    (page_id, 'text', empty_json, styles),
-    (page_id, 'text', attributes, empty_json),
-    (page_id, 'text', empty_json, styles);
-
-  page_id := get_page_id(project_id, 1, 0);
+  INSERT INTO pages (project_id, x, y, styles) VALUES
+    (3, 0, 0, empty_json),
+    (3, 0, 1, empty_json),
+    (3, 1, 0, styles),
+    (3, 1, 1, empty_json),
+    (3, -1, 0, styles);
 
   INSERT INTO elements (page_id, type, attributes, styles) VALUES
-    (page_id, 'text', empty_json, empty_json),
-    (page_id, 'text', attributes, styles),
-    (page_id, 'text', empty_json, styles),
-    (page_id, 'text', attributes, empty_json),
-    (page_id, 'text', empty_json, styles),
-    (page_id, 'text', attributes, empty_json),
-    (page_id, 'text', empty_json, styles);
-
-  page_id := get_page_id(project_id, -1, 0);
+    (1, 'text', empty_json, empty_json),
+    (1, 'image', attributes, styles),
+    (1, 'link button', empty_json, styles),
+    (1, 'text', attributes, empty_json),
+    (1, 'image', empty_json, styles),
+    (1, 'text', attributes, empty_json),
+    (1, 'link button', empty_json, styles);
 
   INSERT INTO elements (page_id, type, attributes, styles) VALUES
-    (page_id, 'image', empty_json, empty_json),
-    (page_id, 'image', attributes, styles),
-    (page_id, 'image', empty_json, styles),
-    (page_id, 'image', attributes, empty_json),
-    (page_id, 'image', empty_json, styles),
-    (page_id, 'image', attributes, empty_json),
-    (page_id, 'image', empty_json, styles);
+    (7, 'text', empty_json, empty_json),
+    (7, 'link button', empty_json, styles),
+    (7, 'link button', empty_json, styles);
+
+  INSERT INTO elements (page_id, type, attributes, styles) VALUES
+    (8, 'text', empty_json, empty_json),
+    (8, 'image', attributes, styles),
+    (8, 'link button', empty_json, styles),
+    (8, 'text', attributes, empty_json),
+    (8, 'image', empty_json, styles),
+    (8, 'link button', attributes, empty_json),
+    (8, 'text', empty_json, styles);
+
+  INSERT INTO elements (page_id, type, attributes, styles) VALUES
+    (10, 'image', empty_json, empty_json),
+    (10, 'link button', attributes, styles),
+    (10, 'text', empty_json, styles),
+    (10, 'image', attributes, empty_json),
+    (10, 'link button', empty_json, styles),
+    (10, 'text', attributes, empty_json),
+    (10, 'image', empty_json, styles);
 END $$;

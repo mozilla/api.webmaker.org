@@ -889,13 +889,26 @@ experiment('Project Handlers', function() {
       });
     });
 
-    test('update thumbnail succeeds', function(done) {
+    test('update thumbnail (400) succeeds', function(done) {
       var opts = configs.patch.update.success.thumb;
 
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(200);
         expect(resp.result.status).to.equal('updated');
         expect(resp.result.project.thumbnail[400]).to.equal('new');
+        expect(resp.result.project.thumbnail[1024]).to.equal('');
+        done();
+      });
+    });
+
+    test('update thumbnail (1024) succeeds', function(done) {
+      var opts = configs.patch.update.success.thumb2;
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+        expect(resp.result.status).to.equal('updated');
+        expect(resp.result.project.thumbnail[400]).to.equal('');
+        expect(resp.result.project.thumbnail[1024]).to.equal('new');
         done();
       });
     });
@@ -907,8 +920,8 @@ experiment('Project Handlers', function() {
         expect(resp.statusCode).to.equal(200);
         expect(resp.result.status).to.equal('updated');
         expect(resp.result.project.thumbnail).to.exist();
-        expect(resp.result.project.thumbnail[400]).to.not.exist();
-        expect(resp.result.project.thumbnail[1024]).to.not.exist();
+        expect(resp.result.project.thumbnail[400]).to.equal('');
+        expect(resp.result.project.thumbnail[1024]).to.equal('');
         done();
       });
     });

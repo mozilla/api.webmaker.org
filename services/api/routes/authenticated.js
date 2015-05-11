@@ -17,7 +17,7 @@ var pages = require('../handlers/pages');
 var elements = require('../handlers/elements');
 
 var numericSchema = Joi.alternatives().try(
-  Joi.number(),
+  Joi.number().integer(),
   Joi.string().regex(/^\d+$/)
 );
 
@@ -32,7 +32,7 @@ var routes = [
       },
       validate: {
         params: {
-          user: Joi.number().required()
+          user: numericSchema
         }
       },
       cors: {
@@ -49,7 +49,7 @@ var routes = [
       },
       validate: {
         params: {
-          user: Joi.number().required()
+          user: numericSchema
         },
         payload: {
           username: Joi.string().max(20).optional(),
@@ -107,7 +107,7 @@ var routes = [
         },
         payload: {
           title: Joi.string().required(),
-          remixed_from: Joi.number().optional(),
+          remixed_from: Joi.number().integer().optional(),
           thumbnail: Joi.object().keys({
             400: Joi.string().optional(),
             1024: Joi.string().optional()
@@ -252,8 +252,8 @@ var routes = [
           project: numericSchema
         },
         payload: {
-          x: Joi.number().required(),
-          y: Joi.number().required(),
+          x: Joi.number().integer().required(),
+          y: Joi.number().integer().required(),
           styles: Joi.object().default({})
         }
       },
@@ -281,8 +281,8 @@ var routes = [
           page: numericSchema
         },
         payload: Joi.object().keys({
-          x: Joi.number(),
-          y: Joi.number(),
+          x: Joi.number().integer(),
+          y: Joi.number().integer(),
           styles: Joi.object()
         }).or('x', 'y', 'styles')
       },
@@ -316,7 +316,7 @@ var routes = [
         prerequisites.getUser,
         prerequisites.getProject,
         prerequisites.getPage,
-        prerequisites.canWrite
+        prerequisites.canDelete
       ],
       cors: {
         methods: ['get', 'patch', 'delete', 'options']
@@ -404,7 +404,7 @@ var routes = [
         prerequisites.getProject,
         prerequisites.getPage,
         prerequisites.getElement,
-        prerequisites.canWrite
+        prerequisites.canDelete
       ],
       cors: {
         methods: ['get', 'patch', 'delete', 'options']
