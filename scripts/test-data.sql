@@ -4,8 +4,6 @@ DECLARE
   chris_id bigint;
   jon_id bigint;
   andrew_id bigint;
-  project_id bigint;
-  page_id bigint;
   empty_json jsonb := '{}'::jsonb;
   thumb_small jsonb := '{"400": "https://example.com/400.png"}'::jsonb;
   thumb_large jsonb := '{"1024": "https://example.com/1024.png"}'::jsonb;
