@@ -118,7 +118,6 @@ function version() {
   return API_VERSION;
 }
 
-
 exports.register = function(server, options, done) {
   server.method('utils.formatUser', formatUser, { callback: false });
   server.method('utils.formatProject', formatProject, { callback: false });
