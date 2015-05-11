@@ -49,6 +49,69 @@ function formatProject(project) {
   return formatted;
 }
 
+function formatPage(rows) {
+  var elements = [];
+
+  rows.forEach(function(row) {
+    if ( !row.elem_id ) {
+      return;
+    }
+    elements.push({
+      id: row.elem_id,
+      type: row.elem_type,
+      attributes: row.elem_attributes,
+      styles: row.elem_styles,
+      history: {
+        created_at: row.elem_created_at,
+        updated_at: row.elem_updated_at
+      }
+    });
+  });
+
+  return {
+    id: rows[0].id,
+    project_id: rows[0].project_id,
+    x: rows[0].x,
+    y: rows[0].y,
+    styles: rows[0].styles,
+    history: {
+      created_at: rows[0].created_at,
+      updated_at: rows[0].updated_at
+    },
+    elements: elements
+  };
+}
+
+function formatPages(rows) {
+  var sorted = {};
+
+  rows.forEach(function(row) {
+    if ( !sorted[row.id] ) {
+      sorted[row.id] = [];
+    }
+
+    sorted[row.id].push(row);
+  });
+
+  return Object.keys(sorted).map(function(key) {
+    return formatPage(sorted[key]);
+  });
+}
+
+function formatElement(el) {
+  return {
+    id: el.id,
+    page_id: el.page_id,
+    type: el.type,
+    attributes: el.attributes,
+    styles: el.styles,
+    history: {
+      created_at: el.created_at,
+      updated_at: el.updated_at
+    }
+  };
+}
+
 var API_VERSION = process.env.API_VERSION;
 
 function version() {
@@ -58,6 +121,9 @@ function version() {
 exports.register = function(server, options, done) {
   server.method('utils.formatUser', formatUser, { callback: false });
   server.method('utils.formatProject', formatProject, { callback: false });
+  server.method('utils.formatPage', formatPage, { callback: false });
+  server.method('utils.formatPages', formatPages, { callback: false });
+  server.method('utils.formatElement', formatElement, { callback: false });
   server.method('utils.version', version, { callback: false });
   done();
 };

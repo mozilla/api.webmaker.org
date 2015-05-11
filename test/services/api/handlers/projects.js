@@ -133,9 +133,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.equal(
-          'child "count" fails because ["count" must be larger than or equal to 1]'
-        );
+        expect(resp.result.message).to.be.a.string();
         done();
       });
     });
@@ -146,9 +144,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.equal(
-          'child "count" fails because ["count" must be less than or equal to 100]'
-        );
+        expect(resp.result.message).to.be.a.string();
         done();
       });
     });
@@ -159,7 +155,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.equal('child "count" fails because ["count" must be a number]');
+        expect(resp.result.message).to.be.a.string();
         done();
       });
     });
@@ -170,7 +166,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.equal('child "page" fails because ["page" must be larger than or equal to 1]');
+        expect(resp.result.message).to.be.a.string();
         done();
       });
     });
@@ -181,7 +177,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.equal('child "page" fails because ["page" must be less than or equal to 50]');
+        expect(resp.result.message).to.be.a.string();
         done();
       });
     });
@@ -192,7 +188,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.equal('child "page" fails because ["page" must be a number]');
+        expect(resp.result.message).to.be.a.string();
         done();
       });
     });
@@ -220,8 +216,8 @@ experiment('Project Handlers', function() {
         expect(resp.statusCode).to.equal(200);
         expect(resp.result.status).to.equal('success');
         expect(resp.result.project).to.exist();
-        expect(resp.result.project.id).to.equal(1);
-        expect(resp.result.project.author.id).to.equal(1);
+        expect(resp.result.project.id).to.equal('1');
+        expect(resp.result.project.author.id).to.equal('1');
         done();
       });
     });
@@ -243,7 +239,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.equal('child "user" fails because ["user" must be a number]');
+        expect(resp.result.message).to.be.a.string();
         done();
       });
     });
@@ -265,7 +261,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.equal('child "project" fails because ["project" must be a number]');
+        expect(resp.result.message).to.be.a.string();
         done();
       });
     });
@@ -278,7 +274,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(500);
         expect(resp.result.error).to.equal('Internal Server Error');
-        expect(resp.result.message).to.equal('An internal server error occurred');
+        expect(resp.result.message).to.be.a.string();
         stub.restore();
         done();
       });
@@ -343,9 +339,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.equal(
-          'child "count" fails because ["count" must be larger than or equal to 1]'
-        );
+        expect(resp.result.message).to.be.a.string();
         done();
       });
     });
@@ -356,9 +350,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.equal(
-          'child "count" fails because ["count" must be less than or equal to 100]'
-        );
+        expect(resp.result.message).to.be.a.string();
         done();
       });
     });
@@ -369,7 +361,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.equal('child "count" fails because ["count" must be a number]');
+        expect(resp.result.message).to.be.a.string();
         done();
       });
     });
@@ -380,7 +372,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.equal('child "page" fails because ["page" must be larger than or equal to 1]');
+        expect(resp.result.message).to.be.a.string();
         done();
       });
     });
@@ -391,7 +383,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.equal('child "page" fails because ["page" must be less than or equal to 50]');
+        expect(resp.result.message).to.be.a.string();
         done();
       });
     });
@@ -402,7 +394,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.equal('child "page" fails because ["page" must be a number]');
+        expect(resp.result.message).to.be.a.string();
         done();
       });
     });
@@ -480,9 +472,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.equal(
-          'child "count" fails because ["count" must be larger than or equal to 1]'
-        );
+        expect(resp.result.message).to.be.a.string();
         done();
       });
     });
@@ -493,9 +483,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.equal(
-          'child "count" fails because ["count" must be less than or equal to 100]'
-        );
+        expect(resp.result.message).to.be.a.string();
         done();
       });
     });
@@ -506,7 +494,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.equal('child "count" fails because ["count" must be a number]');
+        expect(resp.result.message).to.be.a.string();
         done();
       });
     });
@@ -517,7 +505,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.equal('child "page" fails because ["page" must be larger than or equal to 1]');
+        expect(resp.result.message).to.be.a.string();
         done();
       });
     });
@@ -528,7 +516,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.equal('child "page" fails because ["page" must be less than or equal to 50]');
+        expect(resp.result.message).to.be.a.string();
         done();
       });
     });
@@ -539,7 +527,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.equal('child "page" fails because ["page" must be a number]');
+        expect(resp.result.message).to.be.a.string();
         done();
       });
     });
@@ -617,9 +605,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.equal(
-          'child "count" fails because ["count" must be larger than or equal to 1]'
-        );
+        expect(resp.result.message).to.be.a.string();
         done();
       });
     });
@@ -630,9 +616,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.equal(
-          'child "count" fails because ["count" must be less than or equal to 100]'
-        );
+        expect(resp.result.message).to.be.a.string();
         done();
       });
     });
@@ -643,7 +627,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.equal('child "count" fails because ["count" must be a number]');
+        expect(resp.result.message).to.be.a.string();
         done();
       });
     });
@@ -654,7 +638,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.equal('child "page" fails because ["page" must be larger than or equal to 1]');
+        expect(resp.result.message).to.be.a.string();
         done();
       });
     });
@@ -665,7 +649,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.equal('child "page" fails because ["page" must be less than or equal to 50]');
+        expect(resp.result.message).to.be.a.string();
         done();
       });
     });
@@ -676,7 +660,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.equal('child "page" fails because ["page" must be a number]');
+        expect(resp.result.message).to.be.a.string();
         done();
       });
     });
@@ -726,7 +710,7 @@ experiment('Project Handlers', function() {
         server.inject(opts, function(resp) {
           expect(resp.statusCode).to.equal(400);
           expect(resp.result.error).to.equal('Bad Request');
-          expect(resp.result.message).to.equal('child "title" fails because ["title" must be a string]');
+          expect(resp.result.message).to.be.a.string();
           done();
         });
       });
@@ -737,7 +721,7 @@ experiment('Project Handlers', function() {
         server.inject(opts, function(resp) {
           expect(resp.statusCode).to.equal(400);
           expect(resp.result.error).to.equal('Bad Request');
-          expect(resp.result.message).to.equal('child "thumbnail" fails because ["thumbnail" must be an object]');
+          expect(resp.result.message).to.be.a.string();
           done();
         });
       });
@@ -748,9 +732,7 @@ experiment('Project Handlers', function() {
         server.inject(opts, function(resp) {
           expect(resp.statusCode).to.equal(400);
           expect(resp.result.error).to.equal('Bad Request');
-          expect(resp.result.message).to.equal(
-            'child "thumbnail" fails because [child "400" fails because ["400" must be a string]]'
-          );
+          expect(resp.result.message).to.be.a.string();
           done();
         });
       });
@@ -761,7 +743,7 @@ experiment('Project Handlers', function() {
         server.inject(opts, function(resp) {
           expect(resp.statusCode).to.equal(400);
           expect(resp.result.error).to.equal('Bad Request');
-          expect(resp.result.message).to.equal('child "thumbnail" fails because ["2048" is not allowed]');
+          expect(resp.result.message).to.be.a.string();
           done();
         });
       });
@@ -783,7 +765,7 @@ experiment('Project Handlers', function() {
         server.inject(opts, function(resp) {
           expect(resp.statusCode).to.equal(400);
           expect(resp.result.error).to.equal('Bad Request');
-          expect(resp.result.message).to.equal('child "user" fails because ["user" must be a number]');
+          expect(resp.result.message).to.be.a.string();
           done();
         });
       });
@@ -807,7 +789,7 @@ experiment('Project Handlers', function() {
         server.inject(opts, function(resp) {
           expect(resp.statusCode).to.equal(500);
           expect(resp.result.error).to.equal('Internal Server Error');
-          expect(resp.result.message).to.equal('An internal server error occurred');
+          expect(resp.result.message).to.be.a.string();
           stub.restore();
           done();
         });
@@ -829,7 +811,7 @@ experiment('Project Handlers', function() {
             expect(getResp.statusCode).to.equal(200);
             expect(getResp.result.status).to.equal('success');
             expect(getResp.result.project.id).to.equal(resp.result.project.id);
-            expect(getResp.result.project.remixed_from).to.equal(2);
+            expect(getResp.result.project.remixed_from).to.equal('2');
             done();
           });
         });
@@ -852,7 +834,7 @@ experiment('Project Handlers', function() {
         server.inject(opts, function(resp) {
           expect(resp.statusCode).to.equal(400);
           expect(resp.result.error).to.equal('Bad Request');
-          expect(resp.result.message).to.equal('child "user" fails because ["user" must be a number]');
+          expect(resp.result.message).to.be.a.string();
           done();
         });
       });
@@ -874,7 +856,7 @@ experiment('Project Handlers', function() {
         server.inject(opts, function(resp) {
           expect(resp.statusCode).to.equal(400);
           expect(resp.result.error).to.equal('Bad Request');
-          expect(resp.result.message).to.equal('child "project" fails because ["project" must be a number]');
+          expect(resp.result.message).to.be.a.string();
           done();
         });
       });
@@ -907,13 +889,26 @@ experiment('Project Handlers', function() {
       });
     });
 
-    test('update thumbnail succeeds', function(done) {
+    test('update thumbnail (400) succeeds', function(done) {
       var opts = configs.patch.update.success.thumb;
 
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(200);
         expect(resp.result.status).to.equal('updated');
         expect(resp.result.project.thumbnail[400]).to.equal('new');
+        expect(resp.result.project.thumbnail[1024]).to.equal('');
+        done();
+      });
+    });
+
+    test('update thumbnail (1024) succeeds', function(done) {
+      var opts = configs.patch.update.success.thumb2;
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+        expect(resp.result.status).to.equal('updated');
+        expect(resp.result.project.thumbnail[400]).to.equal('');
+        expect(resp.result.project.thumbnail[1024]).to.equal('new');
         done();
       });
     });
@@ -925,8 +920,8 @@ experiment('Project Handlers', function() {
         expect(resp.statusCode).to.equal(200);
         expect(resp.result.status).to.equal('updated');
         expect(resp.result.project.thumbnail).to.exist();
-        expect(resp.result.project.thumbnail[400]).to.not.exist();
-        expect(resp.result.project.thumbnail[1024]).to.not.exist();
+        expect(resp.result.project.thumbnail[400]).to.equal('');
+        expect(resp.result.project.thumbnail[1024]).to.equal('');
         done();
       });
     });
@@ -949,7 +944,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.equal('child "user" fails because ["user" must be a number]');
+        expect(resp.result.message).to.be.a.string();
         done();
       });
     });
@@ -960,7 +955,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.equal('child "project" fails because ["project" must be a number]');
+        expect(resp.result.message).to.be.a.string();
         done();
       });
     });
@@ -971,7 +966,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.equal('child "title" fails because ["title" must be a string]');
+        expect(resp.result.message).to.be.a.string();
         done();
       });
     });
@@ -982,7 +977,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.equal('child "thumbnail" fails because ["thumbnail" must be an object]');
+        expect(resp.result.message).to.be.a.string();
         done();
       });
     });
@@ -993,9 +988,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.equal(
-          'child "thumbnail" fails because [child "400" fails because ["400" must be a string]]'
-        );
+        expect(resp.result.message).to.be.a.string();
         done();
       });
     });
@@ -1006,7 +999,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.equal('child "thumbnail" fails because ["2048" is not allowed]');
+        expect(resp.result.message).to.be.a.string();
         done();
       });
     });
@@ -1055,7 +1048,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(200);
         expect(resp.result.status).to.equal('updated');
-        expect(resp.result.project.id).to.equal(1);
+        expect(resp.result.project.id).to.equal('1');
         expect(resp.result.project.featured).to.be.true();
         done();
       });
@@ -1067,7 +1060,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(200);
         expect(resp.result.status).to.equal('updated');
-        expect(resp.result.project.id).to.equal(2);
+        expect(resp.result.project.id).to.equal('2');
         expect(resp.result.project.featured).to.be.false();
         done();
       });
@@ -1090,7 +1083,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.equal('child "user" fails because ["user" must be a number]');
+        expect(resp.result.message).to.be.a.string();
         done();
       });
     });
@@ -1112,7 +1105,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.equal('child "project" fails because ["project" must be a number]');
+        expect(resp.result.message).to.be.a.string();
         done();
       });
     });
@@ -1181,7 +1174,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.equal('child "user" fails because ["user" must be a number]');
+        expect(resp.result.message).to.be.a.string();
         done();
       });
     });
@@ -1203,7 +1196,7 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.equal('child "project" fails because ["project" must be a number]');
+        expect(resp.result.message).to.be.a.string();
         done();
       });
     });

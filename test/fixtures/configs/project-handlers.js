@@ -491,6 +491,16 @@ exports.patch = {
         },
         headers: userToken
       },
+      thumb2: {
+        url: '/users/1/projects/1',
+        method: 'patch',
+        payload: {
+          thumbnail: {
+            '1024': 'new'
+          }
+        },
+        headers: userToken
+      },
       clearThumb: {
         url: '/users/1/projects/1',
         method: 'patch',
@@ -578,16 +588,6 @@ exports.patch = {
             }
           },
           headers: userToken2
-        },
-        moderatorCanNotDelete: {
-          url: '/users/1/projects/1',
-          method: 'patch',
-          payload: {
-            thumbnail: {
-              400: 'new'
-            }
-          },
-          headers: moderatorToken
         }
       },
       error:  {

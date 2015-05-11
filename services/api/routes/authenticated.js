@@ -13,6 +13,13 @@ var authRouteConfig = {
 var prerequisites = require('../lib/prerequisites');
 var users = require('../handlers/users');
 var projects = require('../handlers/projects');
+var pages = require('../handlers/pages');
+var elements = require('../handlers/elements');
+
+var numericSchema = Joi.alternatives().try(
+  Joi.number().integer(),
+  Joi.string().regex(/^\d+$/)
+);
 
 var routes = [
   {
@@ -25,7 +32,7 @@ var routes = [
       },
       validate: {
         params: {
-          user: Joi.number().required()
+          user: numericSchema
         }
       },
       cors: {
@@ -42,7 +49,7 @@ var routes = [
       },
       validate: {
         params: {
-          user: Joi.number().required()
+          user: numericSchema
         },
         payload: {
           username: Joi.string().max(20).optional(),
@@ -64,7 +71,7 @@ var routes = [
       },
       validate: {
         params: {
-          user: Joi.number().required()
+          user: numericSchema
         }
       },
       cors: {
@@ -96,11 +103,11 @@ var routes = [
       },
       validate: {
         params: {
-          user: Joi.number().required()
+          user: numericSchema
         },
         payload: {
           title: Joi.string().required(),
-          remixed_from: Joi.number().optional(),
+          remixed_from: Joi.number().integer().optional(),
           thumbnail: Joi.object().keys({
             400: Joi.string().optional(),
             1024: Joi.string().optional()
@@ -125,21 +132,21 @@ var routes = [
       },
       validate: {
         params: {
-          user: Joi.number().required(),
-          project: Joi.number().required()
+          user: numericSchema,
+          project: numericSchema
         },
         payload: {
           title: Joi.string().optional(),
           thumbnail: Joi.object().keys({
             400: Joi.string().optional(),
             1024: Joi.string().optional()
-          }).optional({})
+          }).default({})
         }
       },
       pre: [
         prerequisites.getUser,
         prerequisites.getProject,
-        prerequisites.canUpdate
+        prerequisites.canWrite
       ],
       cors: {
         methods: ['options', 'get', 'patch', 'delete']
@@ -155,8 +162,8 @@ var routes = [
       },
       validate: {
         params: {
-          user: Joi.number().required(),
-          project: Joi.number().required()
+          user: numericSchema,
+          project: numericSchema
         }
       },
       pre: [
@@ -178,8 +185,8 @@ var routes = [
       },
       validate: {
         params: {
-          user: Joi.number().required(),
-          project: Joi.number().required()
+          user: numericSchema,
+          project: numericSchema
         }
       },
       pre: [
@@ -200,8 +207,8 @@ var routes = [
       },
       validate: {
         params: {
-          user: Joi.number().required(),
-          project: Joi.number().required()
+          user: numericSchema,
+          project: numericSchema
         }
       },
       pre: [
@@ -223,12 +230,184 @@ var routes = [
       },
       validate: {
         params: {
-          user: Joi.number().required(),
-          project: Joi.number().required()
+          user: numericSchema,
+          project: numericSchema
         }
       },
       cors: {
         methods: ['options', 'post']
+      }
+    }
+  }, {
+    path: '/users/{user}/projects/{project}/pages',
+    method: 'post',
+    handler: pages.post.create,
+    config: {
+      auth: {
+        scope: 'projects'
+      },
+      validate: {
+        params: {
+          user: numericSchema,
+          project: numericSchema
+        },
+        payload: {
+          x: Joi.number().integer().required(),
+          y: Joi.number().integer().required(),
+          styles: Joi.object().default({})
+        }
+      },
+      pre: [
+        prerequisites.getUser,
+        prerequisites.getProject,
+        prerequisites.canWrite
+      ],
+      cors: {
+        methods: ['get', 'post', 'options']
+      }
+    }
+  }, {
+    path: '/users/{user}/projects/{project}/pages/{page}',
+    method: 'patch',
+    handler: pages.patch.update,
+    config: {
+      auth: {
+        scope: 'projects'
+      },
+      validate: {
+        params: {
+          user: numericSchema,
+          project: numericSchema,
+          page: numericSchema
+        },
+        payload: Joi.object().keys({
+          x: Joi.number().integer(),
+          y: Joi.number().integer(),
+          styles: Joi.object()
+        }).or('x', 'y', 'styles')
+      },
+      pre: [
+        prerequisites.getUser,
+        prerequisites.getProject,
+        prerequisites.getPage,
+        prerequisites.canWrite
+      ],
+      cors: {
+        methods: ['get', 'patch', 'delete', 'options']
+      }
+    }
+  },
+  {
+    path: '/users/{user}/projects/{project}/pages/{page}',
+    method: 'delete',
+    handler: pages.del,
+    config: {
+      auth: {
+        scope: 'projects'
+      },
+      validate: {
+        params: {
+          user: numericSchema,
+          project: numericSchema,
+          page: numericSchema
+        }
+      },
+      pre: [
+        prerequisites.getUser,
+        prerequisites.getProject,
+        prerequisites.getPage,
+        prerequisites.canDelete
+      ],
+      cors: {
+        methods: ['get', 'patch', 'delete', 'options']
+      }
+    }
+  }, {
+    path: '/users/{user}/projects/{project}/pages/{page}/elements',
+    method: 'post',
+    handler: elements.post,
+    config: {
+      auth: {
+        scope: 'projects'
+      },
+      validate: {
+        params: {
+          user: numericSchema,
+          project: numericSchema,
+          page: numericSchema
+        },
+        payload: {
+          type: Joi.string().required(),
+          attributes: Joi.object().default({}),
+          styles: Joi.object().default({})
+        }
+      },
+      pre: [
+        prerequisites.getUser,
+        prerequisites.getProject,
+        prerequisites.getPage,
+        prerequisites.canWrite
+      ],
+      cors: {
+        methods: ['get', 'post', 'options']
+      }
+    }
+  }, {
+    path: '/users/{user}/projects/{project}/pages/{page}/elements/{element}',
+    method: 'patch',
+    handler: elements.patch.update,
+    config: {
+      auth: {
+        scope: 'projects'
+      },
+      validate: {
+        params: {
+          user: numericSchema,
+          project: numericSchema,
+          page: numericSchema,
+          element: numericSchema
+        },
+        payload: Joi.object().keys({
+          attributes: Joi.object(),
+          styles: Joi.object()
+        }).or('attributes', 'styles')
+      },
+      pre: [
+        prerequisites.getUser,
+        prerequisites.getProject,
+        prerequisites.getPage,
+        prerequisites.getElement,
+        prerequisites.canWrite
+      ],
+      cors: {
+        methods: ['get', 'patch', 'delete', 'options']
+      }
+    }
+  }, {
+    path: '/users/{user}/projects/{project}/pages/{page}/elements/{element}',
+    method: 'delete',
+    handler: elements.del,
+    config: {
+      auth: {
+        scope: 'projects'
+      },
+      validate: {
+        params: {
+          user: numericSchema,
+          project: numericSchema,
+          page: numericSchema,
+          element: numericSchema
+        }
+      },
+      pre: [
+        prerequisites.getUser,
+        prerequisites.getProject,
+        prerequisites.getPage,
+        prerequisites.getElement,
+        prerequisites.canDelete
+      ],
+      cors: {
+        methods: ['get', 'patch', 'delete', 'options']
       }
     }
   }

@@ -30,7 +30,7 @@ experiment('Authentication Config', function() {
         expect(result).to.be.true();
         expect(tokenData).to.exist();
         expect(tokenData.scope).to.include('user', 'project');
-        expect(tokenData.user_id).to.equal(1);
+        expect(tokenData.user_id).to.equal('1');
         done();
       });
     });

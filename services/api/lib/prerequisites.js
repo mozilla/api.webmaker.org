@@ -62,6 +62,52 @@ exports.getProject = {
   }
 };
 
+exports.getPage = {
+  assign: 'page',
+  method: function(request, reply) {
+    request.server.methods.pages.findOne(
+      [
+        request.pre.project.id,
+        request.params.page
+      ],
+      function(err, result) {
+        if ( err ) {
+          return reply(err);
+        }
+
+        if ( !result.rows.length ) {
+          return reply(boom.notFound('Page not found'));
+        }
+
+        reply(result.rows[0]);
+      }
+    );
+  }
+};
+
+exports.getElement = {
+  assign: 'element',
+  method: function(request, reply) {
+    request.server.methods.elements.findOne(
+      [
+        request.params.element,
+        request.pre.page.id
+      ],
+      function(err, result) {
+        if ( err ) {
+          return reply(err);
+        }
+
+        if ( !result.rows.length ) {
+          return reply(boom.notFound('Element not found'));
+        }
+
+        reply(result.rows[0]);
+      }
+    );
+  }
+};
+
 exports.canCreate = function(request, reply) {
   if ( request.auth.credentials.user_id === request.pre.user.id ) {
     return reply();
@@ -70,7 +116,7 @@ exports.canCreate = function(request, reply) {
   reply(boom.forbidden('Insufficient permissions'));
 };
 
-exports.canUpdate = function(request, reply) {
+exports.canWrite = function(request, reply) {
   var ownsProject = isOwner(
     request.auth.credentials.user_id,
     request.pre.user.id,

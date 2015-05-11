@@ -10,6 +10,13 @@ var publicRouteConfig = {
 var prerequisites = require('../lib/prerequisites');
 var users = require('../handlers/users');
 var projects = require('../handlers/projects');
+var pages = require('../handlers/pages');
+var elements = require('../handlers/elements');
+
+var numericSchema = Joi.alternatives().try(
+  Joi.number().integer(),
+  Joi.string().regex(/^\d+$/)
+);
 
 var routes = [
   {
@@ -48,8 +55,8 @@ var routes = [
     config: {
       validate: {
         query: {
-          count: Joi.number().min(1).max(100).default(10),
-          page:Joi.number().min(1).max(50).default(1)
+          count: Joi.number().integer().min(1).max(100).default(10),
+          page:Joi.number().integer().min(1).max(50).default(1)
         }
       },
       pre: [
@@ -66,11 +73,11 @@ var routes = [
     config: {
       validate: {
         params: {
-          user: Joi.number().required()
+          user: numericSchema
         },
         query: {
-          count: Joi.number().min(1).max(100).default(10),
-          page:Joi.number().min(1).max(50).default(1)
+          count: Joi.number().integer().min(1).max(100).default(10),
+          page:Joi.number().integer().min(1).max(50).default(1)
         }
       },
       pre: [
@@ -88,8 +95,8 @@ var routes = [
     config: {
       validate: {
         params: {
-          user: Joi.number().required(),
-          project: Joi.number().required()
+          user: numericSchema,
+          project: numericSchema
         }
       },
       pre: [
@@ -106,8 +113,8 @@ var routes = [
     config: {
       validate: {
         params: {
-          user: Joi.number().required(),
-          project: Joi.number().required()
+          user: numericSchema,
+          project: numericSchema
         }
       },
       cors: {
@@ -121,11 +128,11 @@ var routes = [
     config: {
       validate: {
         params: {
-          user: Joi.number().required()
+          user: numericSchema
         },
         query: {
-          count: Joi.number().min(1).max(100).default(10),
-          page:Joi.number().min(1).default(1)
+          count: Joi.number().integer().min(1).max(100).default(10),
+          page:Joi.number().integer().min(1).default(1)
         }
       },
       cors: {
@@ -139,8 +146,8 @@ var routes = [
     config: {
       validate: {
         query: {
-          count: Joi.number().min(1).max(100),
-          page:Joi.number().min(1)
+          count: Joi.number().integer().min(1).max(100),
+          page:Joi.number().integer().min(1)
         }
       },
       cors: {
@@ -154,12 +161,12 @@ var routes = [
     config: {
       validate: {
         params: {
-          user: Joi.number().required(),
-          project: Joi.number().required()
+          user: numericSchema,
+          project: numericSchema
         },
         query: {
-          count: Joi.number().min(1).max(100).default(10),
-          page:Joi.number().min(1).max(50).default(1)
+          count: Joi.number().integer().min(1).max(100).default(10),
+          page:Joi.number().integer().min(1).max(50).default(1)
         }
       },
       pre: [
@@ -178,8 +185,8 @@ var routes = [
     config: {
       validate: {
         query: {
-          count: Joi.number().min(1).max(100).default(10),
-          page:Joi.number().min(1).max(50).default(1)
+          count: Joi.number().integer().min(1).max(100).default(10),
+          page:Joi.number().integer().min(1).max(50).default(1)
         }
       },
       pre: [
@@ -205,12 +212,158 @@ var routes = [
     config: {
       validate: {
         params: {
-          user: Joi.number().required(),
-          project: Joi.number().required()
+          user: numericSchema,
+          project: numericSchema
         }
       },
       cors: {
         methods: ['get', 'post', 'options']
+      }
+    }
+  }, {
+    path: '/users/{user}/projects/{project}/pages',
+    method: 'get',
+    handler: pages.get.all,
+    config: {
+      validate: {
+        params: {
+          user: numericSchema,
+          project: numericSchema
+        }
+      },
+      pre: [
+        prerequisites.getUser,
+        prerequisites.getProject
+      ],
+      cors: {
+        methods: ['get', 'post', 'options']
+      }
+    }
+  }, {
+    path: '/users/{user}/projects/{project}/pages',
+    method: 'options',
+    handler: pages.options,
+    config: {
+      validate: {
+        params: {
+          user: numericSchema,
+          project: numericSchema
+        }
+      },
+      cors: {
+        methods: ['get', 'post', 'options']
+      }
+    }
+  }, {
+    path: '/users/{user}/projects/{project}/pages/{page}',
+    method: 'get',
+    handler: pages.get.one,
+    config: {
+      validate: {
+        params: {
+          user: numericSchema,
+          project: numericSchema,
+          page: numericSchema
+        }
+      },
+      pre: [
+        prerequisites.getUser,
+        prerequisites.getProject
+      ],
+      cors: {
+        methods: ['get', 'patch', 'delete', 'options']
+      }
+    }
+  }, {
+    path: '/users/{user}/projects/{project}/pages/{page}',
+    method: 'options',
+    handler: pages.options,
+    config: {
+      validate: {
+        params: {
+          user: numericSchema,
+          project: numericSchema,
+          page: numericSchema
+        }
+      },
+      cors: {
+        methods: ['get', 'patch', 'delete', 'options']
+      }
+    }
+  }, {
+    path: '/users/{user}/projects/{project}/pages/{page}/elements',
+    method: 'get',
+    handler: elements.get.all,
+    config: {
+      validate: {
+        params: {
+          user: numericSchema,
+          project: numericSchema,
+          page: numericSchema
+        }
+      },
+      pre: [
+        prerequisites.getUser,
+        prerequisites.getProject,
+        prerequisites.getPage
+      ],
+      cors: {
+        methods: ['get', 'post', 'options']
+      }
+    }
+  }, {
+    path: '/users/{user}/projects/{project}/pages/{page}/elements',
+    method: 'options',
+    handler: elements.options,
+    config: {
+      validate: {
+        params: {
+          user: numericSchema,
+          project: numericSchema,
+          page: numericSchema
+        }
+      },
+      cors: {
+        methods: ['get', 'post', 'options']
+      }
+    }
+  }, {
+    path: '/users/{user}/projects/{project}/pages/{page}/elements/{element}',
+    method: 'get',
+    handler: elements.get.one,
+    config: {
+      validate: {
+        params: {
+          user: numericSchema,
+          project: numericSchema,
+          page: numericSchema,
+          element: numericSchema
+        }
+      },
+      pre: [
+        prerequisites.getUser,
+        prerequisites.getProject,
+        prerequisites.getPage
+      ],
+      cors: {
+        methods: ['get', 'patch', 'delete', 'options']
+      }
+    }
+  }, {
+    path: '/users/{user}/projects/{project}/pages/{page}/elements/{element}',
+    method: 'options',
+    handler: elements.options,
+    config: {
+      validate: {
+        params: {
+          user: numericSchema,
+          project: numericSchema,
+          page: numericSchema,
+          element: numericSchema
+        }
+      },
+      cors: {
+        methods: ['get', 'patch', 'delete', 'options']
       }
     }
   }, {

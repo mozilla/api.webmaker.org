@@ -80,6 +80,46 @@ exports.register = function(server, options, done) {
     executeQuery(queries.projects.remove, values, done);
   }, {});
 
+  server.method('pages.create', function(values, done) {
+    executeQuery(queries.pages.create, values, done);
+  }, {});
+
+  server.method('pages.findAll', function(values, done) {
+    executeQuery(queries.pages.findAll, values, done);
+  }, {});
+
+  server.method('pages.findOne', function(values, done) {
+    executeQuery(queries.pages.findOne, values, done);
+  }, {});
+
+  server.method('pages.update', function(values, done) {
+    executeQuery(queries.pages.update, values, done);
+  }, {});
+
+  server.method('pages.remove', function(values, done) {
+    executeQuery(queries.pages.remove, values, done);
+  }, {});
+
+  server.method('elements.create', function(values, done) {
+    executeQuery(queries.elements.create, values, done);
+  }, {});
+
+  server.method('elements.findAll', function(values, done) {
+    executeQuery(queries.elements.findAll, values, done);
+  }, {});
+
+  server.method('elements.findOne', function(values, done) {
+    executeQuery(queries.elements.findOne, values, done);
+  }, {});
+
+  server.method('elements.update', function(values, done) {
+    executeQuery(queries.elements.update, values, done);
+  }, {});
+
+  server.method('elements.remove', function(values, done) {
+    executeQuery(queries.elements.remove, values, done);
+  }, {});
+
   // expose so tests can stub
   server.expose('pg', pg);
 

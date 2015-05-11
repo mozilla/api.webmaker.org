@@ -99,6 +99,16 @@ exports.patch = {
       language: 'es',
       country: 'US'
     }
+  },
+  duplicateUsername: {
+    url: '/users/2',
+    method: 'patch',
+    headers: {
+      authorization: 'token userToken2'
+    },
+    payload: {
+      username: 'changedAgain'
+    }
   }
 };
 

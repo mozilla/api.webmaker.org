@@ -77,7 +77,7 @@ experiment('User Handlers', function() {
         expect(resp.result.status).to.equal('success');
 
         var user = resp.result.user;
-        expect(user.id).to.equal(1);
+        expect(user.id).to.equal('1');
         expect(user.username).to.equal('chris_testing');
         expect(user.locale).to.be.an.object();
         expect(user.history).to.be.an.object();
@@ -183,6 +183,17 @@ experiment('User Handlers', function() {
         expect(resp.statusCode).to.equal(401);
         expect(resp.result.error).to.equal('Unauthorized');
         expect(resp.result.message).to.equal('Insufficient permissions');
+        done();
+      });
+    });
+
+    test('Does not allow duplicate usernames', function(done) {
+      var opts = configs.patch.duplicateUsername;
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(400);
+        expect(resp.result.error).to.equal('Bad Request');
+        expect(resp.result.message).to.equal('Username taken');
         done();
       });
     });
