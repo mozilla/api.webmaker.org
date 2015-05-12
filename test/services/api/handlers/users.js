@@ -42,6 +42,28 @@ experiment('User Handlers', function() {
       });
     });
 
+    test('Creates a new user - no language', function(done) {
+      var opts = configs.create.noLang;
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+        expect(resp.result.status).to.equal('created');
+        expect(resp.result.user.id).to.exist();
+        done();
+      });
+    });
+
+    test('Creates a new user - no country', function(done) {
+      var opts = configs.create.noCountry;
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+        expect(resp.result.status).to.equal('created');
+        expect(resp.result.user.id).to.exist();
+        done();
+      });
+    });
+
     test('Does not allow duplicate usernames', function(done) {
       var opts = configs.create.duplicateUsername;
 
