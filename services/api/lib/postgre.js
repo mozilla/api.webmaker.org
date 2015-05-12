@@ -106,7 +106,6 @@ exports.register = function(server, options, done) {
 
   // expose so tests can stub
   server.expose('pg', pg);
-  server.expose('executeQuery', executeQuery);
 
   done();
 };
