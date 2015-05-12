@@ -16,6 +16,22 @@ exports.create = {
       language: 'en',
       country: 'CA'
     }
+  },
+  noLang: {
+    url: '/users',
+    method: 'post',
+    payload: {
+      username: 'newuser2',
+      country: 'CA'
+    }
+  },
+  noCountry: {
+    url: '/users',
+    method: 'post',
+    payload: {
+      username: 'newuser3',
+      language: 'en'
+    }
   }
 };
 
