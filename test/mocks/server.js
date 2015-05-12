@@ -8,9 +8,13 @@ function mockTokenValidator(token, callback) {
   callback(null, !!t, t);
 }
 
-module.exports = function(done) {
+module.exports = function(done, opts) {
   var server = new Hapi.Server();
   server.connection();
+
+  if ( opts && opts.enableCache ) {
+    process.env.DISABLE_CACHE = false;
+  }
 
   server.register(require('hapi-auth-bearer-token'), function(err) {
     if ( err ) {

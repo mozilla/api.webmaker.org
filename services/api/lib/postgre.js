@@ -28,100 +28,85 @@ exports.register = function(server, options, done) {
     });
   }
 
-  server.method('users.create', function(values, done) {
-    executeQuery(queries.users.create, values, done);
-  }, {});
+  function getMethodConfig (segment, cached) {
+    if ( !cached || process.env.DISABLE_CACHE === 'true' ) {
+      return {};
+    }
 
-  server.method('users.find', function(values, done) {
-    executeQuery(queries.users.find, values, done);
-  }, {});
+    return {
+      cache: {
+        segment: segment,
+        expiresIn: 60000,
+        staleIn: 30000,
+        staleTimeout: 100
+      },
+      generateKey: function(args) {
+        return args.join(':');
+      }
+    };
+  }
 
-  server.method('users.update', function(values, done) {
-    executeQuery(queries.users.update, values, done);
-  }, {});
+  function generateServerMethods(methods, cached) {
+    Object.keys(methods).forEach(function(method) {
+      methods[method].forEach(function(func) {
+        var query = queries[method][func];
+        var methodString = method + '.' + func;
+        server.method(methodString, function(values, done) {
+          executeQuery(query, values, done);
+        }, getMethodConfig(methodString, cached));
+      });
+    });
+  }
 
-  server.method('users.remove', function(values, done) {
-    executeQuery(queries.users.remove, values, done);
-  }, {});
+  var cachedMethods = {
+    projects: [
+      'findAll',
+      'findUsersProjects',
+      'findOne',
+      'findRemixes',
+      'findFeatured'
+    ],
+    pages: [
+      'findAll',
+      'findOne'
+    ],
+    elements: [
+      'findAll',
+      'findOne'
+    ]
+  };
 
-  server.method('projects.create', function(values, done) {
-    executeQuery(queries.projects.create, values, done);
-  }, {});
+  var nonCachedMethods = {
+    users: [
+      'find',
+      'create',
+      'update',
+      'remove'
+    ],
+    projects: [
+      'create',
+      'update',
+      'feature',
+      'remove'
+    ],
+    pages: [
+      'create',
+      'update',
+      'remove'
+    ],
+    elements: [
+      'create',
+      'update',
+      'remove'
+    ]
+  };
 
-  server.method('projects.findAll', function(values, done) {
-    executeQuery(queries.projects.findAll, values, done);
-  }, {});
-
-  server.method('projects.findUsersProjects', function(values, done) {
-    executeQuery(queries.projects.findUsersProjects, values, done);
-  }, {});
-
-  server.method('projects.findOne', function(values, done) {
-    executeQuery(queries.projects.findOne, values, done);
-  }, {});
-
-  server.method('projects.findRemixes', function(values, done) {
-    executeQuery(queries.projects.findRemixes, values, done);
-  }, {});
-
-  server.method('projects.findFeatured', function(values, done) {
-    executeQuery(queries.projects.findFeatured, values, done);
-  }, {});
-
-  server.method('projects.update', function(values, done) {
-    executeQuery(queries.projects.update, values, done);
-  }, {});
-
-  server.method('projects.feature', function(values, done) {
-    executeQuery(queries.projects.feature, values, done);
-  }, {});
-
-  server.method('projects.remove', function(values, done) {
-    executeQuery(queries.projects.remove, values, done);
-  }, {});
-
-  server.method('pages.create', function(values, done) {
-    executeQuery(queries.pages.create, values, done);
-  }, {});
-
-  server.method('pages.findAll', function(values, done) {
-    executeQuery(queries.pages.findAll, values, done);
-  }, {});
-
-  server.method('pages.findOne', function(values, done) {
-    executeQuery(queries.pages.findOne, values, done);
-  }, {});
-
-  server.method('pages.update', function(values, done) {
-    executeQuery(queries.pages.update, values, done);
-  }, {});
-
-  server.method('pages.remove', function(values, done) {
-    executeQuery(queries.pages.remove, values, done);
-  }, {});
-
-  server.method('elements.create', function(values, done) {
-    executeQuery(queries.elements.create, values, done);
-  }, {});
-
-  server.method('elements.findAll', function(values, done) {
-    executeQuery(queries.elements.findAll, values, done);
-  }, {});
-
-  server.method('elements.findOne', function(values, done) {
-    executeQuery(queries.elements.findOne, values, done);
-  }, {});
-
-  server.method('elements.update', function(values, done) {
-    executeQuery(queries.elements.update, values, done);
-  }, {});
-
-  server.method('elements.remove', function(values, done) {
-    executeQuery(queries.elements.remove, values, done);
-  }, {});
+  generateServerMethods(cachedMethods, true);
+  generateServerMethods(nonCachedMethods, false);
 
   // expose so tests can stub
   server.expose('pg', pg);
+  server.expose('executeQuery', executeQuery);
 
   done();
 };

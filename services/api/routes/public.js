@@ -27,8 +27,8 @@ var routes = [
       validate: {
         payload: {
           username: Joi.string().required(),
-          language: Joi.string().length(2).optional(),
-          country: Joi.string().length(2).optional()
+          language: Joi.string().length(2).default('en'),
+          country: Joi.string().length(2).default('US')
         }
       },
       cors: {

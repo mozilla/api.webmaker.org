@@ -3,7 +3,20 @@ require('habitat').load();
 var Hapi = require('hapi'),
     Hoek = require('hoek');
 
+Hoek.assert(process.env.API_HOST, 'Must define API_HOST');
+Hoek.assert(process.env.PORT, 'Must define PORT');
+Hoek.assert(process.env.API_VERSION, 'Must define API_VERSION');
+Hoek.assert(process.env.REDIS_URL, 'Must define REDIS_URL');
+
+var redisConfig = require('redis-url').parse(process.env.REDIS_URL);
+
 var server = new Hapi.Server({
+  cache: {
+    engine: require('catbox-redis'),
+    host: redisConfig.hostname,
+    port: redisConfig.port,
+    password: redisConfig.password
+  },
   connections: {
     router: {
       stripTrailingSlash: true
@@ -14,15 +27,10 @@ var server = new Hapi.Server({
   }
 });
 
-Hoek.assert(process.env.API_HOST, 'Must define API_HOST');
-Hoek.assert(process.env.PORT, 'Must define PORT');
-
-var connection = {
+server.connection({
   host: process.env.API_HOST,
   port: process.env.PORT
-};
-
-server.connection(connection);
+});
 
 if ( process.env.DISABLE_LOGGING !== 'true' ) {
   server.register({
@@ -60,7 +68,11 @@ server.register(require('./services'), function(err) {
     throw err;
   }
 
-  server.start(function() {
+  server.start(function(err) {
+    if ( err ) {
+      console.error(err);
+      return;
+    }
     console.log('Server started @ ' + server.info.uri);
   });
 });
