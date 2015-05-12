@@ -58,11 +58,11 @@ CREATE TABLE IF NOT EXISTS "elements"
 
 /* Indexes */
 CREATE INDEX user_idx_id_deleted_at ON users (id, deleted_at);
-CREATE INDEX project_id_user_id_deleted_at ON projects (id, user_id, deleted_at);
 CREATE INDEX project_deleted_at_user_id on projects (deleted_at, user_id);
-CREATE INDEX project_id_deleted_at ON pages (project_id, deleted_at);
-CREATE INDEX pages_id_x_y_deleted_at ON pages (id, x, y, deleted_at);
-CREATE INDEX elements_page_is_deleted_at ON elements (id, page_id, deleted_at);
+CREATE INDEX deleted_at_remixed_from_idx on projects (deleted_at, remixed_from);
+CREATE INDEX deleted_at_featured_idx on projects (deleted_at, featured);
+CREATE INDEX project_id_deleted_at_idx ON pages (project_id, deleted_at);
+CREATE INDEX deleted_at_page_id_idx ON elements (deleted_at, page_id);
 
 /* Triggers */
 CREATE OR REPLACE FUNCTION update_updated_at()
