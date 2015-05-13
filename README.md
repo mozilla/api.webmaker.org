@@ -43,6 +43,6 @@ You can view documentation by navigating to `http://localhost:2015/docs` in your
 ## Test
 
 The tests require access to a postgreSQL database named `webmaker_testing`.
-Create it by running the command `createdb webmaker_testing`, the test script will automatically create tables and populate them with data.
+Create it by running the command `npm run inittest`, the test script will automatically create tables and populate them with data.
 
 Run the tests with `npm test`

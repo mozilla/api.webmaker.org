@@ -24,7 +24,7 @@ var numericSchema = Joi.alternatives().try(
 var routes = [
   {
     path: '/users/{user}',
-    method: 'get',
+    method: 'GET',
     handler: users.get,
     config: {
       auth: {
@@ -36,12 +36,12 @@ var routes = [
         }
       },
       cors: {
-        methods: ['options', 'get', 'patch', 'delete']
+        methods: ['OPTIONS', 'GET', 'PATCH', 'DELETE']
       }
     }
   }, {
     path: '/users/{user}',
-    method: 'patch',
+    method: 'PATCH',
     handler: users.patch,
     config: {
       auth: {
@@ -58,12 +58,12 @@ var routes = [
         }
       },
       cors: {
-        methods: ['options', 'get', 'patch', 'delete']
+        methods: ['OPTIONS', 'GET', 'PATCH', 'DELETE']
       }
     }
   }, {
     path: '/users/{user}',
-    method: 'delete',
+    method: 'DELETE',
     handler: users.del,
     config: {
       auth: {
@@ -75,19 +75,19 @@ var routes = [
         }
       },
       cors: {
-        methods: ['options', 'get', 'patch', 'delete']
+        methods: ['OPTIONS', 'GET', 'PATCH', 'DELETE']
       }
     }
   }, {
     path: '/users/{user}',
-    method: 'options',
+    method: 'OPTIONS',
     handler: users.options,
     config: {
       auth: {
         scope: 'user'
       },
       cors: {
-        methods: ['options', 'get', 'patch', 'delete']
+        methods: ['OPTIONS', 'GET', 'PATCH', 'DELETE']
       },
       plugins: {
         lout: false
@@ -95,7 +95,7 @@ var routes = [
     }
   }, {
     path: '/users/{user}/projects',
-    method: 'post',
+    method: 'POST',
     handler: projects.post.create,
     config: {
       auth: {
@@ -119,12 +119,12 @@ var routes = [
         prerequisites.canCreate
       ],
       cors: {
-        methods: ['options', 'post', 'get']
+        methods: ['OPTIONS', 'POST', 'GET']
       }
     }
   }, {
     path: '/users/{user}/projects/{project}',
-    method: 'patch',
+    method: 'PATCH',
     handler: projects.patch.update,
     config: {
       auth: {
@@ -149,12 +149,12 @@ var routes = [
         prerequisites.canWrite
       ],
       cors: {
-        methods: ['options', 'get', 'patch', 'delete']
+        methods: ['OPTIONS', 'GET', 'PATCH', 'DELETE']
       }
     }
   }, {
     path: '/users/{user}/projects/{project}',
-    method: 'delete',
+    method: 'DELETE',
     handler: projects.del,
     config: {
       auth: {
@@ -172,12 +172,12 @@ var routes = [
         prerequisites.canDelete
       ],
       cors: {
-        methods: ['options', 'get', 'patch', 'delete']
+        methods: ['OPTIONS', 'GET', 'PATCH', 'DELETE']
       }
     }
   }, {
     path: '/users/{user}/projects/{project}/remixes',
-    method: 'post',
+    method: 'POST',
     handler: projects.post.remix,
     config: {
       auth: {
@@ -194,12 +194,12 @@ var routes = [
         prerequisites.getProject
       ],
       cors: {
-        methods: ['options', 'get', 'post']
+        methods: ['OPTIONS', 'GET', 'POST']
       }
     }
   }, {
     path: '/users/{user}/projects/{project}/feature',
-    method: 'patch',
+    method: 'PATCH',
     handler: projects.patch.feature,
     config: {
       auth: {
@@ -217,12 +217,12 @@ var routes = [
         prerequisites.isMod
       ],
       cors: {
-        methods: ['options', 'post']
+        methods: ['OPTIONS', 'POST']
       }
     }
   }, {
     path: '/users/{user}/projects/{project}/feature',
-    method: 'options',
+    method: 'OPTIONS',
     handler: projects.options,
     config: {
       auth: {
@@ -235,12 +235,12 @@ var routes = [
         }
       },
       cors: {
-        methods: ['options', 'post']
+        methods: ['OPTIONS', 'POST']
       }
     }
   }, {
     path: '/users/{user}/projects/{project}/pages',
-    method: 'post',
+    method: 'POST',
     handler: pages.post.create,
     config: {
       auth: {
@@ -263,12 +263,12 @@ var routes = [
         prerequisites.canWrite
       ],
       cors: {
-        methods: ['get', 'post', 'options']
+        methods: ['GET', 'POST', 'OPTIONS']
       }
     }
   }, {
     path: '/users/{user}/projects/{project}/pages/{page}',
-    method: 'patch',
+    method: 'PATCH',
     handler: pages.patch.update,
     config: {
       auth: {
@@ -293,13 +293,13 @@ var routes = [
         prerequisites.canWrite
       ],
       cors: {
-        methods: ['get', 'patch', 'delete', 'options']
+        methods: ['GET', 'PATCH', 'DELETE', 'OPTIONS']
       }
     }
   },
   {
     path: '/users/{user}/projects/{project}/pages/{page}',
-    method: 'delete',
+    method: 'DELETE',
     handler: pages.del,
     config: {
       auth: {
@@ -319,12 +319,12 @@ var routes = [
         prerequisites.canDelete
       ],
       cors: {
-        methods: ['get', 'patch', 'delete', 'options']
+        methods: ['GET', 'PATCH', 'DELETE', 'OPTIONS']
       }
     }
   }, {
     path: '/users/{user}/projects/{project}/pages/{page}/elements',
-    method: 'post',
+    method: 'POST',
     handler: elements.post,
     config: {
       auth: {
@@ -349,12 +349,12 @@ var routes = [
         prerequisites.canWrite
       ],
       cors: {
-        methods: ['get', 'post', 'options']
+        methods: ['GET', 'POST', 'OPTIONS']
       }
     }
   }, {
     path: '/users/{user}/projects/{project}/pages/{page}/elements/{element}',
-    method: 'patch',
+    method: 'PATCH',
     handler: elements.patch.update,
     config: {
       auth: {
@@ -380,12 +380,12 @@ var routes = [
         prerequisites.canWrite
       ],
       cors: {
-        methods: ['get', 'patch', 'delete', 'options']
+        methods: ['GET', 'PATCH', 'DELETE', 'OPTIONS']
       }
     }
   }, {
     path: '/users/{user}/projects/{project}/pages/{page}/elements/{element}',
-    method: 'delete',
+    method: 'DELETE',
     handler: elements.del,
     config: {
       auth: {
@@ -407,7 +407,7 @@ var routes = [
         prerequisites.canDelete
       ],
       cors: {
-        methods: ['get', 'patch', 'delete', 'options']
+        methods: ['GET', 'PATCH', 'DELETE', 'OPTIONS']
       }
     }
   }

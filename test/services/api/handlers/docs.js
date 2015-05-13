@@ -23,7 +23,7 @@ experiment('Docs', function() {
     test('GET / redirects to /docs', function(done) {
       var opts = {
         url: '/',
-        method: 'get'
+        method: 'GET'
       };
 
       server.inject(opts, function(resp) {
