@@ -32,7 +32,7 @@ var routes = [
         }
       },
       cors: {
-        methods: ['post', 'options']
+        methods: ['POST', 'OPTIONS']
       },
       description: 'Create a user account'
     }
@@ -42,7 +42,7 @@ var routes = [
     handler: users.options,
     config: {
       cors: {
-        methods: ['post', 'options']
+        methods: ['POST', 'OPTIONS']
       },
       plugins: {
         lout: false
@@ -63,7 +63,7 @@ var routes = [
         prerequisites.calculateOffset
       ],
       cors: {
-        methods: ['get', 'options']
+        methods: ['GET', 'OPTIONS']
       }
     }
   }, {
@@ -85,7 +85,7 @@ var routes = [
         prerequisites.calculateOffset
       ],
       cors: {
-        methods: ['get', 'post', 'options']
+        methods: ['GET', 'POST', 'OPTIONS']
       }
     }
   }, {
@@ -103,7 +103,7 @@ var routes = [
         prerequisites.getUser
       ],
       cors: {
-        methods: ['get', 'patch', 'options', 'delete']
+        methods: ['GET', 'PATCH', 'OPTIONS', 'DELETE']
       }
     }
   }, {
@@ -118,7 +118,7 @@ var routes = [
         }
       },
       cors: {
-        methods: ['get', 'patch', 'options', 'delete']
+        methods: ['GET', 'PATCH', 'OPTIONS', 'DELETE']
       }
     }
   }, {
@@ -136,7 +136,7 @@ var routes = [
         }
       },
       cors: {
-        methods: ['get', 'options']
+        methods: ['GET', 'OPTIONS']
       }
     }
   }, {
@@ -151,7 +151,7 @@ var routes = [
         }
       },
       cors: {
-        methods: ['get', 'options']
+        methods: ['GET', 'OPTIONS']
       }
     }
   }, {
@@ -175,7 +175,7 @@ var routes = [
         prerequisites.calculateOffset
       ],
       cors: {
-        methods: ['get', 'post', 'options']
+        methods: ['GET', 'POST', 'OPTIONS']
       }
     }
   }, {
@@ -193,7 +193,7 @@ var routes = [
         prerequisites.calculateOffset
       ],
       cors: {
-        methods: ['get', 'options']
+        methods: ['GET', 'OPTIONS']
       }
     }
   }, {
@@ -202,7 +202,7 @@ var routes = [
     handler: projects.options,
     config: {
       cors: {
-        methods: ['get', 'options']
+        methods: ['GET', 'OPTIONS']
       }
     }
   }, {
@@ -217,7 +217,7 @@ var routes = [
         }
       },
       cors: {
-        methods: ['get', 'post', 'options']
+        methods: ['GET', 'POST', 'OPTIONS']
       }
     }
   }, {
@@ -236,7 +236,7 @@ var routes = [
         prerequisites.getProject
       ],
       cors: {
-        methods: ['get', 'post', 'options']
+        methods: ['GET', 'POST', 'OPTIONS']
       }
     }
   }, {
@@ -251,7 +251,7 @@ var routes = [
         }
       },
       cors: {
-        methods: ['get', 'post', 'options']
+        methods: ['GET', 'POST', 'OPTIONS']
       }
     }
   }, {
@@ -271,7 +271,7 @@ var routes = [
         prerequisites.getProject
       ],
       cors: {
-        methods: ['get', 'patch', 'delete', 'options']
+        methods: ['GET', 'PATCH', 'DELETE', 'OPTIONS']
       }
     }
   }, {
@@ -287,7 +287,7 @@ var routes = [
         }
       },
       cors: {
-        methods: ['get', 'patch', 'delete', 'options']
+        methods: ['GET', 'PATCH', 'DELETE', 'OPTIONS']
       }
     }
   }, {
@@ -308,7 +308,7 @@ var routes = [
         prerequisites.getPage
       ],
       cors: {
-        methods: ['get', 'post', 'options']
+        methods: ['GET', 'POST', 'OPTIONS']
       }
     }
   }, {
@@ -324,7 +324,7 @@ var routes = [
         }
       },
       cors: {
-        methods: ['get', 'post', 'options']
+        methods: ['GET', 'POST', 'OPTIONS']
       }
     }
   }, {
@@ -346,7 +346,7 @@ var routes = [
         prerequisites.getPage
       ],
       cors: {
-        methods: ['get', 'patch', 'delete', 'options']
+        methods: ['GET', 'PATCH', 'DELETE', 'OPTIONS']
       }
     }
   }, {
@@ -363,7 +363,7 @@ var routes = [
         }
       },
       cors: {
-        methods: ['get', 'patch', 'delete', 'options']
+        methods: ['GET', 'PATCH', 'DELETE', 'OPTIONS']
       }
     }
   }, {

@@ -12,7 +12,7 @@ experiment('users routes', function() {
     expect(create.method).to.equal('post');
     expect(create.config.auth).to.be.false();
     expect(create.config.cors).to.be.an.object();
-    expect(create.config.cors.methods).to.include(['post', 'options']);
+    expect(create.config.cors.methods).to.include(['POST', 'OPTIONS']);
     expect(create.config.validate).to.be.an.object();
     expect(create.config.validate.payload).to.be.an.object();
     expect(create.config.validate.payload.username).to.be.an.object();
@@ -27,7 +27,7 @@ experiment('users routes', function() {
     expect(create.method).to.equal('options');
     expect(create.config.auth).to.be.false();
     expect(create.config.cors).to.be.an.object();
-    expect(create.config.cors.methods).to.include(['post', 'options']);
+    expect(create.config.cors.methods).to.include(['POST', 'OPTIONS']);
     done();
   });
 
@@ -65,7 +65,7 @@ experiment('users routes', function() {
     expect(users.config.validate.params).to.be.an.object();
     expect(users.config.validate.params.user).to.be.an.object();
     expect(users.config.cors).to.be.an.object();
-    expect(users.config.cors.methods).to.include(['options', 'get', 'patch', 'delete']);
+    expect(users.config.cors.methods).to.include(['OPTIONS', 'GET', 'PATCH', 'DELETE']);
     done();
   });
 
@@ -81,7 +81,7 @@ experiment('users routes', function() {
     expect(users.config.validate.params).to.be.an.object();
     expect(users.config.validate.params.user).to.be.an.object();
     expect(users.config.cors).to.be.an.object();
-    expect(users.config.cors.methods).to.include(['options', 'get', 'patch', 'delete']);
+    expect(users.config.cors.methods).to.include(['OPTIONS', 'GET', 'PATCH', 'DELETE']);
     done();
   });
 
@@ -94,7 +94,7 @@ experiment('users routes', function() {
     expect(users.config.auth.strategies).to.include('token');
     expect(users.config.auth.scope).to.equal('user');
     expect(users.config.cors).to.be.an.object();
-    expect(users.config.cors.methods).to.include(['options', 'get', 'patch', 'delete']);
+    expect(users.config.cors.methods).to.include(['OPTIONS', 'GET', 'PATCH', 'DELETE']);
     done();
   });
 
@@ -114,7 +114,7 @@ experiment('users routes', function() {
     expect(users.config.validate.payload.language).to.be.an.object();
     expect(users.config.validate.payload.country).to.be.an.object();
     expect(users.config.cors).to.be.an.object();
-    expect(users.config.cors.methods).to.include(['options', 'get', 'patch', 'delete']);
+    expect(users.config.cors.methods).to.include(['OPTIONS', 'GET', 'PATCH', 'DELETE']);
     done();
   });
 });
