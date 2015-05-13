@@ -12,7 +12,7 @@ experiment('project routes', function() {
     expect(discover.method).to.equal('get');
     expect(discover.config.auth).to.be.false();
     expect(discover.config.cors).to.be.an.object();
-    expect(discover.config.cors.methods).to.include(['get', 'options']);
+    expect(discover.config.cors.methods).to.include(['GET', 'OPTIONS']);
     expect(discover.config.validate).to.be.an.object();
     expect(discover.config.validate.query).to.be.an.object();
     expect(discover.config.validate.query.count).to.be.an.object();
@@ -26,7 +26,7 @@ experiment('project routes', function() {
     expect(projects.method).to.equal('get');
     expect(projects.config.auth).to.be.false();
     expect(projects.config.cors).to.be.an.object();
-    expect(projects.config.cors.methods).to.include(['get', 'options']);
+    expect(projects.config.cors.methods).to.include(['GET', 'OPTIONS']);
     expect(projects.config.validate).to.be.an.object();
     expect(projects.config.validate.query).to.be.an.object();
     expect(projects.config.validate.query.count).to.be.an.object();
@@ -42,7 +42,7 @@ experiment('project routes', function() {
     expect(projects.method).to.equal('get');
     expect(projects.config.auth).to.be.false();
     expect(projects.config.cors).to.be.an.object();
-    expect(projects.config.cors.methods).to.include(['get', 'post', 'options']);
+    expect(projects.config.cors.methods).to.include(['GET', 'POST', 'OPTIONS']);
     expect(projects.config.validate).to.be.an.object();
     expect(projects.config.validate.params).to.be.an.object();
     expect(projects.config.validate.params.user).to.be.an.object();
@@ -60,7 +60,7 @@ experiment('project routes', function() {
     expect(projects.method).to.equal('get');
     expect(projects.config.auth).to.be.false();
     expect(projects.config.cors).to.be.an.object();
-    expect(projects.config.cors.methods).to.include(['get', 'patch', 'options', 'delete']);
+    expect(projects.config.cors.methods).to.include(['GET', 'PATCH', 'DELETE', 'OPTIONS']);
     expect(projects.config.validate).to.be.an.object();
     expect(projects.config.validate.params).to.be.an.object();
     expect(projects.config.validate.params.user).to.be.an.object();
@@ -76,7 +76,7 @@ experiment('project routes', function() {
     expect(projects.method).to.equal('get');
     expect(projects.config.auth).to.be.false();
     expect(projects.config.cors).to.be.an.object();
-    expect(projects.config.cors.methods).to.include(['get', 'post', 'options']);
+    expect(projects.config.cors.methods).to.include(['GET', 'POST', 'OPTIONS']);
     expect(projects.config.validate).to.be.an.object();
     expect(projects.config.validate.params).to.be.an.object();
     expect(projects.config.validate.params.user).to.be.an.object();
@@ -98,7 +98,7 @@ experiment('project routes', function() {
     expect(projects.config.auth.strategies).to.include('token');
     expect(projects.config.auth.scope).to.equal('projects');
     expect(projects.config.cors).to.be.an.object();
-    expect(projects.config.cors.methods).to.include(['get', 'post', 'options']);
+    expect(projects.config.cors.methods).to.include(['GET', 'POST', 'OPTIONS']);
     expect(projects.config.validate).to.be.an.object();
     expect(projects.config.validate.payload).to.be.an.object();
     expect(projects.config.validate.payload.title).to.be.an.object();
@@ -118,7 +118,7 @@ experiment('project routes', function() {
     expect(projects.config.auth.strategies).to.include('token');
     expect(projects.config.auth.scope).to.equal('projects');
     expect(projects.config.cors).to.be.an.object();
-    expect(projects.config.cors.methods).to.include(['get', 'patch', 'delete', 'options']);
+    expect(projects.config.cors.methods).to.include(['GET', 'PATCH', 'DELETE', 'OPTIONS']);
     expect(projects.config.validate).to.be.an.object();
     expect(projects.config.validate.params).to.be.an.object();
     expect(projects.config.validate.payload).to.be.an.object();
@@ -140,7 +140,7 @@ experiment('project routes', function() {
     expect(projects.config.auth.strategies).to.include('token');
     expect(projects.config.auth.scope).to.equal('projects');
     expect(projects.config.cors).to.be.an.object();
-    expect(projects.config.cors.methods).to.include(['get', 'patch', 'delete', 'options']);
+    expect(projects.config.cors.methods).to.include(['GET', 'PATCH', 'DELETE', 'OPTIONS']);
     expect(projects.config.validate).to.be.an.object();
     expect(projects.config.validate.params).to.be.an.object();
     expect(projects.config.validate.params.project).to.be.an.object();
@@ -159,7 +159,7 @@ experiment('project routes', function() {
     expect(projects.config.auth.strategies).to.include('token');
     expect(projects.config.auth.scope).to.equal('projects');
     expect(projects.config.cors).to.be.an.object();
-    expect(projects.config.cors.methods).to.include(['get', 'post', 'options']);
+    expect(projects.config.cors.methods).to.include(['GET', 'POST', 'OPTIONS']);
     expect(projects.config.validate).to.be.an.object();
     expect(projects.config.validate.params).to.be.an.object();
     expect(projects.config.validate.params.project).to.be.an.object();
@@ -178,7 +178,7 @@ experiment('project routes', function() {
     expect(projects.config.auth.strategies).to.include('token');
     expect(projects.config.auth.scope).to.equal('projects');
     expect(projects.config.cors).to.be.an.object();
-    expect(projects.config.cors.methods).to.include(['post', 'options']);
+    expect(projects.config.cors.methods).to.include(['POST', 'OPTIONS']);
     expect(projects.config.validate).to.be.an.object();
     expect(projects.config.validate.params).to.be.an.object();
     expect(projects.config.validate.params.project).to.be.an.object();
@@ -197,7 +197,7 @@ experiment('project routes', function() {
     expect(projects.config.auth.strategies).to.include('token');
     expect(projects.config.auth.scope).to.equal('projects');
     expect(projects.config.cors).to.be.an.object();
-    expect(projects.config.cors.methods).to.include(['post', 'options']);
+    expect(projects.config.cors.methods).to.include(['POST', 'OPTIONS']);
     expect(projects.config.validate).to.be.an.object();
     expect(projects.config.validate.params).to.be.an.object();
     expect(projects.config.validate.params.project).to.be.an.object();
@@ -211,7 +211,7 @@ experiment('project routes', function() {
     expect(projects.method).to.equal('options');
     expect(projects.config.auth).to.be.false();
     expect(projects.config.cors).to.be.an.object();
-    expect(projects.config.cors.methods).to.include(['get', 'options']);
+    expect(projects.config.cors.methods).to.include(['GET', 'OPTIONS']);
     done();
   });
 
@@ -221,7 +221,7 @@ experiment('project routes', function() {
     expect(projects.method).to.equal('options');
     expect(projects.config.auth).to.be.false();
     expect(projects.config.cors).to.be.an.object();
-    expect(projects.config.cors.methods).to.include(['get', 'options']);
+    expect(projects.config.cors.methods).to.include(['GET', 'OPTIONS']);
     done();
   });
 
@@ -231,7 +231,7 @@ experiment('project routes', function() {
     expect(projects.method).to.equal('options');
     expect(projects.config.auth).to.be.false();
     expect(projects.config.cors).to.be.an.object();
-    expect(projects.config.cors.methods).to.include(['get', 'patch', 'delete', 'options']);
+    expect(projects.config.cors.methods).to.include(['GET', 'PATCH', 'DELETE', 'OPTIONS']);
     done();
   });
 
@@ -241,7 +241,7 @@ experiment('project routes', function() {
     expect(projects.method).to.equal('options');
     expect(projects.config.auth).to.be.false();
     expect(projects.config.cors).to.be.an.object();
-    expect(projects.config.cors.methods).to.include(['get', 'post', 'options']);
+    expect(projects.config.cors.methods).to.include(['GET', 'POST', 'OPTIONS']);
     expect(projects.config.validate).to.be.an.object();
     expect(projects.config.validate.params).to.be.an.object();
     expect(projects.config.validate.params.project).to.be.an.object();

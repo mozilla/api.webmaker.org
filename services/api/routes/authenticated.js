@@ -36,7 +36,7 @@ var routes = [
         }
       },
       cors: {
-        methods: ['options', 'get', 'patch', 'delete']
+        methods: ['OPTIONS', 'GET', 'PATCH', 'DELETE']
       }
     }
   }, {
@@ -58,7 +58,7 @@ var routes = [
         }
       },
       cors: {
-        methods: ['options', 'get', 'patch', 'delete']
+        methods: ['OPTIONS', 'GET', 'PATCH', 'DELETE']
       }
     }
   }, {
@@ -75,7 +75,7 @@ var routes = [
         }
       },
       cors: {
-        methods: ['options', 'get', 'patch', 'delete']
+        methods: ['OPTIONS', 'GET', 'PATCH', 'DELETE']
       }
     }
   }, {
@@ -87,7 +87,7 @@ var routes = [
         scope: 'user'
       },
       cors: {
-        methods: ['options', 'get', 'patch', 'delete']
+        methods: ['OPTIONS', 'GET', 'PATCH', 'DELETE']
       },
       plugins: {
         lout: false
@@ -119,7 +119,7 @@ var routes = [
         prerequisites.canCreate
       ],
       cors: {
-        methods: ['options', 'post', 'get']
+        methods: ['OPTIONS', 'POST', 'GET']
       }
     }
   }, {
@@ -149,7 +149,7 @@ var routes = [
         prerequisites.canWrite
       ],
       cors: {
-        methods: ['options', 'get', 'patch', 'delete']
+        methods: ['OPTIONS', 'GET', 'PATCH', 'DELETE']
       }
     }
   }, {
@@ -172,7 +172,7 @@ var routes = [
         prerequisites.canDelete
       ],
       cors: {
-        methods: ['options', 'get', 'patch', 'delete']
+        methods: ['OPTIONS', 'GET', 'PATCH', 'DELETE']
       }
     }
   }, {
@@ -194,7 +194,7 @@ var routes = [
         prerequisites.getProject
       ],
       cors: {
-        methods: ['options', 'get', 'post']
+        methods: ['OPTIONS', 'GET', 'POST']
       }
     }
   }, {
@@ -217,7 +217,7 @@ var routes = [
         prerequisites.isMod
       ],
       cors: {
-        methods: ['options', 'post']
+        methods: ['OPTIONS', 'POST']
       }
     }
   }, {
@@ -235,7 +235,7 @@ var routes = [
         }
       },
       cors: {
-        methods: ['options', 'post']
+        methods: ['OPTIONS', 'POST']
       }
     }
   }, {
@@ -263,7 +263,7 @@ var routes = [
         prerequisites.canWrite
       ],
       cors: {
-        methods: ['get', 'post', 'options']
+        methods: ['GET', 'POST', 'OPTIONS']
       }
     }
   }, {
@@ -293,7 +293,7 @@ var routes = [
         prerequisites.canWrite
       ],
       cors: {
-        methods: ['get', 'patch', 'delete', 'options']
+        methods: ['GET', 'PATCH', 'DELETE', 'OPTIONS']
       }
     }
   },
@@ -319,7 +319,7 @@ var routes = [
         prerequisites.canDelete
       ],
       cors: {
-        methods: ['get', 'patch', 'delete', 'options']
+        methods: ['GET', 'PATCH', 'DELETE', 'OPTIONS']
       }
     }
   }, {
@@ -349,7 +349,7 @@ var routes = [
         prerequisites.canWrite
       ],
       cors: {
-        methods: ['get', 'post', 'options']
+        methods: ['GET', 'POST', 'OPTIONS']
       }
     }
   }, {
@@ -380,7 +380,7 @@ var routes = [
         prerequisites.canWrite
       ],
       cors: {
-        methods: ['get', 'patch', 'delete', 'options']
+        methods: ['GET', 'PATCH', 'DELETE', 'OPTIONS']
       }
     }
   }, {
@@ -407,7 +407,7 @@ var routes = [
         prerequisites.canDelete
       ],
       cors: {
-        methods: ['get', 'patch', 'delete', 'options']
+        methods: ['GET', 'PATCH', 'DELETE', 'OPTIONS']
       }
     }
   }
