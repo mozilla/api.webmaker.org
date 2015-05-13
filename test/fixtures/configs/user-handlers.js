@@ -1,7 +1,7 @@
 exports.create = {
   success: {
     url: '/users',
-    method: 'post',
+    method: 'POST',
     payload: {
       username: 'newuser',
       language: 'en',
@@ -10,7 +10,7 @@ exports.create = {
   },
   duplicateUsername: {
     url: '/users',
-    method: 'post',
+    method: 'POST',
     payload: {
       username: 'newuser',
       language: 'en',
@@ -19,7 +19,7 @@ exports.create = {
   },
   noLang: {
     url: '/users',
-    method: 'post',
+    method: 'POST',
     payload: {
       username: 'newuser2',
       country: 'CA'
@@ -27,7 +27,7 @@ exports.create = {
   },
   noCountry: {
     url: '/users',
-    method: 'post',
+    method: 'POST',
     payload: {
       username: 'newuser3',
       language: 'en'
@@ -38,21 +38,21 @@ exports.create = {
 exports.get = {
   success: {
     url: '/users/1',
-    method: 'get',
+    method: 'GET',
     headers: {
       authorization: 'token userToken'
     }
   },
   invalidId: {
     url: '/users/90',
-    method: 'get',
+    method: 'GET',
     headers: {
       authorization: 'token userToken'
     }
   },
   notYourAccount: {
     url: '/users/2',
-    method: 'get',
+    method: 'GET',
     headers: {
       authorization: 'token userToken'
     }
@@ -62,7 +62,7 @@ exports.get = {
 exports.patch = {
   updateEverything: {
     url: '/users/1',
-    method: 'patch',
+    method: 'PATCH',
     headers: {
       authorization: 'token userToken'
     },
@@ -74,7 +74,7 @@ exports.patch = {
   },
   username: {
     url: '/users/1',
-    method: 'patch',
+    method: 'PATCH',
     headers: {
       authorization: 'token userToken'
     },
@@ -84,7 +84,7 @@ exports.patch = {
   },
   language: {
     url: '/users/1',
-    method: 'patch',
+    method: 'PATCH',
     headers: {
       authorization: 'token userToken'
     },
@@ -94,7 +94,7 @@ exports.patch = {
   },
   userNotFound: {
     url: '/users/90',
-    method: 'patch',
+    method: 'PATCH',
     headers: {
       authorization: 'token userToken'
     },
@@ -106,7 +106,7 @@ exports.patch = {
   },
   unauthorized: {
     url: '/users/2',
-    method: 'patch',
+    method: 'PATCH',
     headers: {
       authorization: 'token userToken'
     },
@@ -118,7 +118,7 @@ exports.patch = {
   },
   duplicateUsername: {
     url: '/users/2',
-    method: 'patch',
+    method: 'PATCH',
     headers: {
       authorization: 'token userToken2'
     },
@@ -131,34 +131,34 @@ exports.patch = {
 exports.del = {
   success: {
     url: '/users/1',
-    method: 'delete',
+    method: 'DELETE',
     headers: {
       authorization: 'token userToken'
     }
   },
   userNotFound: {
     url: '/users/90',
-    method: 'delete',
+    method: 'DELETE',
     headers: {
       authorization: 'token userToken'
     }
   },
   unauthorized: {
     url: '/users/3',
-    method: 'delete',
+    method: 'DELETE',
     headers: {
       authorization: 'token userToken2'
     }
   },
   fail: {
     url: '/users/2',
-    method: 'delete',
+    method: 'DELETE',
     headers: {
       authorization: 'token userToken2'
     }
   }, fail2: {
     url: '/users/3',
-    method: 'delete',
+    method: 'DELETE',
     headers: {
       authorization: 'token moderatorToken'
     }
@@ -168,7 +168,7 @@ exports.del = {
 exports.options = {
   success: {
     url: '/users/1',
-    method: 'options',
+    method: 'OPTIONS',
     headers: {
       authorization: 'token userToken'
     }

@@ -13,7 +13,7 @@ var moderatorToken = {
 exports.prerequisites = {
   fail: {
     url: '/users/1/projects/1/pages/1/elements/1',
-    method: 'patch',
+    method: 'PATCH',
     payload: {
       styles: {}
     },
@@ -26,11 +26,11 @@ exports.get = {
     success: {
       manyElements:{
         url: '/users/1/projects/1/pages/1/elements',
-        method: 'get'
+        method: 'GET'
       },
       noElements: {
         url: '/users/1/projects/1/pages/2/elements',
-        method: 'get'
+        method: 'GET'
       }
     },
     fail: {
@@ -38,149 +38,149 @@ exports.get = {
         user: {
           notFound: {
             url: '/users/99/projects/3/pages/1/elements',
-            method: 'get'
+            method: 'GET'
           },
           notNumber: {
             url: '/users/cade/projects/1/pages/1/elements',
-            method: 'get'
+            method: 'GET'
           },
           notInteger: {
             url: '/users/1.5/projects/1/pages/1/elements',
-            method: 'get'
+            method: 'GET'
           },
           doesNotOwnProject: {
             url: '/users/1/projects/4/pages/1/elements',
-            method: 'get'
+            method: 'GET'
           }
         },
         project: {
           notFound: {
             url: '/users/1/projects/89/pages/1/elements',
-            method: 'get'
+            method: 'GET'
           },
           notNumber: {
             url: '/users/1/projects/coolproject/pages/1/elements',
-            method: 'get'
+            method: 'GET'
           },
           notInteger: {
             url: '/users/1/projects/1.5/pages/1/elements',
-            method: 'get'
+            method: 'GET'
           },
           pageNotInProject: {
             url: '/users/1/projects/1/pages/1/elements',
-            method: 'get'
+            method: 'GET'
           }
         },
         page: {
           notFound: {
             url: '/users/1/projects/1/pages/87/elements',
-            method: 'get'
+            method: 'GET'
           },
           notNumber: {
             url: '/users/1/projects/1/pages/foo/elements',
-            method: 'get'
+            method: 'GET'
           },
           notInteger: {
             url: '/users/1/projects/1/pages/1.5/elements',
-            method: 'get'
+            method: 'GET'
           }
         }
       },
       error: {
         url: '/users/1/projects/1/pages/1/elements',
-        method: 'get'
+        method: 'GET'
       }
     }
   },
   one: {
     success: {
       url: '/users/1/projects/1/pages/1/elements/1',
-      method: 'get'
+      method: 'GET'
     },
     fail: {
       params: {
         user: {
           notFound: {
             url: '/users/99/projects/3/pages/1/elements/1',
-            method: 'get',
+            method: 'GET',
             headers: userToken
           },
           notNumber: {
             url: '/users/cade/projects/1/pages/1/elements/1',
-            method: 'get',
+            method: 'GET',
             headers: userToken
           },
           notInteger: {
             url: '/users/1.5/projects/1/pages/1/elements/1',
-            method: 'get',
+            method: 'GET',
             headers: userToken
           },
           doesNotOwnProject: {
             url: '/users/1/projects/4/pages/1/elements/1',
-            method: 'get',
+            method: 'GET',
             headers: userToken
           }
         },
         project: {
           notFound: {
             url: '/users/1/projects/89/pages/1/elements/1',
-            method: 'get',
+            method: 'GET',
             headers: userToken
           },
           notNumber: {
             url: '/users/1/projects/coolproject/pages/1/elements/1',
-            method: 'get',
+            method: 'GET',
             headers: userToken
           },
           notInteger: {
             url: '/users/1/projects/1.5/pages/1/elements/1',
-            method: 'get',
+            method: 'GET',
             headers: userToken
           },
           pageNotInProject: {
             url: '/users/1/projects/1/pages/1/elements/1',
-            method: 'get',
+            method: 'GET',
             headers: userToken
           }
         },
         page: {
           notFound: {
             url: '/users/1/projects/1/pages/87/elements/1',
-            method: 'get',
+            method: 'GET',
             headers: userToken
           },
           notNumber: {
             url: '/users/1/projects/1/pages/foo/elements/1',
-            method: 'get',
+            method: 'GET',
             headers: userToken
           },
           notInteger: {
             url: '/users/1/projects/1/pages/1.5/elements/1',
-            method: 'get',
+            method: 'GET',
             headers: userToken
           }
         },
         element: {
           notFound: {
             url: '/users/1/projects/1/pages/1/elements/909',
-            method: 'get',
+            method: 'GET',
             headers: userToken
           },
           notNumber: {
             url: '/users/1/projects/1/pages/1/elements/foo',
-            method: 'get',
+            method: 'GET',
             headers: userToken
           },
           notInteger: {
             url: '/users/1/projects/1/pages/1/elements/1.5',
-            method: 'get',
+            method: 'GET',
             headers: userToken
           }
         }
       },
       error: {
         url: '/users/1/projects/1/pages/1/elements/1',
-        method: 'get'
+        method: 'GET'
       }
     }
   }
@@ -190,7 +190,7 @@ exports.create = {
   success: {
     emptyJSON: {
       url: '/users/1/projects/7/pages/6/elements',
-      method: 'post',
+      method: 'POST',
       headers: userToken,
       payload: {
         type: 'text'
@@ -198,7 +198,7 @@ exports.create = {
     },
     withStyle: {
       url: '/users/1/projects/7/pages/6/elements',
-      method: 'post',
+      method: 'POST',
       headers: userToken,
       payload: {
         type: 'text',
@@ -209,7 +209,7 @@ exports.create = {
     },
     withAttributes: {
       url: '/users/1/projects/7/pages/6/elements',
-      method: 'post',
+      method: 'POST',
       headers: userToken,
       payload: {
         type: 'text',
@@ -224,25 +224,25 @@ exports.create = {
       user: {
         notFound: {
           url: '/users/99/projects/3/pages/1/elements',
-          method: 'post',
+          method: 'POST',
           headers: userToken,
           payload: { type: 'text' }
         },
         notNumber: {
           url: '/users/cade/projects/1/pages/1/elements',
-          method: 'post',
+          method: 'POST',
           headers: userToken,
           payload: { type: 'text' }
         },
         notInteger: {
           url: '/users/1.5/projects/1/pages/1/elements',
-          method: 'post',
+          method: 'POST',
           headers: userToken,
           payload: { type: 'text' }
         },
         doesNotOwnProject: {
           url: '/users/1/projects/4/pages/1/elements',
-          method: 'post',
+          method: 'POST',
           headers: userToken,
           payload: { type: 'text' }
         }
@@ -250,25 +250,25 @@ exports.create = {
       project: {
         notFound: {
           url: '/users/1/projects/89/pages/1/elements',
-          method: 'post',
+          method: 'POST',
           headers: userToken,
           payload: { type: 'text' }
         },
         notNumber: {
           url: '/users/1/projects/coolproject/pages/1/elements',
-          method: 'post',
+          method: 'POST',
           headers: userToken,
           payload: { type: 'text' }
         },
         notInteger: {
           url: '/users/1/projects/1.5/pages/1/elements',
-          method: 'post',
+          method: 'POST',
           headers: userToken,
           payload: { type: 'text' }
         },
         pageNotInProject: {
           url: '/users/1/projects/1/pages/1/elements',
-          method: 'post',
+          method: 'POST',
           headers: userToken,
           payload: { type: 'text' }
         }
@@ -276,19 +276,19 @@ exports.create = {
       page: {
         notFound: {
           url: '/users/1/projects/1/pages/87/elements',
-          method: 'post',
+          method: 'POST',
           headers: userToken,
           payload: { type: 'text' }
         },
         notNumber: {
           url: '/users/1/projects/1/pages/foo/elements',
-          method: 'post',
+          method: 'POST',
           headers: userToken,
           payload: { type: 'text' }
         },
         notInteger: {
           url: '/users/1/projects/1/pages/1.5/elements',
-          method: 'post',
+          method: 'POST',
           headers: userToken,
           payload: { type: 'text' }
         }
@@ -298,13 +298,13 @@ exports.create = {
       type: {
         notProvided: {
           url: '/users/1/projects/1/pages/1/elements',
-          method: 'post',
+          method: 'POST',
           headers: userToken,
           payload: {}
         },
         notString: {
           url: '/users/1/projects/1/pages/1/elements',
-          method: 'post',
+          method: 'POST',
           headers: userToken,
           payload: {
             type: 1
@@ -314,7 +314,7 @@ exports.create = {
       attributes: {
         notObject: {
           url: '/users/1/projects/1/pages/1/elements',
-          method: 'post',
+          method: 'POST',
           headers: userToken,
           payload: {
             type: 'text',
@@ -325,7 +325,7 @@ exports.create = {
       styles: {
         notObject: {
           url: '/users/1/projects/1/pages/1/elements',
-          method: 'post',
+          method: 'POST',
           headers: userToken,
           payload: {
             type: 'text',
@@ -336,7 +336,7 @@ exports.create = {
     },
     error: {
       url: '/users/1/projects/1/pages/1/elements',
-      method: 'post',
+      method: 'POST',
       headers: userToken,
       payload: {
         type: 'fail'
@@ -349,7 +349,7 @@ exports.patch = {
   success: {
     onlyStyles: {
       url: '/users/1/projects/1/pages/1/elements/1',
-      method: 'patch',
+      method: 'PATCH',
       headers: userToken,
       payload: {
         styles: {
@@ -359,7 +359,7 @@ exports.patch = {
     },
     onlyAttributes: {
       url: '/users/1/projects/1/pages/1/elements/1',
-      method: 'patch',
+      method: 'PATCH',
       headers: userToken,
       payload: {
         attributes: {
@@ -369,7 +369,7 @@ exports.patch = {
     },
     all: {
       url: '/users/1/projects/1/pages/1/elements/1',
-      method: 'patch',
+      method: 'PATCH',
       headers: userToken,
       payload: {
         styles: {
@@ -386,25 +386,25 @@ exports.patch = {
       user: {
         notFound: {
           url: '/users/75/projects/1/pages/1/elements/1',
-          method: 'patch',
+          method: 'PATCH',
           headers: userToken,
           payload: { styles: {} }
         },
         notNumber: {
           url: '/users/cade/projects/1/pages/1/elements/1',
-          method: 'patch',
+          method: 'PATCH',
           headers: userToken,
           payload: { styles: {} }
         },
         notInteger: {
           url: '/users/1.5/projects/1/pages/1/elements/1',
-          method: 'patch',
+          method: 'PATCH',
           headers: userToken,
           payload: { styles: {} }
         },
         doesNotOwnProject: {
           url: '/users/1/projects/4/pages/1/elements/1',
-          method: 'patch',
+          method: 'PATCH',
           headers: userToken,
           payload: { styles: {} }
         }
@@ -412,25 +412,25 @@ exports.patch = {
       project: {
         notFound: {
           url: '/users/1/projects/75/pages/1/elements/1',
-          method: 'patch',
+          method: 'PATCH',
           headers: userToken,
           payload: { styles: {} }
         },
         notNumber: {
           url: '/users/1/projects/foo/pages/1/elements/1',
-          method: 'patch',
+          method: 'PATCH',
           headers: userToken,
           payload: { styles: {} }
         },
         notInteger: {
           url: '/users/1/projects/1.5/pages/1/elements/1',
-          method: 'patch',
+          method: 'PATCH',
           headers: userToken,
           payload: { styles: {} }
         },
         pageNotInProject: {
           url: '/users/1/projects/1/pages/7/elements/1',
-          method: 'patch',
+          method: 'PATCH',
           headers: userToken,
           payload: { styles: {} }
         }
@@ -438,25 +438,25 @@ exports.patch = {
       page: {
         notFound: {
           url: '/users/1/projects/1/pages/87/elements/1',
-          method: 'patch',
+          method: 'PATCH',
           headers: userToken,
           payload: { styles: {} }
         },
         notNumber: {
           url: '/users/1/projects/1/pages/foo/elements/1',
-          method: 'patch',
+          method: 'PATCH',
           headers: userToken,
           payload: { styles: {} }
         },
         notInteger: {
           url: '/users/1/projects/1/pages/1.5/elements/1',
-          method: 'patch',
+          method: 'PATCH',
           headers: userToken,
           payload: { styles: {} }
         },
         elementNotInPage: {
           url: '/users/1/projects/1/pages/1/elements/8',
-          method: 'patch',
+          method: 'PATCH',
           headers: userToken,
           payload: { styles: {} }
         }
@@ -464,19 +464,19 @@ exports.patch = {
       element: {
         notFound: {
           url: '/users/1/projects/1/pages/1/elements/43',
-          method: 'patch',
+          method: 'PATCH',
           headers: userToken,
           payload: { styles: {} }
         },
         notNumber: {
           url: '/users/1/projects/1/pages/1/elements/foo',
-          method: 'patch',
+          method: 'PATCH',
           headers: userToken,
           payload: { styles: {} }
         },
         notInteger: {
           url: '/users/1/projects/1/pages/1/elements/1.5',
-          method: 'patch',
+          method: 'PATCH',
           headers: userToken,
           payload: { styles: {} }
         }
@@ -486,7 +486,7 @@ exports.patch = {
       attributes: {
         notObject: {
           url: '/users/1/projects/1/pages/1/elements/1',
-          method: 'patch',
+          method: 'PATCH',
           headers: userToken,
           payload: {
             attributes: 'foo'
@@ -496,7 +496,7 @@ exports.patch = {
       styles: {
         notObject: {
           url: '/users/1/projects/1/pages/1/elements/1',
-          method: 'patch',
+          method: 'PATCH',
           headers: userToken,
           payload: {
             styles: 'foo'
@@ -505,14 +505,14 @@ exports.patch = {
       },
       missingAll: {
         url: '/users/1/projects/1/pages/1/elements/1',
-        method: 'patch',
+        method: 'PATCH',
         headers: userToken,
         payload: {}
       }
     },
     error: {
       url: '/users/1/projects/1/pages/1/elements/1',
-      method: 'patch',
+      method: 'PATCH',
       headers: userToken,
       payload: {
         attributes: {}
@@ -525,12 +525,12 @@ exports.del = {
   success: {
     owner: {
       url: '/users/2/projects/3/pages/7/elements/8',
-      method: 'delete',
+      method: 'DELETE',
       headers: userToken2
     },
     moderator: {
       url: '/users/2/projects/3/pages/7/elements/9',
-      method: 'delete',
+      method: 'DELETE',
       headers: moderatorToken
     }
   },
@@ -539,80 +539,80 @@ exports.del = {
       user: {
         notFound: {
           url: '/users/75/projects/1/pages/1/elements/1',
-          method: 'delete',
+          method: 'DELETE',
           headers: userToken
         },
         notNumber: {
           url: '/users/cade/projects/1/pages/1/elements/1',
-          method: 'delete',
+          method: 'DELETE',
           headers: userToken
         },
         notInteger: {
           url: '/users/3.1415/projects/1/pages/1/elements/1',
-          method: 'delete',
+          method: 'DELETE',
           headers: userToken
         },
         doesNotOwnProject: {
           url: '/users/1/projects/3/pages/1/elements/1',
-          method: 'delete',
+          method: 'DELETE',
           headers: userToken
         }
       },
       project: {
         notFound: {
           url: '/users/1/projects/75/pages/1/elements/1',
-          method: 'delete',
+          method: 'DELETE',
           headers: userToken
         },
         notNumber: {
           url: '/users/1/projects/foo/pages/1/elements/1',
-          method: 'delete',
+          method: 'DELETE',
           headers: userToken
         },
         notInteger: {
           url: '/users/1/projects/3.1415/pages/1/elements/1',
-          method: 'delete',
+          method: 'DELETE',
           headers: userToken
         },
         pageNotInProject: {
           url: '/users/1/projects/1/pages/7/elements/1',
-          method: 'delete',
+          method: 'DELETE',
           headers: userToken
         }
       },
       page: {
         notFound: {
           url: '/users/1/projects/1/pages/78/elements/1',
-          method: 'delete',
+          method: 'DELETE',
           headers: userToken
         },
         notNumber: {
           url: '/users/1/projects/1/pages/foo/elements/1',
-          method: 'delete',
+          method: 'DELETE',
           headers: userToken
         },
         notInteger: {
           url: '/users/1/projects/1/pages/3.1415/elements/1',
-          method: 'delete',
+          method: 'DELETE',
           headers: userToken
         }
       },
       element: {
         notFound: {
           url: '/users/1/projects/1/pages/1/elements/43',
-          method: 'patch',
+          method: 'PATCH',
           headers: userToken,
           payload: { styles: {} }
         },
         notNumber: {
           url: '/users/1/projects/1/pages/1/elements/foo',
-          method: 'patch',
+          method: 'PATCH',
           headers: userToken,
           payload: { styles: {} }
         },
         notInteger: {
           url: '/users/1/projects/1/pages/1/elements/1.5',
-          method: 'patch',
+          method: 'PATCH',
           headers: userToken,
           payload: { styles: {} }
         }
@@ -621,13 +621,13 @@ exports.del = {
     auth: {
       notOwner: {
         url: '/users/2/projects/3/pages/7/elements/10',
-        method: 'delete',
+        method: 'DELETE',
         headers: userToken
       }
     },
     error: {
       url: '/users/1/projects/1/pages/1/elements/1',
-      method: 'delete',
+      method: 'DELETE',
       headers: userToken
     }
   }
@@ -636,6 +636,6 @@ exports.del = {
 exports.options = {
   success: {
     url: '/users/1/projects/1/pages/1/elements/1',
-    method: 'options'
+    method: 'OPTIONS'
   }
 };

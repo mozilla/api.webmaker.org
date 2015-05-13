@@ -21,7 +21,7 @@ var numericSchema = Joi.alternatives().try(
 var routes = [
   {
     path: '/users',
-    method: 'post',
+    method: 'POST',
     handler: users.post,
     config: {
       validate: {
@@ -32,17 +32,17 @@ var routes = [
         }
       },
       cors: {
-        methods: ['post', 'options']
+        methods: ['POST', 'OPTIONS']
       },
       description: 'Create a user account'
     }
   }, {
     path: '/users',
-    method: 'options',
+    method: 'OPTIONS',
     handler: users.options,
     config: {
       cors: {
-        methods: ['post', 'options']
+        methods: ['POST', 'OPTIONS']
       },
       plugins: {
         lout: false
@@ -50,7 +50,7 @@ var routes = [
     }
   }, {
     path: '/projects',
-    method: 'get',
+    method: 'GET',
     handler: projects.get.all,
     config: {
       validate: {
@@ -63,12 +63,12 @@ var routes = [
         prerequisites.calculateOffset
       ],
       cors: {
-        methods: ['get', 'options']
+        methods: ['GET', 'OPTIONS']
       }
     }
   }, {
     path: '/users/{user}/projects',
-    method: 'get',
+    method: 'GET',
     handler: projects.get.allByUser,
     config: {
       validate: {
@@ -85,12 +85,12 @@ var routes = [
         prerequisites.calculateOffset
       ],
       cors: {
-        methods: ['get', 'post', 'options']
+        methods: ['GET', 'POST', 'OPTIONS']
       }
     }
   }, {
     path: '/users/{user}/projects/{project}',
-    method: 'get',
+    method: 'GET',
     handler: projects.get.one,
     config: {
       validate: {
@@ -103,12 +103,12 @@ var routes = [
         prerequisites.getUser
       ],
       cors: {
-        methods: ['get', 'patch', 'options', 'delete']
+        methods: ['GET', 'PATCH', 'OPTIONS', 'DELETE']
       }
     }
   }, {
     path: '/users/{user}/projects/{project}',
-    method: 'options',
+    method: 'OPTIONS',
     handler: projects.options,
     config: {
       validate: {
@@ -118,12 +118,12 @@ var routes = [
         }
       },
       cors: {
-        methods: ['get', 'patch', 'options', 'delete']
+        methods: ['GET', 'PATCH', 'OPTIONS', 'DELETE']
       }
     }
   }, {
     path: '/users/{user}/projects',
-    method: 'options',
+    method: 'OPTIONS',
     handler: projects.options,
     config: {
       validate: {
@@ -136,12 +136,12 @@ var routes = [
         }
       },
       cors: {
-        methods: ['get', 'options']
+        methods: ['GET', 'OPTIONS']
       }
     }
   }, {
     path: '/projects',
-    method: 'options',
+    method: 'OPTIONS',
     handler: projects.options,
     config: {
       validate: {
@@ -151,12 +151,12 @@ var routes = [
         }
       },
       cors: {
-        methods: ['get', 'options']
+        methods: ['GET', 'OPTIONS']
       }
     }
   }, {
     path: '/users/{user}/projects/{project}/remixes',
-    method: 'get',
+    method: 'GET',
     handler: projects.get.remixes,
     config: {
       validate: {
@@ -175,12 +175,12 @@ var routes = [
         prerequisites.calculateOffset
       ],
       cors: {
-        methods: ['get', 'post', 'options']
+        methods: ['GET', 'POST', 'OPTIONS']
       }
     }
   }, {
     path: '/discover',
-    method: 'get',
+    method: 'GET',
     handler: projects.get.featured,
     config: {
       validate: {
@@ -193,21 +193,21 @@ var routes = [
         prerequisites.calculateOffset
       ],
       cors: {
-        methods: ['get', 'options']
+        methods: ['GET', 'OPTIONS']
       }
     }
   }, {
     path: '/discover',
-    method: 'options',
+    method: 'OPTIONS',
     handler: projects.options,
     config: {
       cors: {
-        methods: ['get', 'options']
+        methods: ['GET', 'OPTIONS']
       }
     }
   }, {
     path: '/users/{user}/projects/{project}/remixes',
-    method: 'options',
+    method: 'OPTIONS',
     handler: projects.options,
     config: {
       validate: {
@@ -217,12 +217,12 @@ var routes = [
         }
       },
       cors: {
-        methods: ['get', 'post', 'options']
+        methods: ['GET', 'POST', 'OPTIONS']
       }
     }
   }, {
     path: '/users/{user}/projects/{project}/pages',
-    method: 'get',
+    method: 'GET',
     handler: pages.get.all,
     config: {
       validate: {
@@ -236,12 +236,12 @@ var routes = [
         prerequisites.getProject
       ],
       cors: {
-        methods: ['get', 'post', 'options']
+        methods: ['GET', 'POST', 'OPTIONS']
       }
     }
   }, {
     path: '/users/{user}/projects/{project}/pages',
-    method: 'options',
+    method: 'OPTIONS',
     handler: pages.options,
     config: {
       validate: {
@@ -251,12 +251,12 @@ var routes = [
         }
       },
       cors: {
-        methods: ['get', 'post', 'options']
+        methods: ['GET', 'POST', 'OPTIONS']
       }
     }
   }, {
     path: '/users/{user}/projects/{project}/pages/{page}',
-    method: 'get',
+    method: 'GET',
     handler: pages.get.one,
     config: {
       validate: {
@@ -271,12 +271,12 @@ var routes = [
         prerequisites.getProject
       ],
       cors: {
-        methods: ['get', 'patch', 'delete', 'options']
+        methods: ['GET', 'PATCH', 'DELETE', 'OPTIONS']
       }
     }
   }, {
     path: '/users/{user}/projects/{project}/pages/{page}',
-    method: 'options',
+    method: 'OPTIONS',
     handler: pages.options,
     config: {
       validate: {
@@ -287,12 +287,12 @@ var routes = [
         }
       },
       cors: {
-        methods: ['get', 'patch', 'delete', 'options']
+        methods: ['GET', 'PATCH', 'DELETE', 'OPTIONS']
       }
     }
   }, {
     path: '/users/{user}/projects/{project}/pages/{page}/elements',
-    method: 'get',
+    method: 'GET',
     handler: elements.get.all,
     config: {
       validate: {
@@ -308,12 +308,12 @@ var routes = [
         prerequisites.getPage
       ],
       cors: {
-        methods: ['get', 'post', 'options']
+        methods: ['GET', 'POST', 'OPTIONS']
       }
     }
   }, {
     path: '/users/{user}/projects/{project}/pages/{page}/elements',
-    method: 'options',
+    method: 'OPTIONS',
     handler: elements.options,
     config: {
       validate: {
@@ -324,12 +324,12 @@ var routes = [
         }
       },
       cors: {
-        methods: ['get', 'post', 'options']
+        methods: ['GET', 'POST', 'OPTIONS']
       }
     }
   }, {
     path: '/users/{user}/projects/{project}/pages/{page}/elements/{element}',
-    method: 'get',
+    method: 'GET',
     handler: elements.get.one,
     config: {
       validate: {
@@ -346,12 +346,12 @@ var routes = [
         prerequisites.getPage
       ],
       cors: {
-        methods: ['get', 'patch', 'delete', 'options']
+        methods: ['GET', 'PATCH', 'DELETE', 'OPTIONS']
       }
     }
   }, {
     path: '/users/{user}/projects/{project}/pages/{page}/elements/{element}',
-    method: 'options',
+    method: 'OPTIONS',
     handler: elements.options,
     config: {
       validate: {
@@ -363,12 +363,12 @@ var routes = [
         }
       },
       cors: {
-        methods: ['get', 'patch', 'delete', 'options']
+        methods: ['GET', 'PATCH', 'DELETE', 'OPTIONS']
       }
     }
   }, {
     path: '/docs/css/style.css',
-    method: 'get',
+    method: 'GET',
     handler: {
       file: './node_modules/lout/public/css/style.css'
     },
@@ -380,7 +380,7 @@ var routes = [
     }
   }, {
     path: '/',
-    method: 'get',
+    method: 'GET',
     handler: function(request, reply) {
       reply.redirect('/docs');
     },

@@ -13,14 +13,14 @@ var moderatorToken = {
 exports.pgAdapter = {
   fail: {
     url: '/discover',
-    method: 'get'
+    method: 'GET'
   }
 };
 
 exports.prerequisites = {
   fail: {
     url: '/users/1/projects/1',
-    method: 'patch',
+    method: 'PATCH',
     payload: {
       title: 'new'
     },
@@ -33,19 +33,19 @@ exports.get = {
     success: {
       default: {
         url: '/discover',
-        method: 'get'
+        method: 'GET'
       },
       changeCount: {
         url: '/discover?count=3',
-        method: 'get'
+        method: 'GET'
       },
       changePage: {
         url: '/discover?count=3&page=2',
-        method: 'get'
+        method: 'GET'
       },
       returnsNoneWhenPageTooHigh: {
         url: '/discover?count=50&page=2',
-        method: 'get'
+        method: 'GET'
       }
     },
     fail: {
@@ -53,11 +53,11 @@ exports.get = {
         count: {
           negative: {
             url: '/discover?count=-1',
-            method: 'get'
+            method: 'GET'
           },
           tooHigh: {
             url: '/discover?count=101',
-            method: 'get'
+            method: 'GET'
           },
           notNumber: {
             url: '/discover?count=foo'
@@ -66,11 +66,11 @@ exports.get = {
         page: {
           negative: {
             url: '/discover?page=-1',
-            method: 'get'
+            method: 'GET'
           },
           tooHigh: {
             url: '/discover?page=51',
-            method: 'get'
+            method: 'GET'
           },
           notNumber: {
             url: '/discover?page=foo'
@@ -79,41 +79,41 @@ exports.get = {
       },
       error: {
         url: '/discover',
-        method: 'get'
+        method: 'GET'
       }
     }
   },
   one: {
     success: {
       url: '/users/1/projects/1',
-      method: 'get'
+      method: 'GET'
     },
     fail: {
       params: {
         user: {
           notFound: {
             url: '/users/90/projects/1',
-            method: 'get'
+            method: 'GET'
           },
           notNumber: {
             url: '/users/foo/projects/1',
-            method: 'get'
+            method: 'GET'
           }
         },
         projects: {
           notFound: {
             url: '/users/1/projects/4',
-            method: 'get'
+            method: 'GET'
           },
           notNumber: {
             url: '/users/1/projects/foo',
-            method: 'get'
+            method: 'GET'
           }
         }
       },
       error: {
         url: '/users/1/projects/1',
-        method: 'get'
+        method: 'GET'
       }
     }
   },
@@ -121,19 +121,19 @@ exports.get = {
     success: {
       default: {
         url: '/projects',
-        method: 'get'
+        method: 'GET'
       },
       changeCount: {
         url: '/projects?count=3',
-        method: 'get'
+        method: 'GET'
       },
       changePage: {
         url: '/projects?count=3&page=2',
-        method: 'get'
+        method: 'GET'
       },
       returnsNoneWhenPageTooHigh: {
         url: '/projects?count=50&page=2',
-        method: 'get'
+        method: 'GET'
       }
     },
     fail: {
@@ -141,11 +141,11 @@ exports.get = {
         count: {
           negative: {
             url: '/projects?count=-1',
-            method: 'get'
+            method: 'GET'
           },
           tooHigh: {
             url: '/projects?count=101',
-            method: 'get'
+            method: 'GET'
           },
           notNumber: {
             url: '/projects?count=foo'
@@ -154,11 +154,11 @@ exports.get = {
         page: {
           negative: {
             url: '/projects?page=-1',
-            method: 'get'
+            method: 'GET'
           },
           tooHigh: {
             url: '/projects?page=51',
-            method: 'get'
+            method: 'GET'
           },
           notNumber: {
             url: '/projects?page=foo'
@@ -167,7 +167,7 @@ exports.get = {
       },
       error: {
         url: '/projects',
-        method: 'get'
+        method: 'GET'
       }
     }
   },
@@ -175,19 +175,19 @@ exports.get = {
     success: {
       default: {
         url: '/users/1/projects',
-        method: 'get'
+        method: 'GET'
       },
       changeCount: {
         url: '/users/1/projects?count=3',
-        method: 'get'
+        method: 'GET'
       },
       changePage: {
         url: '/users/1/projects?count=2&page=2',
-        method: 'get'
+        method: 'GET'
       },
       returnsNoneWhenPageTooHigh: {
         url: '/users/1/projects?count=50&page=2',
-        method: 'get'
+        method: 'GET'
       }
     },
     fail: {
@@ -195,11 +195,11 @@ exports.get = {
         count: {
           negative: {
             url: '/users/1/projects?count=-1',
-            method: 'get'
+            method: 'GET'
           },
           tooHigh: {
             url: '/users/1/projects?count=101',
-            method: 'get'
+            method: 'GET'
           },
           notNumber: {
             url: '/users/1/projects?count=foo'
@@ -208,11 +208,11 @@ exports.get = {
         page: {
           negative: {
             url: '/users/1/projects?page=-1',
-            method: 'get'
+            method: 'GET'
           },
           tooHigh: {
             url: '/users/1/projects?page=51',
-            method: 'get'
+            method: 'GET'
           },
           notNumber: {
             url: '/users/1/projects?page=foo'
@@ -223,17 +223,17 @@ exports.get = {
         user: {
           notFound: {
             url: '/users/90/projects',
-            method: 'get'
+            method: 'GET'
           },
           notNumber: {
             url: '/users/foo/projects',
-            method: 'get'
+            method: 'GET'
           }
         }
       },
       error: {
         url: '/users/1/projects',
-        method: 'get'
+        method: 'GET'
       }
     }
   },
@@ -241,19 +241,19 @@ exports.get = {
     success: {
       default: {
         url: '/users/1/projects/1/remixes',
-        method: 'get'
+        method: 'GET'
       },
       changeCount: {
         url: '/users/1/projects/1/remixes?count=3',
-        method: 'get'
+        method: 'GET'
       },
       changePage: {
         url: '/users/1/projects/1/remixes?count=2&page=2',
-        method: 'get'
+        method: 'GET'
       },
       returnsNoneWhenPageTooHigh: {
         url: '/users/1/projects/1/remixes?count=50&page=2',
-        method: 'get'
+        method: 'GET'
       }
     },
     fail: {
@@ -261,11 +261,11 @@ exports.get = {
         count: {
           negative: {
             url: '/users/1/projects/1/remixes?count=-1',
-            method: 'get'
+            method: 'GET'
           },
           tooHigh: {
             url: '/users/1/projects/1/remixes?count=101',
-            method: 'get'
+            method: 'GET'
           },
           notNumber: {
             url: '/users/1/projects/1/remixes?count=foo'
@@ -274,11 +274,11 @@ exports.get = {
         page: {
           negative: {
             url: '/users/1/projects/1/remixes?page=-1',
-            method: 'get'
+            method: 'GET'
           },
           tooHigh: {
             url: '/users/1/projects/1/remixes?page=900',
-            method: 'get'
+            method: 'GET'
           },
           notNumber: {
             url: '/users/1/projects/1/remixes?page=foo'
@@ -289,17 +289,17 @@ exports.get = {
         user: {
           notFound: {
             url: '/users/90/projects/1/remixes',
-            method: 'get'
+            method: 'GET'
           },
           notNumber: {
             url: '/users/foo/projects/1/remixes',
-            method: 'get'
+            method: 'GET'
           }
         }
       },
       error: {
         url: '/users/1/projects/1/remixes',
-        method: 'get'
+        method: 'GET'
       }
     }
   }
@@ -310,7 +310,7 @@ exports.create = {
     success: {
       withoutThumbnail: {
         url: '/users/1/projects',
-        method: 'post',
+        method: 'POST',
         payload: {
           title: 'create_test'
         },
@@ -318,7 +318,7 @@ exports.create = {
       },
       withThumbnail: {
         url: '/users/1/projects',
-        method: 'post',
+        method: 'POST',
         payload: {
           title: 'create_test2',
           thumbnail: {
@@ -332,7 +332,7 @@ exports.create = {
       payload: {
         title: {
           url: '/users/1/projects',
-          method: 'post',
+          method: 'POST',
           payload: {
             title: 123,
             thumbnail: {
@@ -343,7 +343,7 @@ exports.create = {
         },
         thumb: {
           url: '/users/1/projects',
-          method: 'post',
+          method: 'POST',
           payload: {
             title: 'bad_thumb',
             thumbnail: 'https://example.com/image.png'
@@ -352,7 +352,7 @@ exports.create = {
         },
         thumbValue: {
           url: '/users/1/projects',
-          method: 'post',
+          method: 'POST',
           payload: {
             title: 'bad_thumb',
             thumbnail: {
@@ -363,7 +363,7 @@ exports.create = {
         },
         thumbKey: {
           url: '/users/1/projects',
-          method: 'post',
+          method: 'POST',
           payload: {
             title: 'bad_thumb',
             thumbnail: {
@@ -377,7 +377,7 @@ exports.create = {
         user: {
           notNumber : {
             url: '/users/foo/projects',
-            method: 'post',
+            method: 'POST',
             payload: {
               title: 'bad_param',
               thumbnail: {
@@ -388,7 +388,7 @@ exports.create = {
           },
           notFound : {
             url: '/users/56/projects',
-            method: 'post',
+            method: 'POST',
             payload: {
               title: 'bad_param',
               thumbnail: {
@@ -402,7 +402,7 @@ exports.create = {
       auth: {
         wrongUser: {
           url: '/users/1/projects',
-          method: 'post',
+          method: 'POST',
           payload: {
             title: 'bad_param',
             thumbnail: {
@@ -414,7 +414,7 @@ exports.create = {
       },
       error: {
         url: '/users/1/projects',
-        method: 'post',
+        method: 'POST',
         payload: {
           title: 'error_test'
         },
@@ -426,12 +426,12 @@ exports.create = {
     success: {
       remix:{
         url: '/users/1/projects/2/remixes',
-        method: 'post',
+        method: 'POST',
         headers: userToken
       },
       checkRemix: {
         url: '/users/1/projects/$1',
-        method: 'get'
+        method: 'GET'
       }
     },
     fail: {
@@ -439,31 +439,31 @@ exports.create = {
         user: {
           notNumber: {
             url: '/users/foo/projects/2/remixes',
-            method: 'post',
+            method: 'POST',
             headers: userToken
           },
           notFound: {
             url: '/users/45/projects/2/remixes',
-            method: 'post',
+            method: 'POST',
             headers: userToken
           }
         },
         project: {
           notNumber: {
             url: '/users/1/projects/foo/remixes',
-            method: 'post',
+            method: 'POST',
             headers: userToken
           },
           notFound: {
             url: '/users/1/projects/2334/remixes',
-            method: 'post',
+            method: 'POST',
             headers: userToken
           }
         }
       },
       error: {
         url: '/users/1/projects/2/remixes',
-        method: 'post',
+        method: 'POST',
         headers: userToken
       }
     }
@@ -475,7 +475,7 @@ exports.patch = {
     success: {
       title: {
         url: '/users/1/projects/1',
-        method: 'patch',
+        method: 'PATCH',
         payload: {
           title: 'new'
         },
@@ -483,7 +483,7 @@ exports.patch = {
       },
       thumb: {
         url: '/users/1/projects/1',
-        method: 'patch',
+        method: 'PATCH',
         payload: {
           thumbnail: {
             '400': 'new'
@@ -493,7 +493,7 @@ exports.patch = {
       },
       thumb2: {
         url: '/users/1/projects/1',
-        method: 'patch',
+        method: 'PATCH',
         payload: {
           thumbnail: {
             '1024': 'new'
@@ -503,7 +503,7 @@ exports.patch = {
       },
       clearThumb: {
         url: '/users/1/projects/1',
-        method: 'patch',
+        method: 'PATCH',
         payload: {
           thumbnail: {}
         },
@@ -511,7 +511,7 @@ exports.patch = {
       },
       all: {
         url: '/users/1/projects/1',
-        method: 'patch',
+        method: 'PATCH',
         payload: {
           title: 'new2',
           thumbnail: {
@@ -525,7 +525,7 @@ exports.patch = {
       param: {
         user: {
           url: '/users/cade/projects/1',
-          method: 'patch',
+          method: 'PATCH',
           payload: {
             title: 'new2'
           },
@@ -533,7 +533,7 @@ exports.patch = {
         },
         project: {
           url: '/users/1/projects/wat',
-          method: 'patch',
+          method: 'PATCH',
           payload: {
             title: 'new2'
           },
@@ -543,7 +543,7 @@ exports.patch = {
       payload: {
         title: {
           url: '/users/1/projects/1',
-          method: 'patch',
+          method: 'PATCH',
           payload: {
             title: 123
           },
@@ -551,7 +551,7 @@ exports.patch = {
         },
         thumb: {
           url: '/users/1/projects/1',
-          method: 'patch',
+          method: 'PATCH',
           payload: {
             thumbnail: 123
           },
@@ -559,7 +559,7 @@ exports.patch = {
         },
         thumbValue: {
           url: '/users/1/projects/1',
-          method: 'patch',
+          method: 'PATCH',
           payload: {
             thumbnail: {
               400: 123
@@ -569,7 +569,7 @@ exports.patch = {
         },
         thumbKey: {
           url: '/users/1/projects/1',
-          method: 'patch',
+          method: 'PATCH',
           payload: {
             thumbnail: {
               2048: 'new'
@@ -581,7 +581,7 @@ exports.patch = {
       auth: {
         wrongUser: {
           url: '/users/1/projects/1',
-          method: 'patch',
+          method: 'PATCH',
           payload: {
             thumbnail: {
               400: 'new'
@@ -592,7 +592,7 @@ exports.patch = {
       },
       error:  {
         url: '/users/1/projects/1',
-        method: 'patch',
+        method: 'PATCH',
         payload: {
           title: 'new'
         },
@@ -604,12 +604,12 @@ exports.patch = {
     success: {
       feature: {
         url: '/users/1/projects/1/feature',
-        method: 'patch',
+        method: 'PATCH',
         headers: moderatorToken
       },
       unfeature: {
         url: '/users/1/projects/2/feature',
-        method: 'patch',
+        method: 'PATCH',
         headers: moderatorToken
       }
     },
@@ -618,24 +618,24 @@ exports.patch = {
         user: {
           notFound: {
             url: '/users/90/projects/1/feature',
-            method: 'patch',
+            method: 'PATCH',
             headers: moderatorToken
           },
           notNumber: {
             url: '/users/foo/projects/1/feature',
-            method: 'patch',
+            method: 'PATCH',
             headers: moderatorToken
           }
         },
         project: {
           notFound: {
             url: '/users/1/projects/90/feature',
-            method: 'patch',
+            method: 'PATCH',
             headers: moderatorToken
           },
           notNumber: {
             url: '/users/1/projects/foo/feature',
-            method: 'patch',
+            method: 'PATCH',
             headers: moderatorToken
           }
         }
@@ -643,13 +643,13 @@ exports.patch = {
       auth: {
         notMod: {
           url: '/users/1/projects/1/feature',
-          method: 'patch',
+          method: 'PATCH',
           headers: userToken
         }
       },
       error: {
         url: '/users/1/projects/1/feature',
-        method: 'patch',
+        method: 'PATCH',
         headers: moderatorToken
       }
     }
@@ -660,12 +660,12 @@ exports.del = {
   success: {
     owner:{
       url: '/users/1/projects/1',
-      method: 'delete',
+      method: 'DELETE',
       headers: userToken
     },
     moderator: {
       url: '/users/1/projects/2',
-      method: 'delete',
+      method: 'DELETE',
       headers: moderatorToken
     }
   },
@@ -674,24 +674,24 @@ exports.del = {
       user: {
         notNumber: {
           url: '/users/foo/projects/2',
-          method: 'delete',
+          method: 'DELETE',
           headers: userToken
         },
         notFound: {
           url: '/users/45/projects/2',
-          method: 'delete',
+          method: 'DELETE',
           headers: userToken
         }
       },
       project: {
         notNumber: {
           url: '/users/1/projects/foo',
-          method: 'delete',
+          method: 'DELETE',
           headers: userToken
         },
         notFound: {
           url: '/users/1/projects/1',
-          method: 'delete',
+          method: 'DELETE',
           headers: userToken
         }
       }
@@ -699,13 +699,13 @@ exports.del = {
     auth: {
       notOwner: {
         url: '/users/3/projects/5',
-        method: 'delete',
+        method: 'DELETE',
         headers: userToken2
       }
     },
     error: {
       url: '/users/2/projects/3',
-      method: 'delete',
+      method: 'DELETE',
       headers: userToken2
     }
   }
@@ -714,6 +714,6 @@ exports.del = {
 exports.options = {
   success: {
     url: '/discover',
-    method: 'options'
+    method: 'OPTIONS'
   }
 };

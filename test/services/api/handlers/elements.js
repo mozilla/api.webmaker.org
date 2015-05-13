@@ -1054,7 +1054,7 @@ experiment('Element Handlers', function() {
     });
   });
 
-  experiment('options', function() {
+  experiment('OPTIONS', function() {
     test('responds to options requests', function(done) {
       var opts = configs.options.success;
 
