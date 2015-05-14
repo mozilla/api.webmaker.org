@@ -56,10 +56,10 @@ CREATE TABLE IF NOT EXISTS "elements"
 );
 
 /* Unique indexes */
-CREATE UNIQUE INDEX unique_coords ON pages
+CREATE UNIQUE INDEX pages_project_id_x_y_key ON pages
 (project_id, x, y) WHERE deleted_at IS NULL;
 
-CREATE UNIQUE INDEX unique_coords_deleted ON pages
+CREATE UNIQUE INDEX pages_project_id_x_y_deleted_at_key ON pages
 (project_id, x, y, deleted_at) WHERE deleted_at IS NOT NULL;
 
 /* Indexes */
