@@ -39,8 +39,7 @@ CREATE TABLE IF NOT EXISTS "pages"
   updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   deleted_at timestamp DEFAULT NULL,
   styles jsonb NOT NULL DEFAULT '{}'::JSONB,
-  CONSTRAINT pages_id_pk PRIMARY KEY (id),
-  UNIQUE (project_id, x, y)
+  CONSTRAINT pages_id_pk PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS "elements"
@@ -57,6 +56,7 @@ CREATE TABLE IF NOT EXISTS "elements"
 );
 
 /* Indexes */
+CREATE UNIQUE INDEX pages_xyid_unique_idx ON pages (project_id, x, y) WHERE (deleted_at IS NULL);
 CREATE INDEX user_idx_id_deleted_at ON users (id, deleted_at);
 CREATE INDEX project_deleted_at_user_id on projects (deleted_at, user_id);
 CREATE INDEX deleted_at_remixed_from_idx on projects (deleted_at, remixed_from);

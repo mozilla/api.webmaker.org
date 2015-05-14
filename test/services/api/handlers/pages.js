@@ -411,6 +411,31 @@ experiment('Page Handlers', function() {
       });
     });
 
+    test('successfully create page with an x & y position that was deleted', function(done) {
+      var opts = configs.create.success.deletedXY;
+      var created;
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+        expect(resp.result.status).to.equal('created');
+        created = resp.result.page.id;
+        expect(created).to.exist();
+        server.inject(
+          '/users/1/projects/2/pages/' + created,
+          function(resp) {
+            expect(resp.statusCode).to.equal(200);
+            expect(resp.result.page).to.exist();
+            expect(resp.result.page.id).to.equal(created);
+            expect(resp.result.page.x).to.equal(10);
+            expect(resp.result.page.y).to.equal(10);
+            expect(resp.result.page.styles).to.be.an.object();
+            expect(resp.result.page.styles).to.deep.equal({});
+            done();
+          }
+        );
+      });
+    });
+
     test('user not found', function(done) {
       var opts = configs.create.fail.params.user.notFound;
 
