@@ -177,6 +177,15 @@ exports.create = {
         x: -1,
         y: -1
       }
+    },
+    deletedXY: {
+      url: '/users/1/projects/2/pages',
+      method: 'post',
+      headers: userToken,
+      payload: {
+        x: 10,
+        y: 10
+      }
     }
   },
   fail: {

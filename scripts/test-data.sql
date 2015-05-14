@@ -75,6 +75,9 @@ BEGIN
     (3, 1, 1, empty_json),
     (3, -1, 0, styles);
 
+  INSERT INTO pages (project_id, x, y, styles, deleted_at) VALUES
+    (2, 10, 10, empty_json, current_timestamp);
+
   INSERT INTO elements (page_id, type, attributes, styles) VALUES
     (1, 'text', empty_json, empty_json),
     (1, 'image', attributes, styles),
