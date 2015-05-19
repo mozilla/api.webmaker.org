@@ -60,11 +60,7 @@ exports.register = function(server, options, done) {
 
   var cachedMethods = {
     projects: [
-      'findAll',
-      'findUsersProjects',
-      'findOne',
-      'findRemixes',
-      'findFeatured'
+      'findOne'
     ],
     pages: [
       'findAll',
@@ -84,6 +80,10 @@ exports.register = function(server, options, done) {
       'remove'
     ],
     projects: [
+      'findFeatured',
+      'findAll',
+      'findUsersProjects',
+      'findRemixes',
       'create',
       'update',
       'feature',

@@ -20,33 +20,9 @@ after(function(done) {
 
 experiment('Server Methods', function() {
   experiment('Has Cache config', function() {
-    test('projects.findAll should have cache config', function(done) {
-      expect(server.methods.projects.findAll).to.be.a.function();
-      expect(server.methods.projects.findAll.cache).to.be.an.object();
-      done();
-    });
-
-    test('projects.findUsersProjects should have cache config', function(done) {
-      expect(server.methods.projects.findUsersProjects).to.be.a.function();
-      expect(server.methods.projects.findUsersProjects.cache).to.be.an.object();
-      done();
-    });
-
     test('projects.findOne should have cache config', function(done) {
       expect(server.methods.projects.findOne).to.be.a.function();
       expect(server.methods.projects.findOne.cache).to.be.an.object();
-      done();
-    });
-
-    test('projects.findRemixes should have cache config', function(done) {
-      expect(server.methods.projects.findRemixes).to.be.a.function();
-      expect(server.methods.projects.findRemixes.cache).to.be.an.object();
-      done();
-    });
-
-    test('projects.findFeatured should have cache config', function(done) {
-      expect(server.methods.projects.findFeatured).to.be.a.function();
-      expect(server.methods.projects.findFeatured.cache).to.be.an.object();
       done();
     });
 
@@ -76,6 +52,30 @@ experiment('Server Methods', function() {
   });
 
   experiment('Has no caching', function() {
+    test('projects.findRemixes should not have cache config', function(done) {
+      expect(server.methods.projects.findRemixes).to.be.a.function();
+      expect(server.methods.projects.findRemixes.cache).to.be.undefined();
+      done();
+    });
+
+    test('projects.findFeatured should not have cache config', function(done) {
+      expect(server.methods.projects.findFeatured).to.be.a.function();
+      expect(server.methods.projects.findFeatured.cache).to.be.undefined();
+      done();
+    });
+
+    test('projects.findAll should not have cache config', function(done) {
+      expect(server.methods.projects.findAll).to.be.a.function();
+      expect(server.methods.projects.findAll.cache).to.be.undefined();
+      done();
+    });
+
+    test('projects.findUsersProjects should not have cache config', function(done) {
+      expect(server.methods.projects.findUsersProjects).to.be.a.function();
+      expect(server.methods.projects.findUsersProjects.cache).to.be.undefined();
+      done();
+    });
+
     test('users.find should not have cache config', function(done) {
       expect(server.methods.users.find).to.be.a.function();
       expect(server.methods.users.find.cache).to.be.undefined();
