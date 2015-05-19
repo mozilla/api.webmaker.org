@@ -26,6 +26,7 @@ var routes = [
     config: {
       validate: {
         payload: {
+          id: numericSchema.required(),
           username: Joi.string().required(),
           language: Joi.string().length(2).default('en'),
           country: Joi.string().length(2).default('US')

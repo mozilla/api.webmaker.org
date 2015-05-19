@@ -37,7 +37,7 @@ module.exports = {
   users: {
     // Create user
     // Params: username varchar, language varchar, country varchar
-    create: "INSERT INTO users (username, language, country) VALUES($1, $2, $3) RETURNING id;",
+    create: "INSERT INTO users (id, username, language, country) VALUES($1, $2, $3, $4) RETURNING id;",
 
     // Find user
     // Params: id bigint

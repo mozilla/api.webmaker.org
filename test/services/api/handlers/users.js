@@ -64,6 +64,28 @@ experiment('User Handlers', function() {
       });
     });
 
+    test('Must provide id', function(done) {
+      var opts = configs.create.noId;
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(400);
+        expect(resp.result.error).to.equal('Bad Request');
+        expect(resp.result.message).to.exist();
+        done();
+      });
+    });
+
+    test('id must be numeric', function(done) {
+      var opts = configs.create.idNotNumeric;
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(400);
+        expect(resp.result.error).to.equal('Bad Request');
+        expect(resp.result.message).to.exist();
+        done();
+      });
+    });
+
     test('Does not allow duplicate usernames', function(done) {
       var opts = configs.create.duplicateUsername;
 
@@ -71,6 +93,17 @@ experiment('User Handlers', function() {
         expect(resp.statusCode).to.equal(400);
         expect(resp.result.error).to.equal('Bad Request');
         expect(resp.result.message).to.equal('Username taken');
+        done();
+      });
+    });
+
+    test('Does not allow duplicate ids', function(done) {
+      var opts = configs.create.duplicateId;
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(400);
+        expect(resp.result.error).to.equal('Bad Request');
+        expect(resp.result.message).to.equal('Duplicate user id');
         done();
       });
     });

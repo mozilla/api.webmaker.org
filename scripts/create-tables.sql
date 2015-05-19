@@ -1,7 +1,7 @@
 /* Table Creation */
 CREATE TABLE IF NOT EXISTS "users"
 (
-  id bigserial NOT NULL,
+  id bigint NOT NULL,
   username varchar NOT NULL,
   created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
