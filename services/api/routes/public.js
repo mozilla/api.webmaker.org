@@ -14,7 +14,7 @@ var pages = require('../handlers/pages');
 var elements = require('../handlers/elements');
 
 var numericSchema = Joi.alternatives().try(
-  Joi.number().integer(),
+  Joi.number().integer().positive(),
   Joi.string().regex(/^\d+$/)
 );
 
