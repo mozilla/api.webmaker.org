@@ -1,13 +1,7 @@
 var spawn = require('cross-spawn');
 
-var create = spawn('psql', ['-d','webmaker_testing', '-f', 'scripts/create-tables.sql']);
-
-create.stdout.on('data', function(data) {
-  console.log( data.toString() );
-});
-
-create.stderr.on('data', function (data) {
-  console.log( data.toString() );
+var create = spawn('psql', ['-d','webmaker_testing', '-f', 'scripts/create-tables.sql'], {
+  stdio: 'inherit'
 });
 
 create.on('close', function(code) {

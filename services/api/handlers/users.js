@@ -29,6 +29,7 @@ exports.get = function(request, reply) {
 exports.post = function(request, reply) {
   request.server.methods.users.create(
     [
+      request.payload.id,
       request.payload.username,
       request.payload.language,
       request.payload.country
@@ -37,6 +38,9 @@ exports.post = function(request, reply) {
       if ( err ) {
         if ( err.constraint === 'unique_username' ) {
           return reply(boom.badRequest('Username taken'));
+        }
+        if ( err.constraint === 'users_id_pk' ) {
+          return reply(boom.badRequest('Duplicate user id'));
         }
         return reply(err);
       }

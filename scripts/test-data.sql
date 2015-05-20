@@ -14,10 +14,10 @@ DECLARE
 BEGIN
 
   -- create users
-  INSERT INTO users (username, language, country, moderator, staff) VALUES
-    ('chris_testing', 'en', 'CA', FALSE, FALSE),
-    ('jon_testing', 'en', 'US', TRUE, FALSE),
-    ('andrew_testing', 'en', 'GB', FALSE, TRUE);
+  INSERT INTO users (id, username, language, country, moderator, staff) VALUES
+    (1, 'chris_testing', 'en', 'CA', FALSE, FALSE),
+    (2, 'jon_testing', 'en', 'US', TRUE, FALSE),
+    (3, 'andrew_testing', 'en', 'GB', FALSE, TRUE);
 
   -- some helper functions
   CREATE OR REPLACE FUNCTION get_user_id(varchar) RETURNS bigint AS

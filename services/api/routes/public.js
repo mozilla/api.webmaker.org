@@ -14,7 +14,7 @@ var pages = require('../handlers/pages');
 var elements = require('../handlers/elements');
 
 var numericSchema = Joi.alternatives().try(
-  Joi.number().integer(),
+  Joi.number().integer().positive(),
   Joi.string().regex(/^\d+$/)
 );
 
@@ -26,6 +26,7 @@ var routes = [
     config: {
       validate: {
         payload: {
+          id: numericSchema.required(),
           username: Joi.string().required(),
           language: Joi.string().length(2).default('en'),
           country: Joi.string().length(2).default('US')
