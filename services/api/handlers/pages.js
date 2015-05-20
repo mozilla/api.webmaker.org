@@ -104,7 +104,7 @@ exports.patch = {
 
         reply({
           status: 'updated',
-          page: request.server.methods.utils.formatPages(result.rows)
+          page: request.server.methods.utils.formatPage(result.rows)
         });
       }
     );
