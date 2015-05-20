@@ -19,7 +19,7 @@ exports.post = {
 
         reply({
           status: 'created',
-          page: result.rows[0]
+          page: request.server.methods.utils.formatPage(result.rows)
         });
       }
     );
@@ -104,7 +104,7 @@ exports.patch = {
 
         reply({
           status: 'updated',
-          page: result.rows[0]
+          page: request.server.methods.utils.formatPages(result.rows)
         });
       }
     );

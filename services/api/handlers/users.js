@@ -47,7 +47,7 @@ exports.post = function(request, reply) {
 
       reply({
         status: 'created',
-        user: result.rows[0]
+        user: request.server.methods.utils.formatUser(result.rows[0])
       });
     }
   );
@@ -100,7 +100,7 @@ exports.patch = function(request, reply) {
 
           reply({
             status: 'updated',
-            user: result.rows[0]
+            user: request.server.methods.utils.formatUser(result.rows[0])
           });
         }
       );

@@ -17,7 +17,7 @@ exports.post = {
 
         reply({
           status: 'created',
-          project: result.rows[0]
+          project: request.server.methods.utils.formatProject(result.rows[0])
         });
       }
     );
@@ -38,7 +38,7 @@ exports.post = {
 
         reply({
           status: 'created',
-          project: result.rows[0]
+          project: request.server.methods.utils.formatProject(result.rows[0])
         });
       }
     );
@@ -178,7 +178,7 @@ exports.patch = {
 
         reply({
           status: 'updated',
-          project: result.rows[0]
+          project: request.server.methods.utils.formatProject(result.rows[0])
         });
       }
     );
@@ -196,7 +196,7 @@ exports.patch = {
 
         reply({
           status: 'updated',
-          project: result.rows[0]
+          project: request.server.methods.utils.formatProject(result.rows[0])
         });
       }
     );
