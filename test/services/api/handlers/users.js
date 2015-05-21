@@ -38,6 +38,9 @@ experiment('User Handlers', function() {
         expect(resp.statusCode).to.equal(200);
         expect(resp.result.status).to.equal('created');
         expect(resp.result.user.id).to.exist();
+        expect(resp.result.user.username).to.equal('newuser');
+        expect(resp.result.user.locale.language).to.equal('en');
+        expect(resp.result.user.locale.country).to.equal('CA');
         done();
       });
     });
@@ -49,6 +52,9 @@ experiment('User Handlers', function() {
         expect(resp.statusCode).to.equal(200);
         expect(resp.result.status).to.equal('created');
         expect(resp.result.user.id).to.exist();
+        expect(resp.result.user.username).to.equal('newuser2');
+        expect(resp.result.user.locale.language).to.equal('en');
+        expect(resp.result.user.locale.country).to.equal('CA');
         done();
       });
     });
@@ -60,6 +66,9 @@ experiment('User Handlers', function() {
         expect(resp.statusCode).to.equal(200);
         expect(resp.result.status).to.equal('created');
         expect(resp.result.user.id).to.exist();
+        expect(resp.result.user.username).to.equal('newuser3');
+        expect(resp.result.user.locale.language).to.equal('en');
+        expect(resp.result.user.locale.country).to.equal('US');
         done();
       });
     });
@@ -188,8 +197,10 @@ experiment('User Handlers', function() {
         expect(resp.statusCode).to.equal(200);
         expect(resp.result.status).to.equal('updated');
         expect(resp.result.user.username).to.equal('changed');
-        expect(resp.result.user.language).to.equal('es');
-        expect(resp.result.user.country).to.equal('US');
+        expect(resp.result.user.locale.language).to.equal('es');
+        expect(resp.result.user.locale.country).to.equal('US');
+        expect(resp.result.user.permissions.staff).to.be.false();
+        expect(resp.result.user.permissions.moderator).to.be.false();
         done();
       });
     });
@@ -201,8 +212,8 @@ experiment('User Handlers', function() {
         expect(resp.statusCode).to.equal(200);
         expect(resp.result.status).to.equal('updated');
         expect(resp.result.user.username).to.equal('changedAgain');
-        expect(resp.result.user.language).to.equal('es');
-        expect(resp.result.user.country).to.equal('US');
+        expect(resp.result.user.locale.language).to.equal('es');
+        expect(resp.result.user.locale.country).to.equal('US');
         done();
       });
     });
@@ -214,8 +225,8 @@ experiment('User Handlers', function() {
         expect(resp.statusCode).to.equal(200);
         expect(resp.result.status).to.equal('updated');
         expect(resp.result.user.username).to.equal('changedAgain');
-        expect(resp.result.user.language).to.equal('fr');
-        expect(resp.result.user.country).to.equal('US');
+        expect(resp.result.user.locale.language).to.equal('fr');
+        expect(resp.result.user.locale.country).to.equal('US');
         done();
       });
     });

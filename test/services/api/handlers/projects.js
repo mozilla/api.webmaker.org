@@ -689,6 +689,14 @@ experiment('Project Handlers', function() {
           expect(resp.statusCode).to.equal(200);
           expect(resp.result.status).to.equal('created');
           expect(resp.result.project.id).to.exist();
+          expect(resp.result.project.title).to.equal('create_test');
+          expect(resp.result.project.version).to.equal('test');
+          expect(resp.result.project.remixed_from).to.be.null();
+          expect(resp.result.project.featured).to.be.false();
+          expect(resp.result.project.history).to.exist();
+          expect(resp.result.project.history).to.include(['created_at', 'updated_at']);
+          expect(resp.result.project.thumbnail).to.be.an.object();
+          expect(resp.result.project.thumbnail).to.not.include(['400', '1024']);
           done();
         });
       });

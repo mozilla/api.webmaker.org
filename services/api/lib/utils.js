@@ -27,17 +27,21 @@ function formatProject(project) {
   formatted.version = project.version;
   formatted.title = project.title;
   formatted.remixed_from = project.remixed_from;
+  formatted.featured = project.featured;
 
-  formatted.author = formatUser({
-    id: project.id,
-    username: project.username,
-    created_at: project.user_created_at,
-    updated_at: project.user_updated_at,
-    language: project.user_language,
-    country: project.user_country,
-    staff: project.user_staff,
-    moderator: project.user_moderator
-  });
+  // Updates/creates don't include user data
+  if ( project.username ) {
+    formatted.author = formatUser({
+      id: project.user_id,
+      username: project.username,
+      created_at: project.user_created_at,
+      updated_at: project.user_updated_at,
+      language: project.user_language,
+      country: project.user_country,
+      staff: project.user_staff,
+      moderator: project.user_moderator
+    });
+  }
 
   formatted.history = {
     created_at: project.created_at,

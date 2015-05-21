@@ -36,8 +36,9 @@ var pageCols = [
 module.exports = {
   users: {
     // Create user
-    // Params: username varchar, language varchar, country varchar
-    create: "INSERT INTO users (id, username, language, country) VALUES($1, $2, $3, $4) RETURNING id;",
+    // Params: id bigint, username varchar, language varchar, country varchar
+    create: "INSERT INTO users (id, username, language, country) VALUES($1, $2, $3, $4) RETURNING id, username, " +
+      " created_at, updated_at, language, country, moderator, staff;",
 
     // Find user
     // Params: id bigint
@@ -47,7 +48,8 @@ module.exports = {
     // Update user
     // Params username varchar, language varchar, country varchar, id bigint
     update: "UPDATE users SET (username, language, country) = " +
-      "($1, $2, $3) WHERE deleted_at IS NULL AND id = $4 RETURNING username, language, country;",
+      "($1, $2, $3) WHERE deleted_at IS NULL AND id = $4 RETURNING id, username, " +
+      " created_at, updated_at, language, country, moderator, staff;",
 
     // Soft delete user
     // Params: id bigint
@@ -57,7 +59,8 @@ module.exports = {
     // Create project
     // Params:user_id bigint, remixed_from bigint, version varchar, title varchar, thumbnail jsonb
     create: "INSERT INTO projects (user_id, remixed_from, version, title, thumbnail)" +
-      " VALUES ($1, $2, $3, $4, $5) RETURNING id;",
+      " VALUES ($1, $2, $3, $4, $5) RETURNING id, user_id, remixed_from, version, title, featured," +
+      " created_at, updated_at, thumbnail;",
 
     // Find all projects, sorted by updated_at ASC
     // Params: limit integer, offset integer
@@ -77,11 +80,13 @@ module.exports = {
     // Update project
     // Params title varchar, thumbnail jsonb, project_id bigint
     update: "UPDATE projects SET (title, thumbnail) = ($1, $2) WHERE deleted_at IS NULL" +
-      " AND id = $3 RETURNING id, title, thumbnail;",
+      " AND id = $3 RETURNING id, user_id, remixed_from, version, title, featured," +
+      " created_at, updated_at, thumbnail;",
 
     // Feature Project
     // Params: featured Boolean, project_id bigint
-    feature: "UPDATE projects SET featured = $1 WHERE deleted_at IS NULL and id = $2 RETURNING id, featured;",
+    feature: "UPDATE projects SET featured = $1 WHERE deleted_at IS NULL and id = $2 RETURNING id, user_id, " +
+      " remixed_from, version, title, featured, created_at, updated_at, thumbnail;",
 
     // Soft delete project
     // Params: project_id bigint
@@ -100,7 +105,8 @@ module.exports = {
   pages: {
     // Create page
     // Params: project_id bigint, x integer, y integer, styles jsonb
-    create: "INSERT INTO pages (project_id, x, y, styles) VALUES ($1, $2, $3, $4) RETURNING id;",
+    create: "INSERT INTO pages (project_id, x, y, styles) VALUES ($1, $2, $3, $4) RETURNING id, project_id, x, y," +
+      " created_at, updated_at, styles;",
 
     // Find all pages in a project
     // Params: project_id bigint
@@ -115,7 +121,7 @@ module.exports = {
     // Update page
     // Params: x integer, y integer, styles jsonb, page_id bigint
     update: "UPDATE pages SET (x, y, styles) = ($1, $2, $3) WHERE id = $4 AND deleted_at IS NULL" +
-      " RETURNING x, y, styles;",
+      " RETURNING id, project_id, x, y, created_at, updated_at, styles;",
 
     // Soft delete page
     // Params: page_id bigint
@@ -124,7 +130,8 @@ module.exports = {
   elements: {
     // Create element
     // Params: page_id bigint, type varchar, attributes jsonb, styles jsonb
-    create: "INSERT into elements (page_id, type, attributes, styles) VALUES ($1, $2, $3, $4) RETURNING id",
+    create: "INSERT into elements (page_id, type, attributes, styles) VALUES ($1, $2, $3, $4) RETURNING id, type," +
+      " page_id, created_at, updated_at, attributes, styles",
 
     // Find all elements in a page
     // Params page_id bigint
@@ -139,7 +146,7 @@ module.exports = {
     // Update element
     // Params: styles jsonb, attributes jsonb, element_id bigint
     update: "UPDATE elements SET (styles, attributes) = ($1, $2) WHERE id = $3 AND deleted_at IS NULL" +
-      " RETURNING styles, attributes;",
+      " RETURNING id, type, page_id, created_at, updated_at, attributes, styles",
 
     // Soft delete element
     // Params: element_id bigint
