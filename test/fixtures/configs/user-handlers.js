@@ -3,7 +3,7 @@ exports.create = {
     url: '/users',
     method: 'post',
     payload: {
-      id: 4,
+      id: 5,
       username: 'newuser',
       language: 'en',
       country: 'CA'
@@ -13,7 +13,7 @@ exports.create = {
     url: '/users',
     method: 'post',
     payload: {
-      id: 5,
+      id: 6,
       username: 'newuser',
       language: 'en',
       country: 'CA'
@@ -23,7 +23,7 @@ exports.create = {
     url: '/users',
     method: 'post',
     payload: {
-      id: 6,
+      id: 7,
       username: 'newuser2',
       country: 'CA'
     }
@@ -32,7 +32,7 @@ exports.create = {
     url: '/users',
     method: 'post',
     payload: {
-      id: 7,
+      id: 8,
       username: 'newuser3',
       language: 'en'
     }

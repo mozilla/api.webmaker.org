@@ -380,6 +380,7 @@ experiment('Element Handlers', function() {
       var created;
 
       server.inject(opts, function(resp) {
+        console.log( resp.result );
         expect(resp.statusCode).to.equal(200);
         expect(resp.result.status).to.equal('created');
         created = resp.result.element.id;
@@ -852,7 +853,7 @@ experiment('Element Handlers', function() {
     });
   });
 
-  experiment('Delete page', function() {
+  experiment('Delete Element', function() {
     test('success - owner', function(done) {
       var opts = configs.del.success.owner;
 

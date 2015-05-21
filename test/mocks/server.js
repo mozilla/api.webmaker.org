@@ -18,7 +18,7 @@ module.exports = function(done) {
     }
 
     server.auth.strategy('token', 'bearer-access-token', {
-      validateFunc:mockTokenValidator,
+      validateFunc: mockTokenValidator,
       allowQueryToken: false,
       tokenType: 'token'
     });

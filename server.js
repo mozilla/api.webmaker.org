@@ -48,7 +48,11 @@ server.register(require('./adapters/plugins'), function(err) {
     throw err;
   }
 
-  server.auth.strategy('token', 'bearer-access-token', require('./lib/auth-config'));
+  server.auth.strategy(
+    'token',
+    'bearer-access-token',
+    require('./lib/auth-config')(require('./lib/tokenValidator'))
+  );
 });
 
 server.register(require('./services'), function(err) {

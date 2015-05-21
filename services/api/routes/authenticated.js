@@ -116,6 +116,7 @@ var routes = [
       },
       pre: [
         prerequisites.getUser,
+        prerequisites.getTokenUser,
         prerequisites.canCreate
       ],
       cors: {
@@ -145,6 +146,7 @@ var routes = [
       },
       pre: [
         prerequisites.getUser,
+        prerequisites.getTokenUser,
         prerequisites.getProject,
         prerequisites.canWrite
       ],
@@ -168,6 +170,7 @@ var routes = [
       },
       pre: [
         prerequisites.getUser,
+        prerequisites.getTokenUser,
         prerequisites.getProject,
         prerequisites.canDelete
       ],
@@ -191,6 +194,7 @@ var routes = [
       },
       pre: [
         prerequisites.getUser,
+        prerequisites.getTokenUser,
         prerequisites.getProject
       ],
       cors: {
@@ -213,6 +217,7 @@ var routes = [
       },
       pre: [
         prerequisites.getUser,
+        prerequisites.getTokenUser,
         prerequisites.getProject,
         prerequisites.isMod
       ],
@@ -259,6 +264,7 @@ var routes = [
       },
       pre: [
         prerequisites.getUser,
+        prerequisites.getTokenUser,
         prerequisites.getProject,
         prerequisites.canWrite
       ],
@@ -288,6 +294,7 @@ var routes = [
       },
       pre: [
         prerequisites.getUser,
+        prerequisites.getTokenUser,
         prerequisites.getProject,
         prerequisites.getPage,
         prerequisites.canWrite
@@ -314,6 +321,7 @@ var routes = [
       },
       pre: [
         prerequisites.getUser,
+        prerequisites.getTokenUser,
         prerequisites.getProject,
         prerequisites.getPage,
         prerequisites.canDelete
@@ -344,6 +352,7 @@ var routes = [
       },
       pre: [
         prerequisites.getUser,
+        prerequisites.getTokenUser,
         prerequisites.getProject,
         prerequisites.getPage,
         prerequisites.canWrite
@@ -374,6 +383,7 @@ var routes = [
       },
       pre: [
         prerequisites.getUser,
+        prerequisites.getTokenUser,
         prerequisites.getProject,
         prerequisites.getPage,
         prerequisites.getElement,
@@ -401,6 +411,7 @@ var routes = [
       },
       pre: [
         prerequisites.getUser,
+        prerequisites.getTokenUser,
         prerequisites.getProject,
         prerequisites.getPage,
         prerequisites.getElement,

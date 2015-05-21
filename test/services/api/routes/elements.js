@@ -70,7 +70,7 @@ experiment('Element routes', function() {
       expect(pages.config.validate.payload.attributes).to.be.an.object();
       expect(pages.config.validate.payload.styles).to.be.an.object();
       expect(pages.config.pre).to.be.an.array();
-      expect(pages.config.pre.length).to.equal(4);
+      expect(pages.config.pre.length).to.equal(5);
       done();
     }
   );
@@ -95,7 +95,7 @@ experiment('Element routes', function() {
       expect(pages.config.validate.params.element).to.be.an.object();
       expect(pages.config.validate.payload).to.be.an.object();
       expect(pages.config.pre).to.be.an.array();
-      expect(pages.config.pre.length).to.equal(5);
+      expect(pages.config.pre.length).to.equal(6);
       done();
     }
   );
@@ -119,7 +119,7 @@ experiment('Element routes', function() {
       expect(pages.config.validate.params.page).to.be.an.object();
       expect(pages.config.validate.params.element).to.be.an.object();
       expect(pages.config.pre).to.be.an.array();
-      expect(pages.config.pre.length).to.equal(5);
+      expect(pages.config.pre.length).to.equal(6);
       done();
     }
   );

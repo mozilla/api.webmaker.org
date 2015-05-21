@@ -14,7 +14,7 @@ exports.get = function(request, reply) {
         return reply(boom.notFound('User not found'));
       }
 
-      if ( user.id !== request.auth.credentials.user_id ) {
+      if ( user.id !== request.auth.credentials.id ) {
         return reply(boom.unauthorized('Insufficient permissions'));
       }
 
@@ -67,7 +67,7 @@ exports.patch = function(request, reply) {
 
       var user = result.rows[0];
 
-      if ( user.id !== request.auth.credentials.user_id ) {
+      if ( user.id !== request.auth.credentials.id ) {
         return reply(boom.unauthorized('Insufficient permissions'));
       }
 
@@ -122,7 +122,7 @@ exports.del = function(request, reply) {
 
       var user = result.rows[0];
 
-      if ( user.id !== request.auth.credentials.user_id ) {
+      if ( user.id !== request.auth.credentials.id ) {
         return reply(boom.unauthorized('Insufficient permissions'));
       }
 
