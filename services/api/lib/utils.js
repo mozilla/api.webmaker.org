@@ -122,12 +122,6 @@ function version() {
   return API_VERSION;
 }
 
-var CLIENT_ID = process.env.CLIENT_ID;
-
-function clientId() {
-  return CLIENT_ID;
-}
-
 exports.register = function(server, options, done) {
   server.method('utils.formatUser', formatUser, { callback: false });
   server.method('utils.formatProject', formatProject, { callback: false });

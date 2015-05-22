@@ -22,14 +22,7 @@ function createUser(request, reply) {
       request.auth.credentials.prefLocale.split('-')[1]
     ],
     function(err, result) {
-      console.log( err );
       if ( err ) {
-        if ( err.constraint === 'unique_username' ) {
-          return reply(boom.badRequest('Username taken'));
-        }
-        if ( err.constraint === 'users_id_pk' ) {
-          return reply(boom.badRequest('Duplicate user id'));
-        }
         return reply(err);
       }
 
@@ -46,39 +39,6 @@ exports.getUser = {
         request.params.user
       ],
       function(err, result) {
-        console.log( err );
-        if ( err ) {
-          return reply(err);
-        }
-
-        var user = result.rows[0];
-
-        if ( !user ) {
-          console.log( 'wat' );
-          if (
-            request.auth.isAuthenticated &&
-            request.params.user.toString() === request.auth.credentials.id
-          ) {
-            return createUser(request, reply);
-          }
-
-          return reply(boom.notFound('User not found'));
-        }
-
-        reply(user);
-      }
-    );
-  }
-};
-
-exports.getUser = {
-  assign: 'user',
-  method: function(request, reply) {
-    request.server.methods.users.find(
-      [
-        request.params.user
-      ],
-      function(err, result) {
         if ( err ) {
           return reply(err);
         }
@@ -95,7 +55,6 @@ exports.getUser = {
 
           return reply(boom.notFound('User not found'));
         }
-
         reply(user);
       }
     );
@@ -105,10 +64,7 @@ exports.getUser = {
 exports.getTokenUser = {
   assign: 'tokenUser',
   method: function(request, reply) {
-    if (
-      request.auth.isAuthenticated &&
-      request.params.user.toString() === request.auth.credentials.id
-    ) {
+    if (request.params.user.toString() === request.auth.credentials.id) {
       return reply(request.pre.user);
     }
 
@@ -124,7 +80,7 @@ exports.getTokenUser = {
         var user = result.rows[0];
 
         if ( !user ) {
-          return createUser(request, reply);
+          return reply(boom.notFound('User not found'));
         }
 
         reply(user);

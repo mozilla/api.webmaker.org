@@ -3,32 +3,42 @@ module.exports = {
     scope: ['user', 'projects'],
     id: '1',
     username: 'chris_testing',
-    prefLocale: 'en-US',
-    moderator: false,
-    staff: false
+    prefLocale: 'en-US'
   },
   'userToken2': {
     scope: ['user', 'projects'],
     id: '2',
     username: 'jon_testing',
-    prefLocale: 'en-US',
-    moderator: false,
-    staff: false
+    prefLocale: 'en-US'
   },
   'moderatorToken': {
     scope: ['user', 'projects'],
     id: '3',
     username: 'andrew_testing',
-    prefLocale: 'en-US',
-    moderator: true,
-    staff: false
+    prefLocale: 'en-US'
   },
   'adminToken': {
     scope: ['user', 'projects'],
     id: '4',
     username: 'kate_testing',
-    prefLocale: 'en-US',
-    moderator: false,
-    staff: true
+    prefLocale: 'en-US'
+  },
+  'newFromToken': {
+    scope: ['user', 'projects'],
+    id: '45',
+    username: 'newFromToken',
+    prefLocale: 'en-US'
+  },
+  'newFromToken2': {
+    scope: ['user', 'projects'],
+    id: '46',
+    username: 'newFromToken2',
+    prefLocale: 'en-US'
+  },
+  'moderatorNotFound': {
+    scope: ['user', 'projects'],
+    id: '78',
+    username: 'missingmod',
+    prefLocale: 'en-US'
   }
 };
