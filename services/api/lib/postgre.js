@@ -1,3 +1,5 @@
+/* globals Promise */
+
 var Hoek = require('hoek');
 var format = require('util').format;
 var queries = require('./queries');
@@ -8,6 +10,69 @@ Hoek.assert(connString, 'You must provide a connection string to postgre');
 module.exports = function (pg) {
   var postgreAdapter = {
     register: function(server, options, done) {
+      function begin(callback) {
+        return new Promise(function(resolve, reject) {
+          pg.connect(connString, function(err, client, release) {
+            if ( err ) {
+              return reject(err);
+            }
+
+            client.query('BEGIN', function(err, result) {
+              if ( err ) {
+                return reject(err);
+              }
+
+              resolve({
+                client: client,
+                release: release
+              });
+            });
+          });
+        });
+      }
+
+      function executeTransaction(transaction, text, values) {
+        return new Promise(function(resolve, reject) {
+          transaction.client.query({
+            text: text,
+            values: values
+          }, function(err, result) {
+            if ( err ) {
+              return reject(err);
+            }
+
+            resolve(result);
+          });
+        });
+      }
+
+      function commit(transaction) {
+        return new Promise(function(resolve, reject) {
+          transaction.client.query('COMMIT', function(err, result) {
+            if ( err ) {
+              return reject(err);
+            }
+
+            transaction.release();
+            resolve(result);
+          });
+        });
+      }
+
+
+      function rollback(transaction) {
+        return new Promise(function(resolve, reject) {
+          transaction.client.query('ROLLBACK', function(err, result) {
+            if ( err ) {
+              return reject(err);
+            }
+
+            transaction.release();
+            resolve(result);
+          });
+        });
+      }
+
       function executeQuery(text, values, callback) {
         server.log('debug', format('Executing Query: %s - params: %s', text, values.join(', ')));
         pg.connect(connString, function(err, client, release) {
@@ -46,7 +111,37 @@ module.exports = function (pg) {
       }, {});
 
       server.method('projects.create', function(values, done) {
-        executeQuery(queries.projects.create, values, done);
+        var project;
+        var page;
+        var transaction;
+        begin().then(function(t) {
+          transaction = t;
+          return executeTransaction(transaction, queries.projects.create, values);
+        }).then(function(result) {
+          project = result.rows[0];
+          return executeTransaction(transaction, queries.pages.create, [
+            project.id,
+            0,
+            0,
+            '{}'
+          ]);
+        }).then(function(result) {
+          page = result.rows;
+          return commit(transaction);
+        }).then(function() {
+          done({
+            project: project,
+            page: page
+          });
+        })
+        .catch(function(err) {
+          rollback(transaction).then(function(rollbackErr) {
+            if ( rollbackErr ) {
+              transaction.release();
+            }
+            done(rollbackErr || err);
+          });
+        });
       }, {});
 
       server.method('projects.findAll', function(values, done) {
