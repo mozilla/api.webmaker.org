@@ -1,3 +1,8 @@
 module.exports = [
-  require('./api')
+  {
+    register: require('./api'),
+    options: {
+      pgNative: process.env.PG_NATIVE === 'true'
+    }
+  }
 ];

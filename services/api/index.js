@@ -1,6 +1,8 @@
+var pg = require('pg');
+
 exports.register = function api(server, options, next) {
   server.register([
-      require('./lib/postgre'),
+      require('./lib/postgre')(options.pgNative ? pg.native : pg),
       require('./lib/utils')
     ], function(err) {
     if ( err ) {
