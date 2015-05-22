@@ -1,8 +1,13 @@
-var pg = require('pg');
+try {
+  var pg = require('pg').native;
+} catch (ex) {
+  console.warn('Native pg bindings failed to load or are not installed:', ex);
+  pg = require('pg');
+}
 
 exports.register = function api(server, options, next) {
   server.register([
-      require('./lib/postgre')(options.pgNative ? pg.native : pg),
+      require('./lib/postgre')(pg),
       require('./lib/utils')
     ], function(err) {
     if ( err ) {
