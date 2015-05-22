@@ -827,7 +827,7 @@ experiment('Project Handlers', function() {
 
       test('tokenUser Error - handles errors from postgre', function(done) {
         var opts = configs.create.new.fail.auth.tokenUserError;
-        var stub = sinon.stub(server.methods.users, 'find')
+        sinon.stub(server.methods.users, 'find')
           .onFirstCall()
           .callsArgWith(1, null, { rows: [{ id: 1 }] })
           .onSecondCall()
