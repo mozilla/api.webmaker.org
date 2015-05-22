@@ -2,68 +2,22 @@ exports.create = {
   success: {
     url: '/users',
     method: 'post',
-    payload: {
-      id: 5,
-      username: 'newuser',
-      language: 'en',
-      country: 'CA'
+    headers: {
+      authorization: 'token createToken1'
     }
   },
   duplicateUsername: {
     url: '/users',
     method: 'post',
-    payload: {
-      id: 6,
-      username: 'newuser',
-      language: 'en',
-      country: 'CA'
-    }
-  },
-  noLang: {
-    url: '/users',
-    method: 'post',
-    payload: {
-      id: 7,
-      username: 'newuser2',
-      country: 'CA'
-    }
-  },
-  noCountry: {
-    url: '/users',
-    method: 'post',
-    payload: {
-      id: 8,
-      username: 'newuser3',
-      language: 'en'
-    }
-  },
-  noId: {
-    url: '/users',
-    method: 'post',
-    payload: {
-      username: 'newuser4',
-      language: 'en',
-      country: 'CA'
+    headers: {
+      authorization: 'token createToken2'
     }
   },
   duplicateId: {
     url: '/users',
     method: 'post',
-    payload: {
-      id: 1,
-      username: 'newuser3',
-      language: 'en',
-      country: 'CA'
-    }
-  },
-  idNotNumeric: {
-    url: '/users',
-    method: 'post',
-    payload: {
-      id: 'notanumber',
-      username: 'newuser3',
-      language: 'en',
-      country: 'CA'
+    headers: {
+      authorization: 'token createToken1'
     }
   }
 };

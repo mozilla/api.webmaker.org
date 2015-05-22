@@ -23,6 +23,34 @@ var numericSchema = Joi.alternatives().try(
 
 var routes = [
   {
+    path: '/users',
+    method: 'post',
+    handler: users.post,
+    config: {
+      auth: {
+        scope: 'user'
+      },
+      cors: {
+        methods: ['POST', 'OPTIONS']
+      },
+      description: 'Create a user account'
+    }
+  }, {
+    path: '/users',
+    method: 'options',
+    handler: users.options,
+    config: {
+      auth: {
+        scope: 'user'
+      },
+      cors: {
+        methods: ['POST', 'OPTIONS']
+      },
+      plugins: {
+        lout: false
+      }
+    }
+  }, {
     path: '/users/{user}',
     method: 'get',
     handler: users.get,

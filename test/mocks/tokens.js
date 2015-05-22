@@ -23,6 +23,18 @@ module.exports = {
     username: 'kate_testing',
     prefLocale: 'en-US'
   },
+  'createToken1': {
+    scope: ['user', 'projects'],
+    id: '5',
+    username: 'newuser',
+    prefLocale: 'en-CA'
+  },
+  'createToken2': {
+    scope: ['user', 'projects'],
+    id: '6',
+    username: 'newuser',
+    prefLocale: 'en-US'
+  },
   'newFromToken': {
     scope: ['user', 'projects'],
     id: '45',

@@ -8,7 +8,6 @@ var publicRouteConfig = {
 };
 
 var prerequisites = require('../lib/prerequisites');
-var users = require('../handlers/users');
 var projects = require('../handlers/projects');
 var pages = require('../handlers/pages');
 var elements = require('../handlers/elements');
@@ -20,36 +19,6 @@ var numericSchema = Joi.alternatives().try(
 
 var routes = [
   {
-    path: '/users',
-    method: 'post',
-    handler: users.post,
-    config: {
-      validate: {
-        payload: {
-          id: numericSchema.required(),
-          username: Joi.string().required(),
-          language: Joi.string().length(2).default('en'),
-          country: Joi.string().length(2).default('US')
-        }
-      },
-      cors: {
-        methods: ['POST', 'OPTIONS']
-      },
-      description: 'Create a user account'
-    }
-  }, {
-    path: '/users',
-    method: 'options',
-    handler: users.options,
-    config: {
-      cors: {
-        methods: ['POST', 'OPTIONS']
-      },
-      plugins: {
-        lout: false
-      }
-    }
-  }, {
     path: '/projects',
     method: 'get',
     handler: projects.get.all,

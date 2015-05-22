@@ -10,14 +10,9 @@ experiment('users routes', function() {
     var create = routes.at('post /users');
     expect(create).to.be.an.object();
     expect(create.method).to.equal('post');
-    expect(create.config.auth).to.be.false();
+    expect(create.config.auth).to.be.an.object();
     expect(create.config.cors).to.be.an.object();
     expect(create.config.cors.methods).to.include(['POST', 'OPTIONS']);
-    expect(create.config.validate).to.be.an.object();
-    expect(create.config.validate.payload).to.be.an.object();
-    expect(create.config.validate.payload.username).to.be.an.object();
-    expect(create.config.validate.payload.language).to.be.an.object();
-    expect(create.config.validate.payload.country).to.be.an.object();
     done();
   });
 
@@ -25,7 +20,7 @@ experiment('users routes', function() {
     var create = routes.at('options /users');
     expect(create).to.be.an.object();
     expect(create.method).to.equal('options');
-    expect(create.config.auth).to.be.false();
+    expect(create.config.auth).to.be.an.object();
     expect(create.config.cors).to.be.an.object();
     expect(create.config.cors.methods).to.include(['POST', 'OPTIONS']);
     done();

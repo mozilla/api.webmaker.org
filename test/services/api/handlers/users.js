@@ -45,56 +45,6 @@ experiment('User Handlers', function() {
       });
     });
 
-    test('Creates a new user - no language', function(done) {
-      var opts = configs.create.noLang;
-
-      server.inject(opts, function(resp) {
-        expect(resp.statusCode).to.equal(200);
-        expect(resp.result.status).to.equal('created');
-        expect(resp.result.user.id).to.equal('7');
-        expect(resp.result.user.username).to.equal('newuser2');
-        expect(resp.result.user.locale.language).to.equal('en');
-        expect(resp.result.user.locale.country).to.equal('CA');
-        done();
-      });
-    });
-
-    test('Creates a new user - no country', function(done) {
-      var opts = configs.create.noCountry;
-
-      server.inject(opts, function(resp) {
-        expect(resp.statusCode).to.equal(200);
-        expect(resp.result.status).to.equal('created');
-        expect(resp.result.user.id).to.equal('8');
-        expect(resp.result.user.username).to.equal('newuser3');
-        expect(resp.result.user.locale.language).to.equal('en');
-        expect(resp.result.user.locale.country).to.equal('US');
-        done();
-      });
-    });
-
-    test('Must provide id', function(done) {
-      var opts = configs.create.noId;
-
-      server.inject(opts, function(resp) {
-        expect(resp.statusCode).to.equal(400);
-        expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.exist();
-        done();
-      });
-    });
-
-    test('id must be numeric', function(done) {
-      var opts = configs.create.idNotNumeric;
-
-      server.inject(opts, function(resp) {
-        expect(resp.statusCode).to.equal(400);
-        expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.exist();
-        done();
-      });
-    });
-
     test('Does not allow duplicate usernames', function(done) {
       var opts = configs.create.duplicateUsername;
 

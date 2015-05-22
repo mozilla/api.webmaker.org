@@ -27,12 +27,13 @@ exports.get = function(request, reply) {
 };
 
 exports.post = function(request, reply) {
+  var prefLocale = request.auth.credentials.prefLocale.split('-');
   request.server.methods.users.create(
     [
-      request.payload.id,
-      request.payload.username,
-      request.payload.language,
-      request.payload.country
+      request.auth.credentials.id,
+      request.auth.credentials.username,
+      prefLocale[0],
+      prefLocale[1]
     ],
     function(err, result) {
       if ( err ) {
