@@ -380,7 +380,6 @@ experiment('Element Handlers', function() {
       var created;
 
       server.inject(opts, function(resp) {
-        console.log( resp.result );
         expect(resp.statusCode).to.equal(200);
         expect(resp.result.status).to.equal('created');
         created = resp.result.element.id;
