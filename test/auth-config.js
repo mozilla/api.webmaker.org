@@ -4,6 +4,7 @@ var Lab = require('lab'),
   test = lab.test,
   expect = require('code').expect;
 
+// provide an empty validateFunc for hapi-auth-bearer-token
 var auth = require('../lib/auth-config')(function() {});
 
 experiment('Authentication Config', function() {
