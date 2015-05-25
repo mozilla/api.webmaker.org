@@ -10,6 +10,18 @@ var moderatorToken = {
   authorization: 'token moderatorToken'
 };
 
+var newFromToken = {
+  authorization: 'token newFromToken'
+};
+
+var newFromToken2 = {
+  authorization: 'token newFromToken2'
+};
+
+var moderatorNotFound = {
+  authorization: 'token moderatorNotFound'
+};
+
 exports.pgAdapter = {
   fail: {
     url: '/discover',
@@ -326,6 +338,14 @@ exports.create = {
           }
         },
         headers: userToken
+      },
+      userFromToken: {
+        url: '/users/45/projects',
+        method: 'post',
+        payload: {
+          title: 'new_from_token'
+        },
+        headers: newFromToken
       }
     },
     fail: {
@@ -410,6 +430,22 @@ exports.create = {
             }
           },
           headers: userToken2
+        },
+        userFromToken: {
+          url: '/users/46/projects',
+          method: 'post',
+          payload: {
+            title: 'new_from_token'
+          },
+          headers: newFromToken2
+        },
+        tokenUserError: {
+          url: '/users/1/projects',
+          method: 'post',
+          payload: {
+            title: 'new_from_token'
+          },
+          headers: moderatorNotFound
         }
       },
       error: {
@@ -443,7 +479,7 @@ exports.create = {
             headers: userToken
           },
           notFound: {
-            url: '/users/45/projects/2/remixes',
+            url: '/users/467/projects/2/remixes',
             method: 'post',
             headers: userToken
           }
@@ -678,7 +714,7 @@ exports.del = {
           headers: userToken
         },
         notFound: {
-          url: '/users/45/projects/2',
+          url: '/users/458/projects/2',
           method: 'delete',
           headers: userToken
         }

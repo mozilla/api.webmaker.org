@@ -14,7 +14,7 @@ exports.get = function(request, reply) {
         return reply(boom.notFound('User not found'));
       }
 
-      if ( user.id !== request.auth.credentials.user_id ) {
+      if ( user.id !== request.auth.credentials.id ) {
         return reply(boom.unauthorized('Insufficient permissions'));
       }
 
@@ -27,12 +27,13 @@ exports.get = function(request, reply) {
 };
 
 exports.post = function(request, reply) {
+  var prefLocale = request.auth.credentials.prefLocale.split('-');
   request.server.methods.users.create(
     [
-      request.payload.id,
-      request.payload.username,
-      request.payload.language,
-      request.payload.country
+      request.auth.credentials.id,
+      request.auth.credentials.username,
+      prefLocale[0],
+      prefLocale[1]
     ],
     function(err, result) {
       if ( err ) {
@@ -67,7 +68,7 @@ exports.patch = function(request, reply) {
 
       var user = result.rows[0];
 
-      if ( user.id !== request.auth.credentials.user_id ) {
+      if ( user.id !== request.auth.credentials.id ) {
         return reply(boom.unauthorized('Insufficient permissions'));
       }
 
@@ -122,7 +123,7 @@ exports.del = function(request, reply) {
 
       var user = result.rows[0];
 
-      if ( user.id !== request.auth.credentials.user_id ) {
+      if ( user.id !== request.auth.credentials.id ) {
         return reply(boom.unauthorized('Insufficient permissions'));
       }
 

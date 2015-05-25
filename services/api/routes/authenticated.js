@@ -23,6 +23,34 @@ var numericSchema = Joi.alternatives().try(
 
 var routes = [
   {
+    path: '/users',
+    method: 'post',
+    handler: users.post,
+    config: {
+      auth: {
+        scope: 'user'
+      },
+      cors: {
+        methods: ['POST', 'OPTIONS']
+      },
+      description: 'Create a user account'
+    }
+  }, {
+    path: '/users',
+    method: 'options',
+    handler: users.options,
+    config: {
+      auth: {
+        scope: 'user'
+      },
+      cors: {
+        methods: ['POST', 'OPTIONS']
+      },
+      plugins: {
+        lout: false
+      }
+    }
+  }, {
     path: '/users/{user}',
     method: 'get',
     handler: users.get,
@@ -116,6 +144,7 @@ var routes = [
       },
       pre: [
         prerequisites.getUser,
+        prerequisites.getTokenUser,
         prerequisites.canCreate
       ],
       cors: {
@@ -145,6 +174,7 @@ var routes = [
       },
       pre: [
         prerequisites.getUser,
+        prerequisites.getTokenUser,
         prerequisites.getProject,
         prerequisites.canWrite
       ],
@@ -168,6 +198,7 @@ var routes = [
       },
       pre: [
         prerequisites.getUser,
+        prerequisites.getTokenUser,
         prerequisites.getProject,
         prerequisites.canDelete
       ],
@@ -191,6 +222,7 @@ var routes = [
       },
       pre: [
         prerequisites.getUser,
+        prerequisites.getTokenUser,
         prerequisites.getProject
       ],
       cors: {
@@ -213,6 +245,7 @@ var routes = [
       },
       pre: [
         prerequisites.getUser,
+        prerequisites.getTokenUser,
         prerequisites.getProject,
         prerequisites.isMod
       ],
@@ -259,6 +292,7 @@ var routes = [
       },
       pre: [
         prerequisites.getUser,
+        prerequisites.getTokenUser,
         prerequisites.getProject,
         prerequisites.canWrite
       ],
@@ -288,6 +322,7 @@ var routes = [
       },
       pre: [
         prerequisites.getUser,
+        prerequisites.getTokenUser,
         prerequisites.getProject,
         prerequisites.getPage,
         prerequisites.canWrite
@@ -314,6 +349,7 @@ var routes = [
       },
       pre: [
         prerequisites.getUser,
+        prerequisites.getTokenUser,
         prerequisites.getProject,
         prerequisites.getPage,
         prerequisites.canDelete
@@ -344,6 +380,7 @@ var routes = [
       },
       pre: [
         prerequisites.getUser,
+        prerequisites.getTokenUser,
         prerequisites.getProject,
         prerequisites.getPage,
         prerequisites.canWrite
@@ -374,6 +411,7 @@ var routes = [
       },
       pre: [
         prerequisites.getUser,
+        prerequisites.getTokenUser,
         prerequisites.getProject,
         prerequisites.getPage,
         prerequisites.getElement,
@@ -401,6 +439,7 @@ var routes = [
       },
       pre: [
         prerequisites.getUser,
+        prerequisites.getTokenUser,
         prerequisites.getProject,
         prerequisites.getPage,
         prerequisites.getElement,

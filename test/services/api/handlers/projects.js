@@ -712,6 +712,17 @@ experiment('Project Handlers', function() {
         });
       });
 
+      test('Creates new user from token', function(done) {
+        var opts = configs.create.new.success.userFromToken;
+
+        server.inject(opts, function(resp) {
+          expect(resp.statusCode).to.equal(200);
+          expect(resp.result.status).to.equal('created');
+          expect(resp.result.project.id).to.exist();
+          done();
+        });
+      });
+
       test('invalid title type', function(done) {
         var opts = configs.create.new.fail.payload.title;
 
@@ -785,6 +796,48 @@ experiment('Project Handlers', function() {
           expect(resp.statusCode).to.equal(403);
           expect(resp.result.error).to.equal('Forbidden');
           expect(resp.result.message).to.equal('Insufficient permissions');
+          done();
+        });
+      });
+
+      test('new user from token - handles errors from postgre', function(done) {
+        var opts = configs.create.new.fail.auth.userFromToken;
+        var stub = sinon.stub(server.methods.users, 'create')
+          .callsArgWith(1, mockErr());
+
+        server.inject(opts, function(resp) {
+          expect(resp.statusCode).to.equal(500);
+          expect(resp.result.error).to.equal('Internal Server Error');
+          expect(resp.result.message).to.be.a.string();
+          stub.restore();
+          done();
+        });
+      });
+
+      test('tokenUser not found', function(done) {
+        var opts = configs.create.new.fail.auth.tokenUserError;
+
+        server.inject(opts, function(resp) {
+          expect(resp.statusCode).to.equal(404);
+          expect(resp.result.error).to.equal('Not Found');
+          expect(resp.result.message).to.equal('User not found');
+          done();
+        });
+      });
+
+      test('tokenUser Error - handles errors from postgre', function(done) {
+        var opts = configs.create.new.fail.auth.tokenUserError;
+        sinon.stub(server.methods.users, 'find')
+          .onFirstCall()
+          .callsArgWith(1, null, { rows: [{ id: 1 }] })
+          .onSecondCall()
+          .callsArgWith(1, mockErr());
+
+        server.inject(opts, function(resp) {
+          expect(resp.statusCode).to.equal(500);
+          expect(resp.result.error).to.equal('Internal Server Error');
+          expect(resp.result.message).to.be.a.string();
+          server.methods.users.find.restore();
           done();
         });
       });

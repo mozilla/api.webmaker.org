@@ -852,7 +852,7 @@ experiment('Element Handlers', function() {
     });
   });
 
-  experiment('Delete page', function() {
+  experiment('Delete Element', function() {
     test('success - owner', function(done) {
       var opts = configs.del.success.owner;
 
