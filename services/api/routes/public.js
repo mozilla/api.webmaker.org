@@ -3,7 +3,12 @@ var _ = require('lodash');
 
 var publicRouteConfig = {
   config: {
-    auth: false
+    auth: false,
+    plugins: {
+      versions: {
+        '1.0.0': true
+      }
+    }
   }
 };
 
