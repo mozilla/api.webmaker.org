@@ -46,3 +46,10 @@ The tests require access to a postgreSQL database named `webmaker_testing`.
 Create it by running the command `createdb webmaker_testing`, the test script will automatically create tables and populate them with data.
 
 Run the tests with `npm test`
+
+## Diagrams
+
+The Webmaker API uses [id.webmaker.org](https://github.com/mozilla/id.webmaker.org) to authenticate users and requests using
+Bearer tokens. Below is a sequence diagram describing how a create project request is handled for a first time user.
+
+![webmaker-new-user](https://cloud.githubusercontent.com/assets/438003/7801687/cdca9876-02f6-11e5-87ce-3f2916155644.png)
