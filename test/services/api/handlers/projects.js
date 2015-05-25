@@ -1,4 +1,5 @@
 var configs = require('../../../fixtures/configs/project-handlers'),
+  userFixtures = require('../../../fixtures/users'),
   sinon = require('sinon'),
   Lab = require('lab'),
   lab = exports.lab = Lab.script(),
@@ -34,12 +35,139 @@ experiment('Project Handlers', function() {
       var opts = configs.pgAdapter.fail;
       var stub = sinon.stub(server.plugins['webmaker-postgre-adapter'].pg, 'connect')
         .callsArgWith(1, mockErr());
-
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(500);
         expect(resp.result.error).to.equal('Internal Server Error');
         expect(resp.result.message).to.equal('An internal server error occurred');
         stub.restore();
+        done();
+      });
+    });
+
+    test('Handles error from pg when making a transaction', function(done) {
+      var opts = configs.pgAdapter.postFail;
+      var clientStub = {
+        query: sinon.stub()
+      };
+
+      clientStub.query.onFirstCall()
+        .callsArgWith(1, userFixtures.chris_testing);
+
+      sinon.stub(server.plugins['webmaker-postgre-adapter'].pg, 'connect')
+        .callsArgWith(1, null, clientStub, function() {})
+        .onSecondCall()
+        .callsArgWith(1, mockErr());
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(500);
+        expect(resp.result.error).to.equal('Internal Server Error');
+        expect(resp.result.message).to.equal('An internal server error occurred');
+        server.plugins['webmaker-postgre-adapter'].pg.connect.restore();
+        done();
+      });
+    });
+
+    test('handles error if begin query fails', function(done) {
+      var opts = configs.pgAdapter.postFail;
+      var clientStub = {
+        query: sinon.stub()
+      };
+
+      clientStub.query.onFirstCall()
+        .callsArgWith(1, userFixtures.chris_testing)
+        .onSecondCall()
+        .callsArgWith(1, mockErr())
+        .onThirdCall()
+        .callsArgWith(1, null, {});
+
+      sinon.stub(server.plugins['webmaker-postgre-adapter'].pg, 'connect')
+        .callsArgWith(1, null, clientStub, function() {});
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(500);
+        expect(resp.result.error).to.equal('Internal Server Error');
+        expect(resp.result.message).to.equal('An internal server error occurred');
+        server.plugins['webmaker-postgre-adapter'].pg.connect.restore();
+        done();
+      });
+    });
+
+    test('handles error if executeTransaction query fails', function(done) {
+      var opts = configs.pgAdapter.postFail;
+      var clientStub = {
+        query: sinon.stub()
+      };
+
+      clientStub.query
+        .onFirstCall().callsArgWith(1, userFixtures.chris_testing)
+        .onSecondCall().callsArgWith(1, null, {})
+        .onThirdCall().callsArgWith(1, mockErr())
+        .onCall(3).callsArgWith(1, null)
+        .onCall(4).callsArgWith(1, null, {});
+
+      sinon.stub(server.plugins['webmaker-postgre-adapter'].pg, 'connect')
+        .callsArgWith(1, null, clientStub, function() {});
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(500);
+        expect(resp.result.error).to.equal('Internal Server Error');
+        expect(resp.result.message).to.equal('An internal server error occurred');
+        server.plugins['webmaker-postgre-adapter'].pg.connect.restore();
+        done();
+      });
+    });
+
+    test('handles error if commit query fails', function(done) {
+      var opts = configs.pgAdapter.postFail;
+      var clientStub = {
+        query: sinon.stub()
+      };
+
+      clientStub.query
+        .onFirstCall().callsArgWith(1, userFixtures.chris_testing)
+        .onSecondCall().callsArgWith(1, null, {})
+        .onThirdCall().callsArgWith(1, null, { rows: [{ id: '1' }] })
+        .onCall(3).callsArgWith(1, null, {})
+        .onCall(4).callsArgWith(1, mockErr())
+        .onCall(5).callsArgWith(1, null, {});
+
+      sinon.stub(server.plugins['webmaker-postgre-adapter'].pg, 'connect')
+        .callsArgWith(1, null, clientStub, function() {});
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(500);
+        expect(resp.result.error).to.equal('Internal Server Error');
+        expect(resp.result.message).to.equal('An internal server error occurred');
+        server.plugins['webmaker-postgre-adapter'].pg.connect.restore();
+        done();
+      });
+    });
+
+    test('handles error if rollback query fails', function(done) {
+      var opts = configs.pgAdapter.postFail;
+      var clientStub = {
+        query: sinon.stub()
+      };
+
+      clientStub.query.onFirstCall()
+        .callsArgWith(1, userFixtures.chris_testing)
+        .onSecondCall()
+        .callsArgWith(1, null, {})
+        .onThirdCall()
+        .callsArgWith(1, null, {})
+        .onCall(3)
+        .callsArgWith(1, mockErr())
+        .onCall(4)
+        .callsArgWith(1, null, {});
+
+      sinon.stub(server.plugins['webmaker-postgre-adapter'].pg, 'connect')
+        .callsArgWith(1, null, clientStub, function() {});
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(500);
+        expect(resp.result.error).to.equal('Internal Server Error');
+        expect(resp.result.message).to.equal('An internal server error occurred');
+        server.plugins['webmaker-postgre-adapter'].pg.connect.restore();
         done();
       });
     });
@@ -697,6 +825,10 @@ experiment('Project Handlers', function() {
           expect(resp.result.project.history).to.include(['created_at', 'updated_at']);
           expect(resp.result.project.thumbnail).to.be.an.object();
           expect(resp.result.project.thumbnail).to.not.include(['400', '1024']);
+          expect(resp.result.page.id).to.exist();
+          expect(resp.result.page.project_id).to.equal(resp.result.project.id);
+          expect(resp.result.page.x).to.equal(0);
+          expect(resp.result.page.y).to.equal(0);
           done();
         });
       });
@@ -813,6 +945,10 @@ experiment('Project Handlers', function() {
           expect(resp.statusCode).to.equal(200);
           expect(resp.result.status).to.equal('created');
           expect(resp.result.project.id).to.exist();
+          expect(resp.result.page.id).to.exist();
+          expect(resp.result.page.project_id).to.equal(resp.result.project.id);
+          expect(resp.result.page.x).to.equal(0);
+          expect(resp.result.page.y).to.equal(0);
 
           checkOpts.url = checkOpts.url.replace('$1', resp.result.project.id);
           server.inject(checkOpts, function(getResp) {

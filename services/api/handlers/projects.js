@@ -39,7 +39,8 @@ exports.post = {
 
         reply({
           status: 'created',
-          project: request.server.methods.utils.formatProject(result.rows[0])
+          project: request.server.methods.utils.formatProject(result.project),
+          page: request.server.methods.utils.formatPage(result.page)
         });
       }
     );
