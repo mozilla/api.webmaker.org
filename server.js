@@ -3,6 +3,10 @@ require('habitat').load();
 var Hapi = require('hapi'),
     Hoek = require('hoek');
 
+Hoek.assert(process.env.REDIS_URL, 'Must define REDIS_URL');
+
+var redisConfig = require('redis-url').parse(process.env.REDIS_URL);
+
 var server = new Hapi.Server({
   connections: {
     router: {
@@ -11,18 +15,23 @@ var server = new Hapi.Server({
     routes: {
       security: true
     }
+  },
+  cache: {
+    name: 'webmaker-redis-cache',
+    engine: require('catbox-redis'),
+    host: redisConfig.hostname,
+    port: redisConfig.port,
+    password: redisConfig.password
   }
 });
 
 Hoek.assert(process.env.API_HOST, 'Must define API_HOST');
 Hoek.assert(process.env.PORT, 'Must define PORT');
 
-var connection = {
+server.connection({
   host: process.env.API_HOST,
   port: process.env.PORT
-};
-
-server.connection(connection);
+});
 
 if ( process.env.DISABLE_LOGGING !== 'true' ) {
   server.register({
@@ -64,7 +73,11 @@ server.register(require('./services'), function(err) {
     throw err;
   }
 
-  server.start(function() {
+  server.start(function(err) {
+    if ( err ) {
+      console.error(err);
+      return;
+    }
     console.log('Server started @ ' + server.info.uri);
   });
 });

@@ -5,5 +5,6 @@ module.exports = [
     options: require('../lib/csp')
   },
   require('lout'),
-  require('hapi-auth-bearer-token')
+  require('hapi-auth-bearer-token'),
+  require('../lib/ratelimit')
 ];
