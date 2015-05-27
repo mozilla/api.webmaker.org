@@ -1,7 +1,7 @@
 # Webmaker API
 
-FROM ubuntu:14.10
-MAINTAINER Christopher De Cairos <cade@mozillafoundation.org>
+FROM ubuntu:14.04
+MAINTAINER Mozilla Foundation <cade@mozillafoundation.org>
 
 # install curl and native postgre bindings
 RUN apt-get update && apt-get install -y \
