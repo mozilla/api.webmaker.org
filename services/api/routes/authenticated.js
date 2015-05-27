@@ -149,6 +149,16 @@ var routes = [
       ],
       cors: {
         methods: ['OPTIONS', 'POST', 'GET']
+      },
+      plugins: {
+        'hapi-limiter': {
+          enable: true,
+          limit: 5,
+          ttl: 1000 * 30,
+          generateKeyFunc: function(request) {
+            return request.method + ':' + request.path + ':' + request.auth.credentials.id;
+          }
+        }
       }
     }
   }, {

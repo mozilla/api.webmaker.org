@@ -6,5 +6,8 @@ module.exports = [
   },
   require('lout'),
   require('hapi-auth-bearer-token'),
-  require('../lib/ratelimit')
+  {
+    register: require('hapi-limiter'),
+    options: require('../lib/rate-limits')
+  }
 ];
