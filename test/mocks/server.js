@@ -23,9 +23,12 @@ module.exports = function(done) {
       tokenType: 'token'
     });
 
+    // stub
+    server.decorate('server', 'debug', function() {});
+
     server.register([
-        require('../../services/api/lib/postgre')(require('pg')),
-        require('../../services/api/lib/utils')
+        require('../../services/api/lib/utils'),
+        require('../../services/api/lib/postgre')(require('pg'))
       ], function() {
       server.route(require('../../services/api/routes'));
 

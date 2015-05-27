@@ -1,3 +1,5 @@
+/* globals Promise */
+
 var Hoek = require('hoek');
 var format = require('util').format;
 var queries = require('./queries');
@@ -8,8 +10,88 @@ Hoek.assert(connString, 'You must provide a connection string to postgre');
 module.exports = function (pg) {
   var postgreAdapter = {
     register: function(server, options, done) {
+      function getTransactionClient() {
+        return new Promise(function(resolve, reject) {
+          pg.connect(connString, function(err, client, release) {
+            if ( err ) {
+              server.debug(err);
+              return reject(err);
+            }
+
+            server.debug('PG client created', client);
+            resolve({
+              client: client,
+              release: release
+            });
+          });
+        });
+      }
+
+      function begin(transaction) {
+        return new Promise(function(resolve, reject) {
+          transaction.client.query('BEGIN', function(err, result) {
+            if ( err ) {
+              server.debug('Failed to begin transaction', err);
+              return reject(err);
+            }
+
+            server.debug('Transaction started');
+            resolve(result);
+          });
+        });
+      }
+
+      function executeTransaction(transaction, text, values) {
+        return new Promise(function(resolve, reject) {
+          server.debug(format('Executing Transaction Query: %s - params: %s', text, values.join(', ')));
+          transaction.client.query({
+            text: text,
+            values: values
+          }, function(err, result) {
+            if ( err ) {
+              server.debug('Query Execution Failed', err);
+              return reject(err);
+            }
+
+            server.debug('Transaction Query completed successfully');
+            resolve(result);
+          });
+        });
+      }
+
+      function commit(transaction) {
+        return new Promise(function(resolve, reject) {
+          transaction.client.query('COMMIT', function(err, result) {
+            if ( err ) {
+              server.debug('Failed to commit transaction', err);
+              return reject(err);
+            }
+
+            server.debug('Transaction committed to db, releasing connection to pool');
+            transaction.release();
+            resolve(result);
+          });
+        });
+      }
+
+
+      function rollback(transaction) {
+        return new Promise(function(resolve, reject) {
+          transaction.client.query('ROLLBACK', function(err, result) {
+            transaction.release();
+            if ( err ) {
+              server.debug('Transaction rollback failed', err);
+              return reject(err);
+            }
+
+            server.debug('Transaction rolled back');
+            resolve(result);
+          });
+        });
+      }
+
       function executeQuery(text, values, callback) {
-        server.log('debug', format('Executing Query: %s - params: %s', text, values.join(', ')));
+        server.debug(format('Executing Query: %s - params: %s', text, values.join(', ')));
         pg.connect(connString, function(err, client, release) {
           if ( err ) {
             return callback(err);
@@ -21,9 +103,11 @@ module.exports = function (pg) {
           }, function(err, result) {
             release();
             if ( err ) {
+              server.debug('Error executing query', err);
               return callback(err);
             }
 
+            server.debug('Query succeeded', result);
             callback(null, result);
           });
         });
@@ -46,7 +130,41 @@ module.exports = function (pg) {
       }, {});
 
       server.method('projects.create', function(values, done) {
-        executeQuery(queries.projects.create, values, done);
+        var project;
+        var page;
+        var transaction;
+        var transactionErr;
+
+        getTransactionClient().then(function(t) {
+          transaction = t;
+          return begin(transaction);
+        }).then(function() {
+          return executeTransaction(transaction, queries.projects.create, values);
+        }).then(function(result) {
+          project = result.rows[0];
+          return executeTransaction(transaction, queries.pages.create, [
+            project.id,
+            0,
+            0,
+            '{}'
+          ]);
+        }).then(function(result) {
+          page = result.rows;
+          return commit(transaction);
+        }).then(function() {
+          done(null, {
+            project: project,
+            page: page
+          });
+        })
+        .catch(function(err) {
+          transactionErr = err;
+          return rollback(transaction);
+        }).then(function() {
+          done(transactionErr);
+        }).catch(function(err) {
+          done(err);
+        });
       }, {});
 
       server.method('projects.findAll', function(values, done) {

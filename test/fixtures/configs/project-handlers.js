@@ -26,6 +26,14 @@ exports.pgAdapter = {
   fail: {
     url: '/discover',
     method: 'get'
+  },
+  postFail: {
+    url: '/users/1/projects',
+    method: 'post',
+    payload: {
+      title: 'create_test'
+    },
+    headers: userToken
   }
 };
 

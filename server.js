@@ -29,13 +29,11 @@ if ( process.env.DISABLE_LOGGING !== 'true' ) {
     register: require('hapi-bunyan'),
     options: require('./lib/log-config')()
   }, function(err) {
-    if ( err ) {
-      server.log('error', {
-        message: 'Error registering logger',
-        error: err
-      });
-      throw err;
-    }
+    Hoek.assert(!err, err);
+
+    server.decorate('server', 'debug', function(logData) {
+      this.log.bind(this, 'debug').apply(this, arguments);
+    });
   });
 }
 
