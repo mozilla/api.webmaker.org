@@ -40,6 +40,17 @@ Start the server with `npm start`
 
 You can view documentation by navigating to `http://localhost:2015/docs` in your browser
 
+## Configuration
+
+Variable                    | Description                                                                                                  | Default
+----------------------------|--------------------------------------------------------------------------------------------------------------|-------------------------------------
+API_HOST                    | The Host that Hapi should listen for connections on                                                          | 0.0.0.0
+PORT                        | The port number that Hapi should listen for connections on                                                   | 2015
+API_VERSION                 | The Version Number of the API, applied to newly created projects                                             | 'dev'
+LOG_LEVEL                   | given a chosen level, log events only at or above that level. debug < info < warn < error < exception < stat | info
+POSTGRE_CONNECTION_STRING   | A connection string to a PostgreSQL server                                                                   | postgresql://localhost:5432/webmaker
+ID_SERVER_CONNECTION_STRING | A connection string to a [Webmaker ID server](https://github.com/mozilla/id.webmaker.org)                    | http://localhost:6767
+
 ## Test
 
 The tests require access to a postgreSQL database named `webmaker_testing`. Create it by running the command `createdb webmaker_testing`, the test script will automatically create tables and populate them with data.
