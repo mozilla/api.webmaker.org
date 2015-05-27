@@ -6,6 +6,11 @@ var authRouteConfig = {
     auth: {
       mode: 'required',
       strategies: ['token']
+    },
+    plugins: {
+      versions: {
+        '1.0.0': true
+      }
     }
   }
 };
