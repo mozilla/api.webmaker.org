@@ -1,6 +1,6 @@
 # Webmaker API
 
-FROM ubuntu:14.04
+FROM ubuntu:14.04.2
 MAINTAINER Mozilla Foundation <cade@mozillafoundation.org>
 
 # install curl and native postgre bindings
@@ -15,14 +15,16 @@ RUN curl -sL https://deb.nodesource.com/setup_0.12 | sudo bash -
 RUN apt-get update && apt-get install -y \
   nodejs
 
-# Add webmaker-api source code and dependencies
-ADD . /var/www/api
+# create webmaker user and directory
+RUN useradd -d /webmaker -m webmaker
+USER webmaker
+WORKDIR /webmaker
 
-# Set working directory to Webmaker API directory
-WORKDIR /var/www/api
+# Add webmaker-api source code and dependencies
+ADD . /webmaker
 
 # Set Default env
-RUN cp /var/www/api/env.sample /var/www/api/.env
+RUN cp env.sample .env
 
 # Expose default webmaker-api port
 EXPOSE 2015
