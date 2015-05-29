@@ -27,7 +27,7 @@ ADD . /webmaker
 RUN cp env.sample .env
 
 # Expose default webmaker-api port
-EXPOSE 2015
+EXPOSE 2015:2015
 
 # Command to execute when starting Webmaker API
 CMD ["node","server"]

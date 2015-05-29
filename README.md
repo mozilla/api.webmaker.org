@@ -63,3 +63,27 @@ The Webmaker API uses [id.webmaker.org](https://github.com/mozilla/id.webmaker.o
 Bearer tokens. Below is a sequence diagram describing how a create project request is handled for a first time user.
 
 ![webmaker-new-user](https://cloud.githubusercontent.com/assets/438003/7801687/cdca9876-02f6-11e5-87ce-3f2916155644.png)
+
+## Docker
+
+The API can be run using [Docker](https://www.docker.com).
+
+You can run just the api by issuing the following command:
+
+`sudo docker run -d cade/webmaker-api`
+
+To build your own container, run:
+
+`sudo docker build .` from the project root
+
+The API will now be available on `http://localhost:2015`
+
+You can also use [docker-compose](http://docs.docker.com/compose/) to get the API and PostgreSQL running together.
+
+`sudo docker-compose build && sudo docker-compose up -d`
+
+Then, create the database tables (first run only):
+
+`psql -h localhost -U webmaker -f scripts/create-tables.sql`
+
+The API will now be available on `http://localhost:2015` and connect to a postgresql database running in a docker container.

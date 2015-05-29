@@ -1,0 +1,18 @@
+webmaker:
+  build: .
+  ports:
+    - "2015:2015"
+  expose:
+    - "2015"
+  environment:
+    - POSTGRE_CONNECTION_STRING=postgre://pgdb:5432/webmaker
+  links:
+    - "postgre:pgdb"
+postgre:
+  image: postgres
+  environment:
+    - POSTGRES_USER=webmaker
+  ports:
+    - "5432:5432"
+  expose:
+    - "5432"
