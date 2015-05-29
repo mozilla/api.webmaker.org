@@ -70,7 +70,7 @@ The API can be run using [Docker](https://www.docker.com).
 
 You can run just the api by issuing the following command:
 
-`sudo docker run -d cade/webmaker-api`
+`sudo docker run -p 2015:2015 -d cade/webmaker-api`
 
 To build your own container, run:
 
