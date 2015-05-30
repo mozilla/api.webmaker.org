@@ -2,17 +2,31 @@ webmaker:
   build: .
   ports:
     - "2015:2015"
-  expose:
-    - "2015"
   environment:
-    - POSTGRE_CONNECTION_STRING=postgre://pgdb:5432/webmaker
+    - POSTGRE_CONNECTION_STRING=postgre://webmaker@pgdb:5432/webmaker
+    - ID_SERVER_CONNECTION_STRING=http://id:1234
   links:
     - "postgre:pgdb"
+    - "id"
+id:
+  image: cade/webmaker-id
+  ports:
+    - "1234:1234"
+  environment:
+    - LOGINAPI=http://testuser:password@wmlogin:3000
+    - POSTGRE_CONNECTION_STRING=postgre://webmaker@pgdb:5432/webmaker
+    - LOGGING=true
+    - LOG_LEVEL=debug
+  links:
+    - "postgre:pgdb"
+    - "loginapi:wmlogin"
+loginapi:
+  image: cade/legacy-webmaker-login
+  ports:
+    - "3000:3000"
 postgre:
   image: postgres
   environment:
     - POSTGRES_USER=webmaker
   ports:
     - "5432:5432"
-  expose:
-    - "5432"
