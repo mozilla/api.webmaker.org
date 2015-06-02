@@ -105,7 +105,7 @@ exports.patch = {
 
         var tail = request.tail('updating project thumbnail');
         process.nextTick(function() {
-          request.server.methods.projects.checkPageId(page.id, tail);
+          request.server.methods.projects.checkPageId(page, tail);
         });
 
         reply({
