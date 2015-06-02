@@ -89,6 +89,11 @@ exports.patch = {
           return reply(err);
         }
 
+        var tail = request.tail('updating project thumbnail');
+        process.nextTick(function() {
+          request.server.methods.projects.checkPageId(request.pre.page, tail);
+        });
+
         reply({
           status: 'updated',
           element: result.rows[0]

@@ -86,7 +86,6 @@ exports.patch = {
       styles = request.pre.page.styles;
     }
 
-
     request.server.methods.pages.update(
       [
         x,
@@ -102,9 +101,16 @@ exports.patch = {
           return reply(err);
         }
 
+        var page = request.server.methods.utils.formatPage(result.rows);
+
+        var tail = request.tail('updating project thumbnail');
+        process.nextTick(function() {
+          request.server.methods.projects.checkPageId(page.id, tail);
+        });
+
         reply({
           status: 'updated',
-          page: request.server.methods.utils.formatPage(result.rows)
+          page: page
         });
       }
     );

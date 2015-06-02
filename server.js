@@ -24,18 +24,15 @@ var connection = {
 
 server.connection(connection);
 
-if ( process.env.DISABLE_LOGGING !== 'true' ) {
-  server.register({
-    register: require('hapi-bunyan'),
-    options: require('./lib/log-config')()
-  }, function(err) {
-    Hoek.assert(!err, err);
-
-    server.decorate('server', 'debug', function(logData) {
-      this.log.bind(this, 'debug').apply(this, arguments);
-    });
+server.register({
+  register: require('hapi-bunyan'),
+  options: require('./lib/log-config')()
+}, function(err) {
+  Hoek.assert(!err, err);
+  server.decorate('server', 'debug', function(logData) {
+    this.log.bind(this, 'debug').apply(this, arguments);
   });
-}
+});
 
 server.register(require('./adapters/plugins'), function(err) {
   if ( err ) {

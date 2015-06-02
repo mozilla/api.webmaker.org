@@ -8,7 +8,8 @@ try {
 exports.register = function api(server, options, next) {
   server.register([
       require('./lib/utils'),
-      require('./lib/postgre')(pg)
+      require('./lib/postgre')(pg),
+      require('./lib/thumbnails')
     ], function(err) {
     if ( err ) {
       return next(err);
