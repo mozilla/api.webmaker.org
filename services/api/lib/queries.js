@@ -134,7 +134,7 @@ module.exports = {
     // Find lowest page id in a project
     // Params: project_id
     min: "SELECT MIN(pages.id) AS page_id, projects.id AS project_id, projects.user_id as user_id FROM pages " +
-      " INNER JOIN projects ON pages.project_id = 8 AND projects.id = pages.project_id AND pages.deleted_at " +
+      "INNER JOIN projects ON pages.project_id = $1 AND projects.id = pages.project_id AND pages.deleted_at " +
       "IS NULL GROUP BY projects.id;"
   },
   elements: {
