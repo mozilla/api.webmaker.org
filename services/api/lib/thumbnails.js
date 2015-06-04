@@ -15,7 +15,7 @@ exports.register = function(server, options, done) {
       page: page
     };
 
-    return url.format(urlObj);
+    return '/desktop/small/webmaker-desktop/' + new Buffer(url.format(urlObj)).toString('base64');
   }
 
   function updateThumbnail(project, url, tail) {
@@ -33,6 +33,7 @@ exports.register = function(server, options, done) {
             error: err
           });
         }
+
         tail();
       }
     );
@@ -40,7 +41,7 @@ exports.register = function(server, options, done) {
 
   function generateThumbnail(row, tail) {
     req({
-      url: '/thumbnail/' + buildPageRenderUrl(row.user_id, row.project_id, row.page_id)
+      url: buildPageRenderUrl(row.user_id, row.project_id, row.page_id)
     }, function(err, resp, body) {
       if ( err ) {
         server.log('error', {
@@ -58,7 +59,7 @@ exports.register = function(server, options, done) {
         return tail(new Error('Thumbnail update failed'));
       }
 
-      updateThumbnail(row.project_id, body.url, tail);
+      updateThumbnail(row.project_id, body.screenshot, tail);
     });
   }
 
@@ -75,7 +76,6 @@ exports.register = function(server, options, done) {
         });
         return tail(err);
       }
-
       var row = result.rows[0];
 
       if ( !result.rows.length || row.page_id !== page.id ) {
@@ -102,10 +102,13 @@ exports.register = function(server, options, done) {
 
     req = request.defaults({
       baseUrl: thumnailServiceUrl,
-      method: 'get',
+      method: 'post',
       json: true,
       headers: {
         accept: 'application/json'
+      },
+      body: {
+        wait: true
       }
     });
   } else {

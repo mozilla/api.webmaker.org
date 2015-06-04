@@ -703,7 +703,7 @@ exports.patch = {
 exports.del = {
   success: {
     owner:{
-      url: '/users/1/projects/1',
+      url: '/users/1/projects/7',
       method: 'delete',
       headers: userToken
     },
@@ -734,7 +734,7 @@ exports.del = {
           headers: userToken
         },
         notFound: {
-          url: '/users/1/projects/1',
+          url: '/users/1/projects/7',
           method: 'delete',
           headers: userToken
         }
@@ -759,5 +759,86 @@ exports.options = {
   success: {
     url: '/discover',
     method: 'options'
+  }
+};
+
+exports.tail = {
+  before: {
+    first: {
+      url: '/users/1/projects/1/pages/3/elements',
+      method: 'post',
+      payload: {
+        type: 'test'
+      },
+      headers: userToken
+    },
+    second: {
+      url: '/users/1/projects/1/pages/4/elements',
+      method: 'post',
+      payload: {
+        type: 'test'
+      },
+      headers: userToken
+    }
+  },
+  success: {
+    update: {
+      url: '/users/1/projects/1/pages/3',
+      method: 'patch',
+      headers: userToken,
+      payload: {
+        x: 0
+      }
+    },
+    check: {
+      url: '/users/1/projects/1',
+      method: 'get'
+    }
+  },
+  elementSuccess: {
+    update: {
+      url: '/users/1/projects/1/pages/3/elements/27',
+      method: 'patch',
+      headers: userToken,
+      payload: {
+        attributes: {
+          text: 'foo'
+        }
+      }
+    },
+    check: {
+      url: '/users/1/projects/1',
+      method: 'get'
+    }
+  },
+  noUpdate: {
+    update: {
+      url: '/users/1/projects/1/pages/4',
+      method: 'patch',
+      headers: userToken,
+      payload: {
+        x: 3
+      }
+    },
+    check: {
+      url: '/users/1/projects/1',
+      method: 'get'
+    }
+  },
+  elementNoUpdate: {
+    update: {
+      url: '/users/1/projects/1/pages/4/elements/28',
+      method: 'patch',
+      headers: userToken,
+      payload: {
+        attributes: {
+          text: 'foo'
+        }
+      }
+    },
+    check: {
+      url: '/users/1/projects/1',
+      method: 'get'
+    }
   }
 };

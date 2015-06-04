@@ -1,6 +1,7 @@
 var configs = require('../../../fixtures/configs/project-handlers'),
   userFixtures = require('../../../fixtures/users'),
   sinon = require('sinon'),
+  nock = require('nock'),
   Lab = require('lab'),
   lab = exports.lab = Lab.script(),
   experiment = lab.experiment,
@@ -1433,5 +1434,119 @@ experiment('Project Handlers', function() {
         done();
       });
     });
+  });
+
+  experiment('Update Thumbnail Tails', function() {
+    var screenshotMock;
+    var screenshotVal1 = 'https://example.com/screenshot1.png';
+    var screenshotVal2 = 'https://example.com/screenshot2.png';
+
+    before(function(done) {
+      screenshotMock = nock('https://webmaker-screenshot.example.com')
+        .post(
+          '/desktop/small/webmaker-desktop/' +
+          'aHR0cHM6Ly93ZWJtYWtlci1wYWdlLmV4YW1wbGUuY29tLz91c2VyPTEmcHJvamVjdD0xJnBhZ2U9Mw=='
+        )
+        .once()
+        .reply(200, {
+          screenshot: screenshotVal1
+        })
+        .post(
+          '/desktop/small/webmaker-desktop/' +
+          'aHR0cHM6Ly93ZWJtYWtlci1wYWdlLmV4YW1wbGUuY29tLz91c2VyPTEmcHJvamVjdD0xJnBhZ2U9Mw=='
+        )
+        .once()
+        .reply(200, {
+          screenshot: screenshotVal2
+        });
+
+      var addelem1 = configs.tail.before.first;
+      var addelem2 = configs.tail.before.second;
+      server.inject(addelem1, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+        server.inject(addelem2, function(resp) {
+          expect(resp.statusCode).to.equal(200);
+          done();
+        });
+      });
+    });
+
+    after(function(done) {
+      screenshotMock.done();
+      done();
+    });
+
+    test('updating the lowest page id in a project triggers a screenshot update', function(done) {
+      var update = configs.tail.success.update;
+      var check = configs.tail.success.check;
+
+      server.once('tail', function() {
+        server.inject(check, function(resp) {
+          expect(resp.statusCode).to.equal(200);
+          expect(resp.result.project.thumbnail[400]).to.equal(screenshotVal1);
+          done();
+        });
+      });
+
+      server.inject(update, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+      });
+    });
+
+    test('updating (not) the lowest page id in a project does not trigger a screenshot update', function(done) {
+      var update = configs.tail.noUpdate.update;
+      var check = configs.tail.noUpdate.check;
+
+      server.once('tail', function() {
+        server.inject(check, function(resp) {
+          expect(resp.statusCode).to.equal(200);
+          // should not be different from previous test
+          expect(resp.result.project.thumbnail[400]).to.equal(screenshotVal1);
+          done();
+        });
+      });
+
+      server.inject(update, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+      });
+    });
+
+    test('updating an element in the lowest page id in a project triggers a screenshot update', function(done) {
+      var update = configs.tail.elementSuccess.update;
+      var check = configs.tail.elementSuccess.check;
+
+      server.once('tail', function() {
+        server.inject(check, function(resp) {
+          expect(resp.statusCode).to.equal(200);
+          expect(resp.result.project.thumbnail[400]).to.equal(screenshotVal2);
+          done();
+        });
+      });
+
+      server.inject(update, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+      });
+    });
+
+    test('updating an element that is (not) part of the lowest page id in a project ' +
+      'does not trigger a screenshot update',
+      function(done) {
+        var update = configs.tail.elementNoUpdate.update;
+        var check = configs.tail.elementNoUpdate.check;
+
+        server.once('tail', function() {
+          server.inject(check, function(resp) {
+            expect(resp.statusCode).to.equal(200);
+            // should not be different from previous test
+            expect(resp.result.project.thumbnail[400]).to.equal(screenshotVal2);
+            done();
+          });
+        });
+
+        server.inject(update, function(resp) {
+          expect(resp.statusCode).to.equal(200);
+        });
+      }
+    );
   });
 });
