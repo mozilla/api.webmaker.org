@@ -10,7 +10,7 @@ exports.register = function(server, options, done) {
   function buildPageRenderUrl(user, project, page) {
     var urlObj = url.parse(pageRenderUrl);
 
-    urlObj.hash = '#/' + qs.encode({
+    urlObj.hash = '#/thumbnail?' + qs.encode({
       user: user,
       project: project,
       page: page
