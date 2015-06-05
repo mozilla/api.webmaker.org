@@ -1443,16 +1443,36 @@ experiment('Project Handlers', function() {
 
     before(function(done) {
       screenshotMock = nock('https://webmaker-screenshot.example.com')
-        .post(
-          '/desktop/small/webmaker-desktop/' +
+        .get(
+          '/mobile-center-cropped/small/webmaker-desktop/' +
           'aHR0cHM6Ly93ZWJtYWtlci1wYWdlLmV4YW1wbGUuY29tLz91c2VyPTEmcHJvamVjdD0xJnBhZ2U9Mw=='
         )
         .once()
         .reply(200, {
           screenshot: screenshotVal1
         })
-        .post(
-          '/desktop/small/webmaker-desktop/' +
+        .get(
+          '/mobile-center-cropped/small/webmaker-desktop/' +
+          'aHR0cHM6Ly93ZWJtYWtlci1wYWdlLmV4YW1wbGUuY29tLz91c2VyPTEmcHJvamVjdD0xJnBhZ2U9Mw=='
+        )
+        .once()
+        .reply(200, {
+          screenshot: screenshotVal2
+        })
+        .get(
+          '/mobile-center-cropped/small/webmaker-desktop/' +
+          'aHR0cHM6Ly93ZWJtYWtlci1wYWdlLmV4YW1wbGUuY29tLz91c2VyPTEmcHJvamVjdD0xJnBhZ2U9Mw=='
+        )
+        .once()
+        .replyWithError('horrible network destroying monster of an error')
+        .get(
+          '/mobile-center-cropped/small/webmaker-desktop/' +
+          'aHR0cHM6Ly93ZWJtYWtlci1wYWdlLmV4YW1wbGUuY29tLz91c2VyPTEmcHJvamVjdD0xJnBhZ2U9Mw=='
+        )
+        .once()
+        .reply(503)
+        .get(
+          '/mobile-center-cropped/small/webmaker-desktop/' +
           'aHR0cHM6Ly93ZWJtYWtlci1wYWdlLmV4YW1wbGUuY29tLz91c2VyPTEmcHJvamVjdD0xJnBhZ2U9Mw=='
         )
         .once()
@@ -1548,5 +1568,99 @@ experiment('Project Handlers', function() {
         });
       }
     );
+
+    test('checkPageId handles errors from pg', function(done) {
+      var update = configs.tail.fail;
+      var stub = sinon.stub(server.methods.pages, 'min')
+        .callsArgWith(1, mockErr());
+
+      server.once('log', function(event, tags) {
+        if ( !tags.error ) {
+          return;
+        }
+
+        expect(event).to.exist();
+        expect(event.data.details).to.startWith('Error querying DB for lowest page ID in project');
+        stub.restore();
+        done();
+      });
+
+      server.inject(update, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+      });
+    });
+
+    test('generateThumbnail handles errors from thumbnail service', function(done) {
+      var update = configs.tail.fail;
+
+      server.once('log', function(event, tags) {
+        if ( !tags.error ) {
+          return;
+        }
+
+        expect(event).to.exist();
+        expect(event.data.details).to.equal('Error requesting a new thumnail from the screenshot service');
+        done();
+      });
+
+      server.inject(update, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+      });
+    });
+
+    test('generateThumbnail handles non 200 statusCodes from thumbnail service', function(done) {
+      var update = configs.tail.fail;
+
+      server.once('log', function(event, tags) {
+        if ( !tags.error ) {
+          return;
+        }
+
+        expect(event).to.exist();
+        expect(event.data.details).to.equal('Thumbnail service returned 503');
+        done();
+      });
+
+      server.inject(update, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+      });
+    });
+
+    test('updateThumbnail handles errors from pg', function(done) {
+      var update = configs.tail.fail;
+      var stub = sinon.stub(server.methods.projects, 'updateThumbnail')
+        .callsArgWith(1, mockErr());
+
+      server.once('log', function(event, tags) {
+        if ( !tags.error ) {
+          return;
+        }
+
+        expect(event).to.exist();
+        expect(event.data.details).to.equal('Error updating project thumbnail');
+        stub.restore();
+        done();
+      });
+
+      server.inject(update, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+      });
+    });
+  });
+
+  experiment('Thumbnail updating disabled', function() {
+    test('server starts up without THUMBNAIL_SERVICE_URL defined', function(done) {
+      var serviceURL = process.env.THUMBNAIL_SERVICE_URL;
+      delete process.env.THUMBNAIL_SERVICE_URL;
+      require('../../../mocks/server')(function(testServer) {
+        expect(testServer).to.exist();
+        var config = configs.tail.success.update;
+        testServer.inject(config, function(resp) {
+          expect(resp.statusCode).to.equal(200);
+          process.env.THUMBNAIL_SERVICE_URL = serviceURL;
+          done();
+        });
+      });
+    });
   });
 });

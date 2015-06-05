@@ -840,5 +840,13 @@ exports.tail = {
       url: '/users/1/projects/1',
       method: 'get'
     }
+  },
+  fail: {
+    url: '/users/1/projects/1/pages/3',
+    method: 'patch',
+    headers: userToken,
+    payload: {
+      x: 4
+    }
   }
 };

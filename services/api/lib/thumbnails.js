@@ -15,7 +15,7 @@ exports.register = function(server, options, done) {
       page: page
     };
 
-    return '/desktop/small/webmaker-desktop/' + new Buffer(url.format(urlObj)).toString('base64');
+    return '/mobile-center-cropped/small/webmaker-desktop/' + new Buffer(url.format(urlObj)).toString('base64');
   }
 
   function updateThumbnail(project, url, tail) {
@@ -78,7 +78,7 @@ exports.register = function(server, options, done) {
       }
       var row = result.rows[0];
 
-      if ( !result.rows.length || row.page_id !== page.id ) {
+      if ( row.page_id !== page.id ) {
         server.debug('Thumbnail update not required');
         return tail();
       }
@@ -102,7 +102,7 @@ exports.register = function(server, options, done) {
 
     req = request.defaults({
       baseUrl: thumnailServiceUrl,
-      method: 'post',
+      method: 'get',
       json: true,
       headers: {
         accept: 'application/json'
