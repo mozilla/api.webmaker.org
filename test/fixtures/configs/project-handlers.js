@@ -342,7 +342,7 @@ exports.create = {
         payload: {
           title: 'create_test2',
           thumbnail: {
-            400: 'https://example.com/image.png'
+            320: 'https://example.com/image.png'
           }
         },
         headers: userToken
@@ -364,7 +364,7 @@ exports.create = {
           payload: {
             title: 123,
             thumbnail: {
-              400: 'https://example.com/image.png'
+              320: 'https://example.com/image.png'
             }
           },
           headers: userToken
@@ -384,7 +384,7 @@ exports.create = {
           payload: {
             title: 'bad_thumb',
             thumbnail: {
-              400: 123
+              320: 123
             }
           },
           headers: userToken
@@ -409,7 +409,7 @@ exports.create = {
             payload: {
               title: 'bad_param',
               thumbnail: {
-                400: 'https://example.com/image.png'
+                320: 'https://example.com/image.png'
               }
             },
             headers: userToken
@@ -420,7 +420,7 @@ exports.create = {
             payload: {
               title: 'bad_param',
               thumbnail: {
-                400: 'https://example.com/image.png'
+                320: 'https://example.com/image.png'
               }
             },
             headers: userToken
@@ -434,7 +434,7 @@ exports.create = {
           payload: {
             title: 'bad_param',
             thumbnail: {
-              400: 'https://example.com/image.png'
+              320: 'https://example.com/image.png'
             }
           },
           headers: userToken2
@@ -530,7 +530,7 @@ exports.patch = {
         method: 'patch',
         payload: {
           thumbnail: {
-            '400': 'new'
+            '320': 'new'
           }
         },
         headers: userToken
@@ -540,7 +540,7 @@ exports.patch = {
         method: 'patch',
         payload: {
           thumbnail: {
-            '1024': 'new'
+            '320': 'new'
           }
         },
         headers: userToken
@@ -559,7 +559,7 @@ exports.patch = {
         payload: {
           title: 'new2',
           thumbnail: {
-            '400': 'new2'
+            '320': 'new2'
           }
         },
         headers: userToken
@@ -606,7 +606,7 @@ exports.patch = {
           method: 'patch',
           payload: {
             thumbnail: {
-              400: 123
+              320: 123
             }
           },
           headers: userToken
@@ -628,7 +628,7 @@ exports.patch = {
           method: 'patch',
           payload: {
             thumbnail: {
-              400: 'new'
+              320: 'new'
             }
           },
           headers: userToken2

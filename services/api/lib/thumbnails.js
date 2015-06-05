@@ -22,7 +22,7 @@ exports.register = function(server, options, done) {
     server.methods.projects.updateThumbnail(
       [
         JSON.stringify({
-          400: url
+          320: url
         }),
         project
       ],

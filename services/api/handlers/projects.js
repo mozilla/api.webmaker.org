@@ -163,8 +163,7 @@ exports.patch = {
     }
 
     project.thumbnail = {
-      400: request.payload.thumbnail[400] || '',
-      1024: request.payload.thumbnail[1024] || ''
+      320: request.payload.thumbnail[320] || ''
     };
 
     request.server.methods.projects.update(

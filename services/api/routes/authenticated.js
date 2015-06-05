@@ -142,8 +142,7 @@ var routes = [
           title: Joi.string().required(),
           remixed_from: Joi.number().integer().optional(),
           thumbnail: Joi.object().keys({
-            400: Joi.string().optional(),
-            1024: Joi.string().optional()
+            320: Joi.string().optional()
           }).default({})
         }
       },
@@ -172,8 +171,7 @@ var routes = [
         payload: {
           title: Joi.string().optional(),
           thumbnail: Joi.object().keys({
-            400: Joi.string().optional(),
-            1024: Joi.string().optional()
+            320: Joi.string().optional()
           }).default({})
         }
       },
