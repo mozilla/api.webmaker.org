@@ -1443,7 +1443,7 @@ experiment('Project Handlers', function() {
 
     before(function(done) {
       screenshotMock = nock('https://webmaker-screenshot.example.com')
-        .get(
+        .post(
           '/mobile-center-cropped/small/webmaker-desktop/' +
           'aHR0cHM6Ly93ZWJtYWtlci1wYWdlLmV4YW1wbGUuY29tLz91c2VyPTEmcHJvamVjdD0xJnBhZ2U9Mw=='
         )
@@ -1451,7 +1451,7 @@ experiment('Project Handlers', function() {
         .reply(200, {
           screenshot: screenshotVal1
         })
-        .get(
+        .post(
           '/mobile-center-cropped/small/webmaker-desktop/' +
           'aHR0cHM6Ly93ZWJtYWtlci1wYWdlLmV4YW1wbGUuY29tLz91c2VyPTEmcHJvamVjdD0xJnBhZ2U9Mw=='
         )
@@ -1459,19 +1459,19 @@ experiment('Project Handlers', function() {
         .reply(200, {
           screenshot: screenshotVal2
         })
-        .get(
+        .post(
           '/mobile-center-cropped/small/webmaker-desktop/' +
           'aHR0cHM6Ly93ZWJtYWtlci1wYWdlLmV4YW1wbGUuY29tLz91c2VyPTEmcHJvamVjdD0xJnBhZ2U9Mw=='
         )
         .once()
         .replyWithError('horrible network destroying monster of an error')
-        .get(
+        .post(
           '/mobile-center-cropped/small/webmaker-desktop/' +
           'aHR0cHM6Ly93ZWJtYWtlci1wYWdlLmV4YW1wbGUuY29tLz91c2VyPTEmcHJvamVjdD0xJnBhZ2U9Mw=='
         )
         .once()
         .reply(503)
-        .get(
+        .post(
           '/mobile-center-cropped/small/webmaker-desktop/' +
           'aHR0cHM6Ly93ZWJtYWtlci1wYWdlLmV4YW1wbGUuY29tLz91c2VyPTEmcHJvamVjdD0xJnBhZ2U9Mw=='
         )

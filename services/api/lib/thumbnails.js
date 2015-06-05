@@ -102,7 +102,7 @@ exports.register = function(server, options, done) {
 
     req = request.defaults({
       baseUrl: thumnailServiceUrl,
-      method: 'get',
+      method: 'post',
       json: true,
       headers: {
         accept: 'application/json'
