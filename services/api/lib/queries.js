@@ -83,6 +83,10 @@ module.exports = {
       " AND id = $3 RETURNING id, user_id, remixed_from, version, title, featured," +
       " created_at, updated_at, thumbnail;",
 
+    // Update project thumbnail
+    // Params thumbnail jsonb, project_id bigint
+    updateThumbnail: "UPDATE projects SET thumbnail = $1 WHERE deleted_at IS NULL AND id = $2;",
+
     // Feature Project
     // Params: featured Boolean, project_id bigint
     feature: "UPDATE projects SET featured = $1 WHERE deleted_at IS NULL and id = $2 RETURNING id, user_id, " +
@@ -125,7 +129,13 @@ module.exports = {
 
     // Soft delete page
     // Params: page_id bigint
-    remove: "UPDATE pages SET deleted_at = CURRENT_TIMESTAMP WHERE id = $1 AND deleted_at IS NULL;"
+    remove: "UPDATE pages SET deleted_at = CURRENT_TIMESTAMP WHERE id = $1 AND deleted_at IS NULL;",
+
+    // Find lowest page id in a project
+    // Params: project_id
+    min: "SELECT MIN(pages.id) AS page_id, projects.id AS project_id, projects.user_id as user_id FROM pages " +
+      "INNER JOIN projects ON pages.project_id = $1 AND projects.id = pages.project_id AND pages.deleted_at " +
+      "IS NULL GROUP BY projects.id;"
   },
   elements: {
     // Create element

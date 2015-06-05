@@ -191,6 +191,10 @@ module.exports = function (pg) {
         executeQuery(queries.projects.update, values, done);
       }, {});
 
+      server.method('projects.updateThumbnail', function(values, done) {
+        executeQuery(queries.projects.updateThumbnail, values, done);
+      }, {});
+
       server.method('projects.feature', function(values, done) {
         executeQuery(queries.projects.feature, values, done);
       }, {});
@@ -218,6 +222,10 @@ module.exports = function (pg) {
       server.method('pages.remove', function(values, done) {
         executeQuery(queries.pages.remove, values, done);
       }, {});
+
+      server.method('pages.min', function(values, done) {
+        executeQuery(queries.pages.min, values, done);
+      });
 
       server.method('elements.create', function(values, done) {
         executeQuery(queries.elements.create, values, done);

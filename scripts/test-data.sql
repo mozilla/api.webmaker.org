@@ -5,9 +5,7 @@ DECLARE
   jon_id bigint;
   andrew_id bigint;
   empty_json jsonb := '{}'::jsonb;
-  thumb_small jsonb := '{"400": "https://example.com/400.png"}'::jsonb;
-  thumb_large jsonb := '{"1024": "https://example.com/1024.png"}'::jsonb;
-  thumb_all jsonb := '{"400": "https://example.com/400.png", "1024": "https://example.com/1024.png"}'::jsonb;
+  thumb jsonb := '{"320": "https://example.com/320.png"}'::jsonb;
   styles jsonb := '{"color": "#FF0000"}'::jsonb;
   attributes jsonb := '{"text": "test text"}'::jsonb;
 
@@ -41,11 +39,11 @@ BEGIN
   -- create some test project data
   INSERT INTO projects (user_id, remixed_From, version, title, thumbnail, featured) VALUES
     (chris_id, NULL, 'test', 'test_project_1', empty_json, FALSE),
-    (chris_id, NULL, 'test', 'test_project_2', thumb_small, TRUE),
+    (chris_id, NULL, 'test', 'test_project_2', thumb, TRUE),
     (jon_id, NULL, 'test', 'test_project_3', empty_json, FALSE),
-    (jon_id, NULL, 'test', 'test_project_4', thumb_all, TRUE),
+    (jon_id, NULL, 'test', 'test_project_4', thumb, TRUE),
     (andrew_id, NULL, 'test', 'test_project_5', empty_json, FALSE),
-    (andrew_id, NULL, 'test', 'test_project_6', thumb_large, TRUE),
+    (andrew_id, NULL, 'test', 'test_project_6', thumb, TRUE),
     (chris_id, NULL, 'test', 'test_project_7', empty_json, TRUE),
     (andrew_id, NULL, 'test', 'test_project_8', empty_json, TRUE),
     (jon_id, NULL, 'test', 'test_project_9', empty_json, TRUE),

@@ -50,6 +50,8 @@ API_VERSION                 | The Version Number of the API, applied to newly cr
 LOG_LEVEL                   | given a chosen level, log events only at or above that level. debug < info < warn < error < exception < stat | info
 POSTGRE_CONNECTION_STRING   | A connection string to a PostgreSQL server                                                                   | postgresql://localhost:5432/webmaker
 ID_SERVER_CONNECTION_STRING | A connection string to a [Webmaker ID server](https://github.com/mozilla/id.webmaker.org)                    | https://id.mofostaging.net
+THUMBNAIL_SERVICE_URL       | The URL where [webmaker-screenshot](https://github.com/mozilla/webmaker-screenshot) can be reached           | undefined (screenshots disabled)
+PAGE_RENDER_URL             | The URL where [webmaker-desktop](https://github.com/mozilla/webmaker-desktop) can be reached                 | undefined (must defined if screenshots enabled)
 
 ## Test
 

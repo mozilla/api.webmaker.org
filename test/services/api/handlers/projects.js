@@ -1,6 +1,7 @@
 var configs = require('../../../fixtures/configs/project-handlers'),
   userFixtures = require('../../../fixtures/users'),
   sinon = require('sinon'),
+  nock = require('nock'),
   Lab = require('lab'),
   lab = exports.lab = Lab.script(),
   experiment = lab.experiment,
@@ -1086,26 +1087,13 @@ experiment('Project Handlers', function() {
       });
     });
 
-    test('update thumbnail (400) succeeds', function(done) {
+    test('update thumbnail (320) succeeds', function(done) {
       var opts = configs.patch.update.success.thumb;
 
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(200);
         expect(resp.result.status).to.equal('updated');
-        expect(resp.result.project.thumbnail[400]).to.equal('new');
-        expect(resp.result.project.thumbnail[1024]).to.equal('');
-        done();
-      });
-    });
-
-    test('update thumbnail (1024) succeeds', function(done) {
-      var opts = configs.patch.update.success.thumb2;
-
-      server.inject(opts, function(resp) {
-        expect(resp.statusCode).to.equal(200);
-        expect(resp.result.status).to.equal('updated');
-        expect(resp.result.project.thumbnail[400]).to.equal('');
-        expect(resp.result.project.thumbnail[1024]).to.equal('new');
+        expect(resp.result.project.thumbnail[320]).to.equal('new');
         done();
       });
     });
@@ -1117,20 +1105,7 @@ experiment('Project Handlers', function() {
         expect(resp.statusCode).to.equal(200);
         expect(resp.result.status).to.equal('updated');
         expect(resp.result.project.thumbnail).to.exist();
-        expect(resp.result.project.thumbnail[400]).to.equal('');
-        expect(resp.result.project.thumbnail[1024]).to.equal('');
-        done();
-      });
-    });
-
-    test('update all succeeds', function(done) {
-      var opts = configs.patch.update.success.all;
-
-      server.inject(opts, function(resp) {
-        expect(resp.statusCode).to.equal(200);
-        expect(resp.result.status).to.equal('updated');
-        expect(resp.result.project.title).to.equal('new2');
-        expect(resp.result.project.thumbnail[400]).to.equal('new2');
+        expect(resp.result.project.thumbnail[320]).to.equal('');
         done();
       });
     });
@@ -1431,6 +1406,234 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(200);
         done();
+      });
+    });
+  });
+
+  experiment('Update Thumbnail Tails', function() {
+    var screenshotMock;
+    var screenshotVal1 = 'https://example.com/screenshot1.png';
+    var screenshotVal2 = 'https://example.com/screenshot2.png';
+
+    before(function(done) {
+      screenshotMock = nock('https://webmaker-screenshot.example.com')
+        .post(
+          '/mobile-center-cropped/small/webmaker-desktop/' +
+          'aHR0cHM6Ly93ZWJtYWtlci1wYWdlLmV4YW1wbGUuY29tLyMvdXNlcj0xJnByb2plY3Q9MSZwYWdlPTM='
+        )
+        .once()
+        .reply(200, {
+          screenshot: screenshotVal1
+        })
+        .post(
+          '/mobile-center-cropped/small/webmaker-desktop/' +
+          'aHR0cHM6Ly93ZWJtYWtlci1wYWdlLmV4YW1wbGUuY29tLyMvdXNlcj0xJnByb2plY3Q9MSZwYWdlPTM='
+        )
+        .once()
+        .reply(200, {
+          screenshot: screenshotVal2
+        })
+        .post(
+          '/mobile-center-cropped/small/webmaker-desktop/' +
+          'aHR0cHM6Ly93ZWJtYWtlci1wYWdlLmV4YW1wbGUuY29tLyMvdXNlcj0xJnByb2plY3Q9MSZwYWdlPTM='
+        )
+        .once()
+        .replyWithError('horrible network destroying monster of an error')
+        .post(
+          '/mobile-center-cropped/small/webmaker-desktop/' +
+          'aHR0cHM6Ly93ZWJtYWtlci1wYWdlLmV4YW1wbGUuY29tLyMvdXNlcj0xJnByb2plY3Q9MSZwYWdlPTM='
+        )
+        .once()
+        .reply(503)
+        .post(
+          '/mobile-center-cropped/small/webmaker-desktop/' +
+          'aHR0cHM6Ly93ZWJtYWtlci1wYWdlLmV4YW1wbGUuY29tLyMvdXNlcj0xJnByb2plY3Q9MSZwYWdlPTM='
+        )
+        .once()
+        .reply(200, {
+          screenshot: screenshotVal2
+        });
+
+      var addelem1 = configs.tail.before.first;
+      var addelem2 = configs.tail.before.second;
+      server.inject(addelem1, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+        server.inject(addelem2, function(resp) {
+          expect(resp.statusCode).to.equal(200);
+          done();
+        });
+      });
+    });
+
+    after(function(done) {
+      screenshotMock.done();
+      done();
+    });
+
+    test('updating the lowest page id in a project triggers a screenshot update', function(done) {
+      var update = configs.tail.success.update;
+      var check = configs.tail.success.check;
+
+      server.once('tail', function() {
+        server.inject(check, function(resp) {
+          expect(resp.statusCode).to.equal(200);
+          expect(resp.result.project.thumbnail[320]).to.equal(screenshotVal1);
+          done();
+        });
+      });
+
+      server.inject(update, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+      });
+    });
+
+    test('updating (not) the lowest page id in a project does not trigger a screenshot update', function(done) {
+      var update = configs.tail.noUpdate.update;
+      var check = configs.tail.noUpdate.check;
+
+      server.once('tail', function() {
+        server.inject(check, function(resp) {
+          expect(resp.statusCode).to.equal(200);
+          // should not be different from previous test
+          expect(resp.result.project.thumbnail[320]).to.equal(screenshotVal1);
+          done();
+        });
+      });
+
+      server.inject(update, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+      });
+    });
+
+    test('updating an element in the lowest page id in a project triggers a screenshot update', function(done) {
+      var update = configs.tail.elementSuccess.update;
+      var check = configs.tail.elementSuccess.check;
+
+      server.once('tail', function() {
+        server.inject(check, function(resp) {
+          expect(resp.statusCode).to.equal(200);
+          expect(resp.result.project.thumbnail[320]).to.equal(screenshotVal2);
+          done();
+        });
+      });
+
+      server.inject(update, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+      });
+    });
+
+    test('updating an element that is (not) part of the lowest page id in a project ' +
+      'does not trigger a screenshot update',
+      function(done) {
+        var update = configs.tail.elementNoUpdate.update;
+        var check = configs.tail.elementNoUpdate.check;
+
+        server.once('tail', function() {
+          server.inject(check, function(resp) {
+            expect(resp.statusCode).to.equal(200);
+            // should not be different from previous test
+            expect(resp.result.project.thumbnail[320]).to.equal(screenshotVal2);
+            done();
+          });
+        });
+
+        server.inject(update, function(resp) {
+          expect(resp.statusCode).to.equal(200);
+        });
+      }
+    );
+
+    test('checkPageId handles errors from pg', function(done) {
+      var update = configs.tail.fail;
+      var stub = sinon.stub(server.methods.pages, 'min')
+        .callsArgWith(1, mockErr());
+
+      server.once('log', function(event, tags) {
+        if ( !tags.error ) {
+          return;
+        }
+
+        expect(event).to.exist();
+        expect(event.data.details).to.startWith('Error querying DB for lowest page ID in project');
+        stub.restore();
+        done();
+      });
+
+      server.inject(update, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+      });
+    });
+
+    test('generateThumbnail handles errors from thumbnail service', function(done) {
+      var update = configs.tail.fail;
+
+      server.once('log', function(event, tags) {
+        if ( !tags.error ) {
+          return;
+        }
+
+        expect(event).to.exist();
+        expect(event.data.details).to.equal('Error requesting a new thumnail from the screenshot service');
+        done();
+      });
+
+      server.inject(update, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+      });
+    });
+
+    test('generateThumbnail handles non 200 statusCodes from thumbnail service', function(done) {
+      var update = configs.tail.fail;
+
+      server.once('log', function(event, tags) {
+        if ( !tags.error ) {
+          return;
+        }
+
+        expect(event).to.exist();
+        expect(event.data.details).to.equal('Thumbnail service returned 503');
+        done();
+      });
+
+      server.inject(update, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+      });
+    });
+
+    test('updateThumbnail handles errors from pg', function(done) {
+      var update = configs.tail.fail;
+      var stub = sinon.stub(server.methods.projects, 'updateThumbnail')
+        .callsArgWith(1, mockErr());
+
+      server.once('log', function(event, tags) {
+        if ( !tags.error ) {
+          return;
+        }
+
+        expect(event).to.exist();
+        expect(event.data.details).to.equal('Error updating project thumbnail');
+        stub.restore();
+        done();
+      });
+
+      server.inject(update, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+      });
+    });
+  });
+
+  experiment('Thumbnail updating disabled', function() {
+    test('server starts up without THUMBNAIL_SERVICE_URL defined', function(done) {
+      var serviceURL = process.env.THUMBNAIL_SERVICE_URL;
+      delete process.env.THUMBNAIL_SERVICE_URL;
+      require('../../../mocks/server')(function(testServer) {
+        expect(testServer).to.exist();
+        var config = configs.tail.success.update;
+        testServer.inject(config, function(resp) {
+          expect(resp.statusCode).to.equal(200);
+          process.env.THUMBNAIL_SERVICE_URL = serviceURL;
+          done();
+        });
       });
     });
   });
