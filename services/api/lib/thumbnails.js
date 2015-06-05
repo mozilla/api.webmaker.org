@@ -1,6 +1,7 @@
 
 exports.register = function(server, options, done) {
   var url = require('url');
+  var qs = require('querystring');
   var request = require('request');
   var thumnailServiceUrl = process.env.THUMBNAIL_SERVICE_URL;
   var pageRenderUrl = process.env.PAGE_RENDER_URL;
@@ -9,11 +10,11 @@ exports.register = function(server, options, done) {
   function buildPageRenderUrl(user, project, page) {
     var urlObj = url.parse(pageRenderUrl);
 
-    urlObj.query = {
+    urlObj.hash = '#/' + qs.encode({
       user: user,
       project: project,
       page: page
-    };
+    });
 
     return '/mobile-center-cropped/small/webmaker-desktop/' + new Buffer(url.format(urlObj)).toString('base64');
   }

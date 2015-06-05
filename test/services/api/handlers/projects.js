@@ -1419,7 +1419,7 @@ experiment('Project Handlers', function() {
       screenshotMock = nock('https://webmaker-screenshot.example.com')
         .post(
           '/mobile-center-cropped/small/webmaker-desktop/' +
-          'aHR0cHM6Ly93ZWJtYWtlci1wYWdlLmV4YW1wbGUuY29tLz91c2VyPTEmcHJvamVjdD0xJnBhZ2U9Mw=='
+          'aHR0cHM6Ly93ZWJtYWtlci1wYWdlLmV4YW1wbGUuY29tLyMvdXNlcj0xJnByb2plY3Q9MSZwYWdlPTM='
         )
         .once()
         .reply(200, {
@@ -1427,7 +1427,7 @@ experiment('Project Handlers', function() {
         })
         .post(
           '/mobile-center-cropped/small/webmaker-desktop/' +
-          'aHR0cHM6Ly93ZWJtYWtlci1wYWdlLmV4YW1wbGUuY29tLz91c2VyPTEmcHJvamVjdD0xJnBhZ2U9Mw=='
+          'aHR0cHM6Ly93ZWJtYWtlci1wYWdlLmV4YW1wbGUuY29tLyMvdXNlcj0xJnByb2plY3Q9MSZwYWdlPTM='
         )
         .once()
         .reply(200, {
@@ -1435,19 +1435,19 @@ experiment('Project Handlers', function() {
         })
         .post(
           '/mobile-center-cropped/small/webmaker-desktop/' +
-          'aHR0cHM6Ly93ZWJtYWtlci1wYWdlLmV4YW1wbGUuY29tLz91c2VyPTEmcHJvamVjdD0xJnBhZ2U9Mw=='
+          'aHR0cHM6Ly93ZWJtYWtlci1wYWdlLmV4YW1wbGUuY29tLyMvdXNlcj0xJnByb2plY3Q9MSZwYWdlPTM='
         )
         .once()
         .replyWithError('horrible network destroying monster of an error')
         .post(
           '/mobile-center-cropped/small/webmaker-desktop/' +
-          'aHR0cHM6Ly93ZWJtYWtlci1wYWdlLmV4YW1wbGUuY29tLz91c2VyPTEmcHJvamVjdD0xJnBhZ2U9Mw=='
+          'aHR0cHM6Ly93ZWJtYWtlci1wYWdlLmV4YW1wbGUuY29tLyMvdXNlcj0xJnByb2plY3Q9MSZwYWdlPTM='
         )
         .once()
         .reply(503)
         .post(
           '/mobile-center-cropped/small/webmaker-desktop/' +
-          'aHR0cHM6Ly93ZWJtYWtlci1wYWdlLmV4YW1wbGUuY29tLz91c2VyPTEmcHJvamVjdD0xJnBhZ2U9Mw=='
+          'aHR0cHM6Ly93ZWJtYWtlci1wYWdlLmV4YW1wbGUuY29tLyMvdXNlcj0xJnByb2plY3Q9MSZwYWdlPTM='
         )
         .once()
         .reply(200, {
