@@ -1416,38 +1416,39 @@ experiment('Project Handlers', function() {
     var screenshotVal2 = 'https://example.com/screenshot2.png';
 
     before(function(done) {
+      // filteringPath used because of the time-dependent base64 string generated from the page render url
       screenshotMock = nock('https://webmaker-screenshot.example.com')
+        .filteringPath(/^\/mobile-center-cropped\/small\/webmaker-desktop\/(.+)$/, '/screenshotURL')
         .post(
-          '/mobile-center-cropped/small/webmaker-desktop/' +
-          'aHR0cHM6Ly93ZWJtYWtlci1wYWdlLmV4YW1wbGUuY29tLyMvdGh1bWJuYWlsP3VzZXI9MSZwcm9qZWN0PTEmcGFnZT0z'
+          '/screenshotURL'
         )
         .once()
         .reply(200, {
           screenshot: screenshotVal1
         })
+        .filteringPath(/^\/mobile-center-cropped\/small\/webmaker-desktop\/(.+)$/, '/screenshotURL')
         .post(
-          '/mobile-center-cropped/small/webmaker-desktop/' +
-          'aHR0cHM6Ly93ZWJtYWtlci1wYWdlLmV4YW1wbGUuY29tLyMvdGh1bWJuYWlsP3VzZXI9MSZwcm9qZWN0PTEmcGFnZT0z'
+          '/screenshotURL'
         )
         .once()
         .reply(200, {
           screenshot: screenshotVal2
         })
+        .filteringPath(/^\/mobile-center-cropped\/small\/webmaker-desktop\/(.+)$/, '/screenshotURL')
         .post(
-          '/mobile-center-cropped/small/webmaker-desktop/' +
-          'aHR0cHM6Ly93ZWJtYWtlci1wYWdlLmV4YW1wbGUuY29tLyMvdGh1bWJuYWlsP3VzZXI9MSZwcm9qZWN0PTEmcGFnZT0z'
+          '/screenshotURL'
         )
         .once()
         .replyWithError('horrible network destroying monster of an error')
+        .filteringPath(/^\/mobile-center-cropped\/small\/webmaker-desktop\/(.+)$/, '/screenshotURL')
         .post(
-          '/mobile-center-cropped/small/webmaker-desktop/' +
-          'aHR0cHM6Ly93ZWJtYWtlci1wYWdlLmV4YW1wbGUuY29tLyMvdGh1bWJuYWlsP3VzZXI9MSZwcm9qZWN0PTEmcGFnZT0z'
+          '/screenshotURL'
         )
         .once()
         .reply(503)
+        .filteringPath(/^\/mobile-center-cropped\/small\/webmaker-desktop\/(.+)$/, '/screenshotURL')
         .post(
-          '/mobile-center-cropped/small/webmaker-desktop/' +
-          'aHR0cHM6Ly93ZWJtYWtlci1wYWdlLmV4YW1wbGUuY29tLyMvdGh1bWJuYWlsP3VzZXI9MSZwcm9qZWN0PTEmcGFnZT0z'
+          '/screenshotURL'
         )
         .once()
         .reply(200, {

@@ -13,7 +13,8 @@ exports.register = function(server, options, done) {
     urlObj.hash = '#/thumbnail?' + qs.encode({
       user: user,
       project: project,
-      page: page
+      page: page,
+      t: Date.now()
     });
 
     return '/mobile-center-cropped/small/webmaker-desktop/' + new Buffer(url.format(urlObj)).toString('base64');
