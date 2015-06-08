@@ -106,7 +106,7 @@ exports.getProject = {
           return reply(boom.notFound('Project not found'));
         }
 
-        reply(result.rows[0]);
+        reply(request.server.methods.utils.formatProject(result.rows[0]));
       }
     );
   }
@@ -130,6 +130,28 @@ exports.getPage = {
         }
 
         reply(result.rows[0]);
+      }
+    );
+  }
+};
+
+exports.prepareRemix = {
+  assign: 'remixData',
+  method: function(request, reply) {
+    request.server.methods.projects.findDataForRemix(
+      [
+        request.params.project
+      ],
+      function(err, result) {
+        if ( err ) {
+          return reply(err);
+        }
+
+        if ( !result.rows.length ) {
+          return reply(boom.notFound('Project not found'));
+        }
+
+        reply(request.server.methods.utils.formatRemixData(result.rows));
       }
     );
   }

@@ -167,6 +167,71 @@ module.exports = function (pg) {
         });
       }, {});
 
+      server.method('projects.remix', function(userId, remixData, done) {
+        var project;
+        var transaction;
+        var transactionErr;
+
+        getTransactionClient().then(function(t) {
+          transaction = t;
+          return begin(transaction);
+        }).then(function() {
+          return executeTransaction(transaction, queries.projects.create,
+            [
+              userId,
+              remixData.id,
+              server.methods.utils.version(),
+              remixData.title,
+              remixData.thumbnail
+            ]
+          );
+        }).then(function(result) {
+          project = result.rows[0];
+
+          return Promise.resolve(remixData.pages.map(function(page) {
+            return new Promise(function(resolve, reject) {
+              var remixPage;
+              executeTransaction(transaction, queries.pages.create,
+                [
+                  project.id,
+                  page.x,
+                  page.y,
+                  page.styles
+                ]
+              ).then(function(result) {
+                remixPage = result.rows[0];
+                return Promise.resolve(page.elements.map(function(element) {
+                  return executeTransaction(transaction, queries.elements.create,
+                    [
+                      remixPage.id,
+                      element.type,
+                      element.attributes,
+                      element.styles
+                    ]
+                  );
+                }));
+              }).then(function(elementPromises) {
+                return Promise.all(elementPromises);
+              }).then(resolve)
+              .catch(reject);
+            });
+          }));
+        }).then(function(pagePromises) {
+          return Promise.all(pagePromises);
+        }).then(function() {
+          return commit(transaction);
+        }).then(function() {
+          done(null, project);
+        }).catch(function(err) {
+          transactionErr = err;
+          return rollback(transaction);
+        }).then(function() {
+          done(transactionErr);
+        }).catch(function(err) {
+          done(err);
+        });
+      });
+
       server.method('projects.findAll', function(values, done) {
         executeQuery(queries.projects.findAll, values, done);
       }, {});
@@ -181,6 +246,10 @@ module.exports = function (pg) {
 
       server.method('projects.findRemixes', function(values, done) {
         executeQuery(queries.projects.findRemixes, values, done);
+      }, {});
+
+      server.method('projects.findDataForRemix', function(values, done) {
+        executeQuery(queries.projects.findDataForRemix, values, done);
       }, {});
 
       server.method('projects.findFeatured', function(values, done) {

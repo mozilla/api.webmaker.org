@@ -226,7 +226,7 @@ var routes = [
       pre: [
         prerequisites.getUser,
         prerequisites.getTokenUser,
-        prerequisites.getProject
+        prerequisites.prepareRemix
       ],
       cors: {
         methods: ['OPTIONS', 'GET', 'POST']
