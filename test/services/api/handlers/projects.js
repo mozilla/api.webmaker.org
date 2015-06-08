@@ -1416,7 +1416,7 @@ experiment('Project Handlers', function() {
     var screenshotVal2 = 'https://example.com/screenshot2.png';
 
     before(function(done) {
-      // filteringPath used because of the time-dependent hash generated for the page render url
+      // filteringPath used because of the time-dependent base64 string generated from the page render url
       screenshotMock = nock('https://webmaker-screenshot.example.com')
         .filteringPath(/^\/mobile-center-cropped\/small\/webmaker-desktop\/(.+)$/, '/screenshotURL')
         .post(
