@@ -106,7 +106,7 @@ exports.getProject = {
           return reply(boom.notFound('Project not found'));
         }
 
-        reply(request.server.methods.utils.formatProject(result.rows[0]));
+        reply(result.rows[0]);
       }
     );
   }

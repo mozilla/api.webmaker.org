@@ -997,12 +997,9 @@ experiment('Project Handlers', function() {
 
         server.inject(opts, function(resp) {
           expect(resp.statusCode).to.equal(200);
-          expect(resp.result.status).to.equal('created');
+          expect(resp.result.status).to.equal('remixed');
+          console.log( resp.result );
           expect(resp.result.project.id).to.exist();
-          expect(resp.result.page.id).to.exist();
-          expect(resp.result.page.project_id).to.equal(resp.result.project.id);
-          expect(resp.result.page.x).to.equal(0);
-          expect(resp.result.page.y).to.equal(0);
 
           checkOpts.url = checkOpts.url.replace('$1', resp.result.project.id);
           server.inject(checkOpts, function(getResp) {
@@ -1061,7 +1058,7 @@ experiment('Project Handlers', function() {
 
       test('handles errors from postgre', function(done) {
         var opts = configs.create.remix.fail.error;
-        var stub = sinon.stub(server.methods.projects, 'create')
+        var stub = sinon.stub(server.methods.projects, 'remix')
           .callsArgWith(1, mockErr());
 
         server.inject(opts, function(resp) {
