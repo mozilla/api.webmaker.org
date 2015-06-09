@@ -46,7 +46,7 @@ experiment('Project Handlers', function() {
     });
 
     test('Handles error from pg when making a transaction', function(done) {
-      var opts = configs.pgAdapter.postFail;
+      var opts = configs.pgAdapter.createFail;
       var clientStub = {
         query: sinon.stub()
       };
@@ -69,7 +69,7 @@ experiment('Project Handlers', function() {
     });
 
     test('handles error if begin query fails', function(done) {
-      var opts = configs.pgAdapter.postFail;
+      var opts = configs.pgAdapter.createFail;
       var clientStub = {
         query: sinon.stub()
       };
@@ -94,7 +94,7 @@ experiment('Project Handlers', function() {
     });
 
     test('handles error if executeTransaction query fails', function(done) {
-      var opts = configs.pgAdapter.postFail;
+      var opts = configs.pgAdapter.createFail;
       var clientStub = {
         query: sinon.stub()
       };
@@ -119,7 +119,7 @@ experiment('Project Handlers', function() {
     });
 
     test('handles error if commit query fails', function(done) {
-      var opts = configs.pgAdapter.postFail;
+      var opts = configs.pgAdapter.createFail;
       var clientStub = {
         query: sinon.stub()
       };
@@ -145,7 +145,7 @@ experiment('Project Handlers', function() {
     });
 
     test('handles error if rollback query fails', function(done) {
-      var opts = configs.pgAdapter.postFail;
+      var opts = configs.pgAdapter.createFail;
       var clientStub = {
         query: sinon.stub()
       };
@@ -169,6 +169,34 @@ experiment('Project Handlers', function() {
         expect(resp.result.error).to.equal('Internal Server Error');
         expect(resp.result.message).to.equal('An internal server error occurred');
         server.plugins['webmaker-postgre-adapter'].pg.connect.restore();
+        done();
+      });
+    });
+
+
+    test('remix transaction error', function(done) {
+      var opts = configs.pgAdapter.remixFail;
+
+      sinon.stub(server.methods.users, 'find')
+        .callsArgWith(1, null, { rows: [ userFixtures.chris_testing ] });
+
+      sinon.stub(server.methods.projects, 'findDataForRemix')
+        .callsArgWith(1, null, { rows: [ {} ] });
+
+      sinon.stub(server.methods.utils, 'formatRemixData')
+        .returns({});
+
+      sinon.stub(server.plugins['webmaker-postgre-adapter'].pg, 'connect')
+        .callsArgWith(1, mockErr());
+
+      server.inject(opts, function(resp) {
+        server.plugins['webmaker-postgre-adapter'].pg.connect.restore();
+        server.methods.users.find.restore();
+        server.methods.projects.findDataForRemix.restore();
+        server.methods.utils.formatRemixData.restore();
+        expect(resp.statusCode).to.equal(500);
+        expect(resp.result.error).to.equal('Internal Server Error');
+        expect(resp.result.message).to.equal('An internal server error occurred');
         done();
       });
     });
@@ -993,24 +1021,30 @@ experiment('Project Handlers', function() {
     experiment('Remix', function() {
       test('success', function(done) {
         var opts = configs.create.remix.success.remix;
-        var checkOpts = configs.create.remix.success.checkRemix;
+        var checkRemixProject = configs.create.remix.success.checkRemixProject;
+        var checkRemixPages = configs.create.remix.success.checkRemixPages;
 
         server.inject(opts, function(resp) {
           expect(resp.statusCode).to.equal(200);
-          expect(resp.result.status).to.equal('created');
+          expect(resp.result.status).to.equal('remixed');
           expect(resp.result.project.id).to.exist();
-          expect(resp.result.page.id).to.exist();
-          expect(resp.result.page.project_id).to.equal(resp.result.project.id);
-          expect(resp.result.page.x).to.equal(0);
-          expect(resp.result.page.y).to.equal(0);
-
-          checkOpts.url = checkOpts.url.replace('$1', resp.result.project.id);
-          server.inject(checkOpts, function(getResp) {
-            expect(getResp.statusCode).to.equal(200);
-            expect(getResp.result.status).to.equal('success');
-            expect(getResp.result.project.id).to.equal(resp.result.project.id);
-            expect(getResp.result.project.remixed_from).to.equal('2');
-            done();
+          checkRemixProject.url = checkRemixProject.url.replace('$1', resp.result.project.id);
+          checkRemixPages.url = checkRemixPages.url.replace('$1', resp.result.project.id);
+          server.inject(checkRemixProject, function(projectResp) {
+            expect(projectResp.statusCode).to.equal(200);
+            expect(projectResp.result.status).to.equal('success');
+            expect(projectResp.result.project.id).to.equal(resp.result.project.id);
+            expect(projectResp.result.project.title).to.equal('test_project_1');
+            expect(projectResp.result.project.remixed_from).to.equal('1');
+            server.inject(checkRemixPages, function(pagesResp) {
+              expect(pagesResp.statusCode).to.equal(200);
+              expect(pagesResp.result.status).to.equal('success');
+              expect(pagesResp.result.pages).to.be.an.array();
+              expect(pagesResp.result.pages.length).to.equal(3);
+              expect(pagesResp.result.pages[0].elements.length).to.equal(2);
+              expect(pagesResp.result.pages[1].elements.length).to.equal(3);
+              done();
+            });
           });
         });
       });
@@ -1061,7 +1095,21 @@ experiment('Project Handlers', function() {
 
       test('handles errors from postgre', function(done) {
         var opts = configs.create.remix.fail.error;
-        var stub = sinon.stub(server.methods.projects, 'create')
+        var stub = sinon.stub(server.methods.projects, 'remix')
+          .callsArgWith(2, mockErr());
+
+        server.inject(opts, function(resp) {
+          expect(resp.statusCode).to.equal(500);
+          expect(resp.result.error).to.equal('Internal Server Error');
+          expect(resp.result.message).to.equal('An internal server error occurred');
+          stub.restore();
+          done();
+        });
+      });
+
+      test('handles error if findDataForRemix fails', function(done) {
+        var opts = configs.create.remix.fail.error;
+        var stub = sinon.stub(server.methods.projects, 'findDataForRemix')
           .callsArgWith(1, mockErr());
 
         server.inject(opts, function(resp) {
@@ -1454,16 +1502,7 @@ experiment('Project Handlers', function() {
         .reply(200, {
           screenshot: screenshotVal2
         });
-
-      var addelem1 = configs.tail.before.first;
-      var addelem2 = configs.tail.before.second;
-      server.inject(addelem1, function(resp) {
-        expect(resp.statusCode).to.equal(200);
-        server.inject(addelem2, function(resp) {
-          expect(resp.statusCode).to.equal(200);
-          done();
-        });
-      });
+      done();
     });
 
     after(function(done) {

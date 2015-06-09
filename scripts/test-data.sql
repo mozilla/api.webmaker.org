@@ -108,4 +108,12 @@ BEGIN
     (10, 'link button', empty_json, styles),
     (10, 'text', attributes, empty_json),
     (10, 'image', empty_json, styles);
+
+  INSERT INTO elements (page_id, type, attributes, styles) VALUES
+    (3, 'link button', empty_json, styles),
+    (3, 'text', attributes, empty_json),
+    (4, 'image', empty_json, styles),
+    (4, 'text', attributes, empty_json),
+    (4, 'link button', empty_json, styles);
+
 END $$;

@@ -24,23 +24,17 @@ exports.post = {
     );
   },
   remix: function(request, reply) {
-    request.server.methods.projects.create(
-      [
-        request.auth.credentials.id,
-        request.params.project,
-        request.server.methods.utils.version(),
-        'Remix of ' + request.pre.project.title,
-        JSON.stringify(request.pre.project.thumbnail)
-      ],
+    request.server.methods.projects.remix(
+      request.pre.tokenUser.id,
+      request.pre.remixData,
       function(err, result) {
         if ( err ) {
           return reply(err);
         }
 
         reply({
-          status: 'created',
-          project: request.server.methods.utils.formatProject(result.project),
-          page: request.server.methods.utils.formatPage(result.page)
+          status: 'remixed',
+          project: request.server.methods.utils.formatProject(result)
         });
       }
     );

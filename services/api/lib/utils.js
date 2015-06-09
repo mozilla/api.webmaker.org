@@ -116,6 +116,53 @@ function formatElement(el) {
   };
 }
 
+function formatRemixPage(rows) {
+  var elements = [];
+
+  rows.forEach(function(row) {
+    if ( !row.elem_id ) {
+      return;
+    }
+    elements.push({
+      id: row.elem_id,
+      type: row.elem_type,
+      attributes: row.elem_attributes,
+      styles: row.elem_styles
+    });
+  });
+
+  return {
+    id: rows[0].page_id,
+    x: rows[0].page_x,
+    y: rows[0].page_y,
+    styles: rows[0].page_styles,
+    elements: elements
+  };
+}
+
+function formatRemixData(rows) {
+  var pages = {};
+
+  rows.forEach(function(row) {
+    var pageId = row.page_id;
+    if ( !pages[pageId] ) {
+      pages[pageId] = [];
+    }
+    pages[pageId].push(row);
+  });
+
+  pages = Object.keys(pages).map(function(key) {
+    return formatRemixPage(pages[key]);
+  });
+
+  return {
+    id: rows[0].project_id,
+    title: rows[0].project_title,
+    thumbnail: rows[0].project_thumbnail,
+    pages: pages
+  };
+}
+
 var API_VERSION = process.env.API_VERSION;
 
 function version() {
@@ -128,6 +175,7 @@ exports.register = function(server, options, done) {
   server.method('utils.formatPage', formatPage, { callback: false });
   server.method('utils.formatPages', formatPages, { callback: false });
   server.method('utils.formatElement', formatElement, { callback: false });
+  server.method('utils.formatRemixData', formatRemixData, { callback: false });
   server.method('utils.version', version, { callback: false });
   done();
 };

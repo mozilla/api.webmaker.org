@@ -33,6 +33,21 @@ var pageCols = [
   "elements.attributes as elem_attributes"
 ].join(", ");
 
+var remixCols = [
+  "projects.id AS project_id",
+  "projects.title AS project_title",
+  "projects.thumbnail AS project_thumbnail",
+  "pages.id AS page_id",
+  "pages.project_id AS project_id",
+  "pages.x AS page_x",
+  "pages.y AS page_y",
+  "pages.styles AS page_styles",
+  "elements.id AS elem_id",
+  "elements.type AS elem_type",
+  "elements.styles AS elem_styles",
+  "elements.attributes as elem_attributes"
+].join(", ");
+
 module.exports = {
   users: {
     // Create user
@@ -76,6 +91,12 @@ module.exports = {
     // params: project_id bigint, user_id bigint
     findOne: "SELECT " + projectCols + " FROM projects INNER JOIN users ON users.id = projects.user_id WHERE " +
       " projects.deleted_at IS NULL AND projects.id = $1 AND projects.user_id = $2;",
+
+    // Retrieve data in a project for remixing (joins pages and elements)
+    // params: project_id bigint
+    findDataForRemix: "SELECT " + remixCols + " FROM projects LEFT OUTER JOIN pages ON projects.id = " +
+      "pages.project_id LEFT OUTER JOIN elements ON pages.id = elements.page_id WHERE projects.id = $1 AND " +
+      " projects.deleted_at IS NULL AND pages.deleted_at IS NULL AND elements.deleted_at IS NULL",
 
     // Update project
     // Params title varchar, thumbnail jsonb, project_id bigint
