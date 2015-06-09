@@ -27,12 +27,17 @@ exports.pgAdapter = {
     url: '/discover',
     method: 'get'
   },
-  postFail: {
+  createFail: {
     url: '/users/1/projects',
     method: 'post',
     payload: {
       title: 'create_test'
     },
+    headers: userToken
+  },
+  remixFail: {
+    url: '/users/1/projects/1/remixes',
+    method: 'post',
     headers: userToken
   }
 };
@@ -469,12 +474,16 @@ exports.create = {
   remix: {
     success: {
       remix:{
-        url: '/users/1/projects/2/remixes',
+        url: '/users/1/projects/1/remixes',
         method: 'post',
         headers: userToken
       },
-      checkRemix: {
+      checkRemixProject: {
         url: '/users/1/projects/$1',
+        method: 'get'
+      },
+      checkRemixPages: {
+        url: '/users/1/projects/$1/pages',
         method: 'get'
       }
     },
@@ -507,6 +516,11 @@ exports.create = {
       },
       error: {
         url: '/users/1/projects/2/remixes',
+        method: 'post',
+        headers: userToken
+      },
+      findDataForRemix: {
+        url: '/users/1/projects/1/remixes',
         method: 'post',
         headers: userToken
       }
@@ -763,24 +777,6 @@ exports.options = {
 };
 
 exports.tail = {
-  before: {
-    first: {
-      url: '/users/1/projects/1/pages/3/elements',
-      method: 'post',
-      payload: {
-        type: 'test'
-      },
-      headers: userToken
-    },
-    second: {
-      url: '/users/1/projects/1/pages/4/elements',
-      method: 'post',
-      payload: {
-        type: 'test'
-      },
-      headers: userToken
-    }
-  },
   success: {
     update: {
       url: '/users/1/projects/1/pages/3',
@@ -797,7 +793,7 @@ exports.tail = {
   },
   elementSuccess: {
     update: {
-      url: '/users/1/projects/1/pages/3/elements/27',
+      url: '/users/1/projects/1/pages/3/elements/25',
       method: 'patch',
       headers: userToken,
       payload: {
@@ -827,7 +823,7 @@ exports.tail = {
   },
   elementNoUpdate: {
     update: {
-      url: '/users/1/projects/1/pages/4/elements/28',
+      url: '/users/1/projects/1/pages/4/elements/27',
       method: 'patch',
       headers: userToken,
       payload: {
