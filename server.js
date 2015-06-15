@@ -18,6 +18,7 @@ Hoek.assert(process.env.API_HOST, 'Must define API_HOST');
 Hoek.assert(process.env.PORT, 'Must define PORT');
 
 var connection = {
+  uri: process.env.URI,
   host: process.env.API_HOST,
   port: process.env.PORT
 };
