@@ -1,5 +1,4 @@
 var request = require('request');
-var btoa = require('btoa');
 var cli = require('cli');
 var copyPaste = require("copy-paste");
 
@@ -32,7 +31,7 @@ request('https://api.webmaker.org/users/' + userID + '/projects/' + projectID + 
       return 0;
     })[0];
 
-    var base64ThumbnailURL = btoa('https://beta.webmaker.org/#/thumbnail?user=' + userID + '&project=' + projectID + '&page=' + firstPage.id);
+    var base64ThumbnailURL = new Buffer('https://beta.webmaker.org/#/thumbnail?user=' + userID + '&project=' + projectID + '&page=' + firstPage.id).toString('base64');
     var thumbnailPostURL = screenshotServerBaseURL + base64ThumbnailURL;
 
     request.post(thumbnailPostURL, function (err, resp, body) {
