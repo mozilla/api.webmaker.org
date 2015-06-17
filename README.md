@@ -53,6 +53,10 @@ ID_SERVER_CONNECTION_STRING | A connection string to a [Webmaker ID server](http
 THUMBNAIL_SERVICE_URL       | The URL where [webmaker-screenshot](https://github.com/mozilla/webmaker-screenshot) can be reached           | undefined (screenshots disabled)
 PAGE_RENDER_URL             | The URL where [webmaker-desktop](https://github.com/mozilla/webmaker-desktop) can be reached                 | undefined (must defined if screenshots enabled)
 
+#### New Relic
+
+See the guide for [configuring New Relic using environment variables](https://docs.newrelic.com/docs/agents/nodejs-agent/installation-configuration/configuring-nodejs-environment-variables) to configure the New Relic agent
+
 ## Test
 
 The tests require access to a postgreSQL database named `webmaker_testing`. Create it by running the command `createdb webmaker_testing`, the test script will automatically create tables and populate them with data.
