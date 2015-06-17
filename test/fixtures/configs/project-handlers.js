@@ -539,41 +539,13 @@ exports.patch = {
         },
         headers: userToken
       },
-      thumb: {
+      withThumnailKey: {
         url: '/users/1/projects/1',
         method: 'patch',
         payload: {
+          title: 'newww',
           thumbnail: {
-            '320': 'new'
-          }
-        },
-        headers: userToken
-      },
-      thumb2: {
-        url: '/users/1/projects/1',
-        method: 'patch',
-        payload: {
-          thumbnail: {
-            '320': 'new'
-          }
-        },
-        headers: userToken
-      },
-      clearThumb: {
-        url: '/users/1/projects/1',
-        method: 'patch',
-        payload: {
-          thumbnail: {}
-        },
-        headers: userToken
-      },
-      all: {
-        url: '/users/1/projects/1',
-        method: 'patch',
-        payload: {
-          title: 'new2',
-          thumbnail: {
-            '320': 'new2'
+            '320': 'will not work'
           }
         },
         headers: userToken
@@ -641,9 +613,7 @@ exports.patch = {
           url: '/users/1/projects/1',
           method: 'patch',
           payload: {
-            thumbnail: {
-              320: 'new'
-            }
+            title: 'bad form, peter'
           },
           headers: userToken2
         }
@@ -785,6 +755,28 @@ exports.tail = {
       payload: {
         x: 0
       }
+    },
+    check: {
+      url: '/users/1/projects/1',
+      method: 'get'
+    }
+  },
+  noOverwrite: {
+    update: {
+      url: '/users/1/projects/1/pages/3',
+      method: 'patch',
+      headers: userToken,
+      payload: {
+        x: 5
+      }
+    },
+    updateTitle: {
+      url: '/users/1/projects/1',
+      method: 'patch',
+      payload: {
+        title: 'foo'
+      },
+      headers: userToken
     },
     check: {
       url: '/users/1/projects/1',

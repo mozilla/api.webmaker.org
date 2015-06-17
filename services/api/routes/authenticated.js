@@ -169,10 +169,8 @@ var routes = [
           project: numericSchema
         },
         payload: {
-          title: Joi.string().optional(),
-          thumbnail: Joi.object().keys({
-            320: Joi.string().optional()
-          }).default({})
+          title: Joi.string().required(),
+          thumbnail: Joi.object().optional()
         }
       },
       pre: [

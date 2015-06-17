@@ -150,20 +150,9 @@ exports.get = {
 
 exports.patch = {
   update: function(request, reply) {
-    var project = request.pre.project;
-
-    if ( request.payload.title ) {
-      project.title = request.payload.title;
-    }
-
-    project.thumbnail = {
-      320: request.payload.thumbnail[320] || ''
-    };
-
     request.server.methods.projects.update(
       [
-        project.title,
-        project.thumbnail,
+        request.payload.title,
         request.params.project
       ],
       function(err, result) {

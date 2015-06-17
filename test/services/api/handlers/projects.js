@@ -1135,25 +1135,14 @@ experiment('Project Handlers', function() {
       });
     });
 
-    test('update thumbnail (320) succeeds', function(done) {
-      var opts = configs.patch.update.success.thumb;
+    test('update with a thumbnail object succeeds, does not update thumbnail', function(done) {
+      var opts = configs.patch.update.success.withThumnailKey;
 
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(200);
         expect(resp.result.status).to.equal('updated');
-        expect(resp.result.project.thumbnail[320]).to.equal('new');
-        done();
-      });
-    });
-
-    test('update thumbnail (clearing it) succeeds', function(done) {
-      var opts = configs.patch.update.success.clearThumb;
-
-      server.inject(opts, function(resp) {
-        expect(resp.statusCode).to.equal(200);
-        expect(resp.result.status).to.equal('updated');
-        expect(resp.result.project.thumbnail).to.exist();
-        expect(resp.result.project.thumbnail[320]).to.equal('');
+        expect(resp.result.project.title).to.equal('newww');
+        expect(resp.result.project.thumbnail[320]).to.not.equal('will not work');
         done();
       });
     });
@@ -1182,39 +1171,6 @@ experiment('Project Handlers', function() {
 
     test('invalid title type', function(done) {
       var opts = configs.patch.update.fail.payload.title;
-
-      server.inject(opts, function(resp) {
-        expect(resp.statusCode).to.equal(400);
-        expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.be.a.string();
-        done();
-      });
-    });
-
-    test('invalid thumbnail type', function(done) {
-      var opts = configs.patch.update.fail.payload.thumb;
-
-      server.inject(opts, function(resp) {
-        expect(resp.statusCode).to.equal(400);
-        expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.be.a.string();
-        done();
-      });
-    });
-
-    test('invalid thumbnail value type', function(done) {
-      var opts = configs.patch.update.fail.payload.thumbValue;
-
-      server.inject(opts, function(resp) {
-        expect(resp.statusCode).to.equal(400);
-        expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.be.a.string();
-        done();
-      });
-    });
-
-    test('invalid thumbnail key', function(done) {
-      var opts = configs.patch.update.fail.payload.thumbKey;
 
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
@@ -1462,6 +1418,7 @@ experiment('Project Handlers', function() {
     var screenshotMock;
     var screenshotVal1 = 'https://example.com/screenshot1.png';
     var screenshotVal2 = 'https://example.com/screenshot2.png';
+    var screenshotVal3 = 'https://example.com/screenshot3.png';
 
     before(function(done) {
       // filteringPath used because of the time-dependent base64 string generated from the page render url
@@ -1487,6 +1444,14 @@ experiment('Project Handlers', function() {
           '/screenshotURL'
         )
         .once()
+        .reply(200, {
+          screenshot: screenshotVal3
+        })
+        .filteringPath(/^\/mobile-center-cropped\/small\/webmaker-desktop\/(.+)$/, '/screenshotURL')
+        .post(
+          '/screenshotURL'
+        )
+        .once()
         .replyWithError('horrible network destroying monster of an error')
         .filteringPath(/^\/mobile-center-cropped\/small\/webmaker-desktop\/(.+)$/, '/screenshotURL')
         .post(
@@ -1500,7 +1465,7 @@ experiment('Project Handlers', function() {
         )
         .once()
         .reply(200, {
-          screenshot: screenshotVal2
+          screenshot: screenshotVal3
         });
       done();
     });
@@ -1527,6 +1492,27 @@ experiment('Project Handlers', function() {
       });
     });
 
+    test('Project update does not overwrite thumbnail', function(done) {
+      var update = configs.tail.noOverwrite.update;
+      var check = configs.tail.noOverwrite.check;
+      var updateTitle = configs.tail.noOverwrite.updateTitle;
+
+      server.once('tail', function() {
+        server.inject(updateTitle, function(resp) {
+          expect(resp.statusCode).to.equal(200);
+          server.inject(check, function(resp) {
+            expect(resp.statusCode).to.equal(200);
+            expect(resp.result.project.thumbnail[320]).to.equal(screenshotVal2);
+            done();
+          });
+        });
+      });
+
+      server.inject(update, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+      });
+    });
+
     test('updating (not) the lowest page id in a project does not trigger a screenshot update', function(done) {
       var update = configs.tail.noUpdate.update;
       var check = configs.tail.noUpdate.check;
@@ -1535,7 +1521,7 @@ experiment('Project Handlers', function() {
         server.inject(check, function(resp) {
           expect(resp.statusCode).to.equal(200);
           // should not be different from previous test
-          expect(resp.result.project.thumbnail[320]).to.equal(screenshotVal1);
+          expect(resp.result.project.thumbnail[320]).to.equal(screenshotVal2);
           done();
         });
       });
@@ -1552,7 +1538,7 @@ experiment('Project Handlers', function() {
       server.once('tail', function() {
         server.inject(check, function(resp) {
           expect(resp.statusCode).to.equal(200);
-          expect(resp.result.project.thumbnail[320]).to.equal(screenshotVal2);
+          expect(resp.result.project.thumbnail[320]).to.equal(screenshotVal3);
           done();
         });
       });
@@ -1572,7 +1558,7 @@ experiment('Project Handlers', function() {
           server.inject(check, function(resp) {
             expect(resp.statusCode).to.equal(200);
             // should not be different from previous test
-            expect(resp.result.project.thumbnail[320]).to.equal(screenshotVal2);
+            expect(resp.result.project.thumbnail[320]).to.equal(screenshotVal3);
             done();
           });
         });
