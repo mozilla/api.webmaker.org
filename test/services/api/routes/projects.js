@@ -125,7 +125,6 @@ experiment('project routes', function() {
     expect(projects.config.validate.params.project).to.be.an.object();
     expect(projects.config.validate.params.user).to.be.an.object();
     expect(projects.config.validate.payload.title).to.be.an.object();
-    expect(projects.config.validate.payload.thumbnail).to.be.an.object();
     expect(projects.config.pre).to.be.an.array();
     expect(projects.config.pre.length).to.equal(4);
     done();

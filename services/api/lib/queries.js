@@ -99,9 +99,9 @@ module.exports = {
       " projects.deleted_at IS NULL AND pages.deleted_at IS NULL AND elements.deleted_at IS NULL",
 
     // Update project
-    // Params title varchar, thumbnail jsonb, project_id bigint
-    update: "UPDATE projects SET (title, thumbnail) = ($1, $2) WHERE deleted_at IS NULL" +
-      " AND id = $3 RETURNING id, user_id, remixed_from, version, title, featured," +
+    // Params title varchar, project_id bigint
+    update: "UPDATE projects SET (title) = ($1) WHERE deleted_at IS NULL" +
+      " AND id = $2 RETURNING id, user_id, remixed_from, version, title, featured," +
       " created_at, updated_at, thumbnail;",
 
     // Update project thumbnail
