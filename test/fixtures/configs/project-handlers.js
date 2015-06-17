@@ -538,6 +538,17 @@ exports.patch = {
           title: 'new'
         },
         headers: userToken
+      },
+      withThumnailKey: {
+        url: '/users/1/projects/1',
+        method: 'patch',
+        payload: {
+          title: 'newww',
+          thumbnail: {
+            '320': 'will not work'
+          }
+        },
+        headers: userToken
       }
     },
     fail: {

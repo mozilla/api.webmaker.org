@@ -1135,6 +1135,18 @@ experiment('Project Handlers', function() {
       });
     });
 
+    test('update with a thumbnail object succeeds, does not update thumbnail', function(done) {
+      var opts = configs.patch.update.success.withThumnailKey;
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+        expect(resp.result.status).to.equal('updated');
+        expect(resp.result.project.title).to.equal('newww');
+        expect(resp.result.project.thumbnail[320]).to.not.equal('will not work');
+        done();
+      });
+    });
+
     test('invalid user param', function(done) {
       var opts = configs.patch.update.fail.param.user;
 
