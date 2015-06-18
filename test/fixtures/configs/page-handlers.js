@@ -521,7 +521,7 @@ exports.patch = {
           method: 'patch',
           headers: userToken,
           payload: {
-            x: 1,
+            x: 2,
             y: 0
           }
         }

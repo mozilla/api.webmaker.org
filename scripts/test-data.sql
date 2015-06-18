@@ -61,7 +61,7 @@ BEGIN
     (1, 0, 0, empty_json),
     (1, 0, 1, empty_json),
     (1, 1, 0, styles),
-    (1, 1, 1, empty_json),
+    (1, 2, 1, empty_json),
     (1, -1, 0, styles);
 
   INSERT INTO pages (project_id, x, y, styles) VALUES
@@ -78,42 +78,39 @@ BEGIN
     (2, 10, 10, empty_json, current_timestamp);
 
   INSERT INTO elements (page_id, type, attributes, styles) VALUES
-    (1, 'text', empty_json, empty_json),
-    (1, 'image', attributes, styles),
-    (1, 'link button', empty_json, styles),
-    (1, 'text', attributes, empty_json),
-    (1, 'image', empty_json, styles),
-    (1, 'text', attributes, empty_json),
-    (1, 'link button', empty_json, styles);
-
-  INSERT INTO elements (page_id, type, attributes, styles) VALUES
-    (7, 'text', empty_json, empty_json),
-    (7, 'link button', empty_json, styles),
-    (7, 'link button', empty_json, styles);
-
-  INSERT INTO elements (page_id, type, attributes, styles) VALUES
-    (8, 'text', empty_json, empty_json),
-    (8, 'image', attributes, styles),
-    (8, 'link button', empty_json, styles),
-    (8, 'text', attributes, empty_json),
-    (8, 'image', empty_json, styles),
-    (8, 'link button', attributes, empty_json),
-    (8, 'text', empty_json, styles);
-
-  INSERT INTO elements (page_id, type, attributes, styles) VALUES
+    (1,   'text', empty_json, empty_json),
+    (1,  'image', attributes, styles),
+    (1,   'text', empty_json, styles),
+    (1,  'image', empty_json, styles),
+    (1,  'image', empty_json, styles),
+    (1,   'text', attributes, empty_json),
+    (1,  'image', empty_json, styles),
+    (7,   'text', empty_json, empty_json),
+    (7,   'text', empty_json, styles),
+    (7,   'text', empty_json, styles),
+    (8,   'text', empty_json, empty_json),
+    (8,  'image', attributes, styles),
+    (8,   'text', empty_json, styles),
+    (8,   'text', attributes, empty_json),
+    (8,  'image', empty_json, styles),
+    (8,   'text', attributes, empty_json),
+    (8,   'text', empty_json, styles),
     (10, 'image', empty_json, empty_json),
-    (10, 'link button', attributes, styles),
-    (10, 'text', empty_json, styles),
+    (10,  'text', attributes, styles),
+    (10,  'text', empty_json, styles),
     (10, 'image', attributes, empty_json),
-    (10, 'link button', empty_json, styles),
-    (10, 'text', attributes, empty_json),
-    (10, 'image', empty_json, styles);
-
-  INSERT INTO elements (page_id, type, attributes, styles) VALUES
-    (3, 'link button', empty_json, styles),
-    (3, 'text', attributes, empty_json),
-    (4, 'image', empty_json, styles),
-    (4, 'text', attributes, empty_json),
-    (4, 'link button', empty_json, styles);
+    (10,  'text', empty_json, styles),
+    (10,  'text', attributes, empty_json),
+    (10, 'image', empty_json, styles),
+    (3,   'text', empty_json, styles),
+    (3,   'text', attributes, empty_json),
+    (4,  'image', empty_json, styles),
+    (4,   'text', attributes, empty_json),
+    (4,   'text', empty_json, styles),
+    (3,   'link', '{"targetProjectId": "1","targetPageId": "4", "targetUserId": "1"}'::jsonb, empty_json),
+    (3,   'text', attributes, empty_json),
+    (4,   'link', '{"targetProjectId": "1","targetPageId": "3", "targetUserId": "1"}'::jsonb, styles),
+    (4,  'image', empty_json, styles),
+    (4,   'link', '{"targetProjectId": "1","targetPageId": "2", "targetUserId": "1"}'::jsonb, styles);
 
 END $$;

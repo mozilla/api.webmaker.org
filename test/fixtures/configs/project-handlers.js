@@ -476,14 +476,14 @@ exports.create = {
       remix:{
         url: '/users/1/projects/1/remixes',
         method: 'post',
-        headers: userToken
+        headers: userToken2
       },
       checkRemixProject: {
-        url: '/users/1/projects/$1',
+        url: '/users/2/projects/$1',
         method: 'get'
       },
       checkRemixPages: {
-        url: '/users/1/projects/$1/pages',
+        url: '/users/2/projects/$1/pages',
         method: 'get'
       }
     },

@@ -1027,13 +1027,15 @@ experiment('Project Handlers', function() {
         server.inject(opts, function(resp) {
           expect(resp.statusCode).to.equal(200);
           expect(resp.result.status).to.equal('remixed');
-          expect(resp.result.project.id).to.exist();
-          checkRemixProject.url = checkRemixProject.url.replace('$1', resp.result.project.id);
-          checkRemixPages.url = checkRemixPages.url.replace('$1', resp.result.project.id);
+          var projectId = resp.result.project.id;
+          expect(projectId).to.exist();
+          checkRemixProject.url = checkRemixProject.url.replace('$1', projectId);
+          checkRemixPages.url = checkRemixPages.url.replace('$1', projectId);
           server.inject(checkRemixProject, function(projectResp) {
             expect(projectResp.statusCode).to.equal(200);
+            expect(projectResp.result.project.author.id).to.equal('2');
             expect(projectResp.result.status).to.equal('success');
-            expect(projectResp.result.project.id).to.equal(resp.result.project.id);
+            expect(projectResp.result.project.id).to.equal(projectId);
             expect(projectResp.result.project.title).to.equal('test_project_1');
             expect(projectResp.result.project.remixed_from).to.equal('1');
             server.inject(checkRemixPages, function(pagesResp) {
@@ -1041,8 +1043,21 @@ experiment('Project Handlers', function() {
               expect(pagesResp.result.status).to.equal('success');
               expect(pagesResp.result.pages).to.be.an.array();
               expect(pagesResp.result.pages.length).to.equal(3);
-              expect(pagesResp.result.pages[0].elements.length).to.equal(2);
-              expect(pagesResp.result.pages[1].elements.length).to.equal(3);
+              expect(pagesResp.result.pages[0].elements.length).to.equal(4);
+              expect(pagesResp.result.pages[1].elements.length).to.equal(6);
+              var fixedLink = pagesResp.result.pages[0].elements[1];
+              var wasAlreadyBrokenLink = pagesResp.result.pages[1].elements[0];
+              var otherFixedLink = pagesResp.result.pages[1].elements[2];
+              expect(fixedLink.attributes.targetUserId).to.equal('2');
+              expect(fixedLink.attributes.targetProjectId).to.equal(projectId);
+              expect(fixedLink.attributes.targetPageId).to.equal('22');
+              expect(wasAlreadyBrokenLink.attributes.targetUserId).to.equal('2');
+              expect(wasAlreadyBrokenLink.attributes.targetProjectId).to.equal(projectId);
+              // original project page deleted/missing, targetPageId was deleted
+              expect(wasAlreadyBrokenLink.attributes.targetPageId).to.not.exist();
+              expect(otherFixedLink.attributes.targetUserId).to.equal('2');
+              expect(otherFixedLink.attributes.targetProjectId).to.equal(projectId);
+              expect(otherFixedLink.attributes.targetPageId).to.equal('21');
               done();
             });
           });
