@@ -247,17 +247,16 @@ module.exports = function (pg) {
             });
 
             if ( !foundTargetPage ) {
-              // Link was already broken (i.e. page was deleted and target link was never updated by creator)
-              return Promise.resolve();
+              delete link.attributes.targetPageId;
+            } else {
+              remixedPages.some(function(page) {
+                if ( page.x === targetX && page.y === targetY ) {
+                  link.attributes.targetPageId = page.id;
+                  return true;
+                }
+                return false;
+              });
             }
-
-            remixedPages.some(function(page) {
-              if ( page.x === targetX && page.y === targetY ) {
-                link.attributes.targetPageId = page.id;
-                return true;
-              }
-              return false;
-            });
 
             return executeTransaction(transaction, queries.elements.update,
               [
