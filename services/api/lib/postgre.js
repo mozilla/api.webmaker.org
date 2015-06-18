@@ -167,11 +167,12 @@ module.exports = function (pg) {
         });
       }, {});
 
-      server.method('projects.remix', function(userId, remixData, done) {
-        var project;
+      server.method('projects.remix', function(userId, dataToRemix, done) {
+        var remixedProject;
+        var remixedElements;
+        var remixedPages;
         var transaction;
         var transactionErr;
-
         getTransactionClient().then(function(t) {
           transaction = t;
           return begin(transaction);
@@ -179,28 +180,34 @@ module.exports = function (pg) {
           return executeTransaction(transaction, queries.projects.create,
             [
               userId,
-              remixData.id,
+              dataToRemix.id,
               server.methods.utils.version(),
-              remixData.title,
-              remixData.thumbnail
+              dataToRemix.title,
+              dataToRemix.thumbnail
             ]
           );
         }).then(function(result) {
-          project = result.rows[0];
-
-          return Promise.resolve(remixData.pages.map(function(page) {
+          remixedProject = result.rows[0];
+          remixedPages = [];
+          remixedElements = [];
+          return Promise.resolve(dataToRemix.pages.map(function(page) {
             return new Promise(function(resolve, reject) {
               var remixPage;
               executeTransaction(transaction, queries.pages.create,
                 [
-                  project.id,
+                  remixedProject.id,
                   page.x,
                   page.y,
                   page.styles
                 ]
               ).then(function(result) {
                 remixPage = result.rows[0];
+                remixedPages.push(remixPage);
                 return Promise.resolve(page.elements.map(function(element) {
+                  if ( element.type === 'link' ) {
+                    element.attributes.targetProjectId = remixedProject.id;
+                    element.attributes.targetUserId = userId;
+                  }
                   return executeTransaction(transaction, queries.elements.create,
                     [
                       remixPage.id,
@@ -212,16 +219,61 @@ module.exports = function (pg) {
                 }));
               }).then(function(elementPromises) {
                 return Promise.all(elementPromises);
-              }).then(resolve)
+              }).then(function(results) {
+                remixedElements.push.apply(remixedElements, results.map(function(result) {
+                  return result.rows[0];
+                }));
+                resolve();
+              })
               .catch(reject);
             });
           }));
         }).then(function(pagePromises) {
           return Promise.all(pagePromises);
         }).then(function() {
-          return commit(transaction);
+          var remixLinks = remixedElements.filter(function(elem) {
+            return elem.type === 'link';
+          });
+          return Promise.resolve(remixLinks.map(function(link) {
+            var targetX;
+            var targetY;
+            var foundTargetPage = dataToRemix.pages.some(function(page) {
+              if ( page.id === link.attributes.targetPageId ) {
+                targetX = page.x;
+                targetY = page.y;
+                return true;
+              }
+              return false;
+            });
+
+            if ( !foundTargetPage ) {
+              // Link was already broken (i.e. page was deleted and target link was never updated by creator)
+              return Promise.resolve();
+            }
+
+            remixedPages.some(function(page) {
+              if ( page.x === targetX && page.y === targetY ) {
+                link.attributes.targetPageId = page.id;
+                return true;
+              }
+              return false;
+            });
+
+            return executeTransaction(transaction, queries.elements.update,
+              [
+                link.styles,
+                link.attributes,
+                link.id
+              ]
+            );
+          }));
+        }).then(function(linkPromises) {
+          return Promise.all(linkPromises);
         }).then(function() {
-          done(null, project);
+          return commit(transaction);
+        })
+        .then(function() {
+          done(null, remixedProject);
         }).catch(function(err) {
           transactionErr = err;
           return rollback(transaction);
