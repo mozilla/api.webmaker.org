@@ -224,8 +224,7 @@ module.exports = function (pg) {
                   return result.rows[0];
                 }));
                 resolve();
-              })
-              .catch(reject);
+              }).catch(reject);
             });
           }));
         }).then(function(pagePromises) {
@@ -270,8 +269,7 @@ module.exports = function (pg) {
           return Promise.all(linkPromises);
         }).then(function() {
           return commit(transaction);
-        })
-        .then(function() {
+        }).then(function() {
           done(null, remixedProject);
         }).catch(function(err) {
           transactionErr = err;
