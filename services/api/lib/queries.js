@@ -83,9 +83,9 @@ module.exports = {
     "projects.deleted_at is NULL AND projects.deleted_at IS NULL ORDER BY created_at DESC LIMIT $1 OFFSET $2",
 
     // Find projects created by given user
-    // Params: user_id bigint, limit integer, offset integer
+    // Params: user_id bigint, offset integer
     findUsersProjects: "SELECT " + projectCols + " FROM projects INNER JOIN users ON users.id = projects.user_id " +
-    "WHERE projects.user_id = $1 AND projects.deleted_at IS NULL ORDER BY created_at DESC LIMIT $2 OFFSET $3",
+    "WHERE projects.user_id = $1 AND projects.deleted_at IS NULL ORDER BY created_at DESC LIMIT 25 OFFSET $2",
 
     // Find one project by id
     // params: project_id bigint, user_id bigint

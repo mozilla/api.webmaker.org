@@ -1,5 +1,17 @@
 var boom = require('boom');
 
+function invalidateElementCache(server, funcName, key, tail) {
+  server.methods.elements[funcName].cache.drop([key], function(err) {
+    if ( err ) {
+      server.log('error', {
+        message: 'failed to invalidate cache for element ' + funcName + ', ' + key,
+        error: err
+      });
+    }
+    tail();
+  });
+}
+
 exports.post = function(request, reply) {
   request.server.methods.elements.create(
     [
@@ -89,9 +101,19 @@ exports.patch = {
           return reply(err);
         }
 
-        var tail = request.tail('updating project thumbnail');
+        var thumbTail = request.tail('updating project thumbnail');
         process.nextTick(function() {
-          request.server.methods.projects.checkPageId(request.pre.page, tail);
+          request.server.methods.projects.checkPageId(request.pre.page, thumbTail);
+        });
+
+        var findAllCache = request.tail('invalidate findAll element cache');
+        process.nextTick(function() {
+          invalidateElementCache(request.server, 'findAll', request.params.page, findAllCache);
+        });
+
+        var findOneCache = request.tail('invalidate findOne element cache');
+        process.nextTick(function() {
+          invalidateElementCache(request.server, 'findOne', request.params.element, findOneCache);
         });
 
         reply({

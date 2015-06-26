@@ -4,7 +4,11 @@ require('newrelic');
 var Hapi = require('hapi'),
     Hoek = require('hoek');
 
-var server = new Hapi.Server({
+Hoek.assert(process.env.API_HOST, 'Must define API_HOST');
+Hoek.assert(process.env.PORT, 'Must define PORT');
+Hoek.assert(process.env.API_VERSION, 'Must define API_VERSION');
+
+var serverConfig = {
   connections: {
     router: {
       stripTrailingSlash: true
@@ -13,7 +17,19 @@ var server = new Hapi.Server({
       security: true
     }
   }
-});
+};
+
+if ( process.env.REDIS_URL ) {
+  var redisUrl = require('redis-url').parse(process.env.REDIS_URL);
+  serverConfig.cache = {
+    engine: require('catbox-redis'),
+    host: redisUrl.hostname,
+    port: redisUrl.port,
+    password: redisUrl.password
+  };
+}
+
+var server = new Hapi.Server(serverConfig);
 
 Hoek.assert(process.env.API_HOST, 'Must define API_HOST');
 Hoek.assert(process.env.PORT, 'Must define PORT');
@@ -61,7 +77,10 @@ server.register(require('./services'), function(err) {
     throw err;
   }
 
-  server.start(function() {
+  server.start(function(err) {
+    if ( err ) {
+      Hoek.assert(!err, err);
+    }
     console.log('Server started @ ' + server.info.uri);
   });
 });

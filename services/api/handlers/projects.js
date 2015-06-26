@@ -1,5 +1,17 @@
 var boom = require('boom');
 
+function invalidateProjectCache(server, funcName, keys, tail) {
+  server.methods.projects[funcName].cache.drop(keys, function(err) {
+    if ( err ) {
+      server.log('error', {
+        message: 'failed to invalidate cache for project key ' + key.join('.'),
+        error: err
+      });
+    }
+    tail();
+  });
+}
+
 exports.post = {
   create: function(request, reply) {
     request.server.methods.projects.create(
@@ -88,7 +100,6 @@ exports.get = {
     request.server.methods.projects.findUsersProjects(
       [
         request.params.user,
-        request.query.count,
         request.pre.offset
       ],
       function(err, result) {
@@ -160,6 +171,16 @@ exports.patch = {
           return reply(err);
         }
 
+        var findOneTail = request.tail();
+        process.nextTick(function() {
+          invalidateProjectCache(request.server, 'findOne', [request.params.project], findOneTail);
+        });
+
+        var findUsersProjectsTail = request.tail();
+        process.nextTick(function() {
+          invalidateProjectCache(request.server, 'findUsersProjects', [request.params.project], findUsersProjectsTail);
+        });
+
         reply({
           status: 'updated',
           project: request.server.methods.utils.formatProject(result.rows[0])
@@ -177,6 +198,12 @@ exports.patch = {
         if ( err ) {
           return reply(err);
         }
+
+        var tail = request.tail();
+
+        process.nextTick(function() {
+          invalidateProjectCache(request.server, request.params.project, tail);
+        });
 
         reply({
           status: 'updated',
@@ -196,6 +223,12 @@ exports.del = function(request, reply) {
       if ( err ) {
         return reply(err);
       }
+
+      var tail = request.tail();
+
+      process.nextTick(function() {
+        invalidateProjectCache(request.server, request.params.project, tail);
+      });
 
       reply({
         status: 'deleted'
