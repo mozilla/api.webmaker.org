@@ -1,10 +1,10 @@
 var boom = require('boom');
 
-function invalidatePageCache(server, funcName, key, tail) {
-  server.methods.pages[funcName].cache.drop(key, function(err) {
+function invalidateCache(server, type, funcName, key, tail) {
+  server.methods[type][funcName].cache.drop(key, function(err) {
     if ( err ) {
       server.log('error', {
-        message: 'failed to invalidate cache for page ' + funcName + ', ' + key,
+        message: 'failed to invalidate cache for ' + type + '.' + funcName + ', ' + key,
         error: err
       });
     }
@@ -28,6 +28,11 @@ exports.post = {
           }
           return reply(err);
         }
+
+        var findOneProjectCache = request.tail('invalidate findOne project cache');
+        process.nextTick(function() {
+          invalidateCache(request.server, 'project', 'findOne', [request.params.project, request.params.user], findOneProjectCache);
+        });
 
         reply({
           status: 'created',
@@ -121,12 +126,12 @@ exports.patch = {
 
         var findAllCache = request.tail('invalidate findAll page cache');
         process.nextTick(function() {
-          invalidatePageCache(request.server, 'findAll', [page.project_id], findAllCache);
+          invalidateCache(request.server, 'page', 'findAll', [request.params.project], findAllCache);
         });
 
         var findOneCache = request.tail('invalidate findOne page cache');
         process.nextTick(function() {
-          invalidatePageCache(request.server, 'findOne', [request.pre.project.id, page.id], findOneCache);
+          invalidateCache(request.server, 'page', 'findOne', [request.params.project, page.id], findOneCache);
         });
 
         reply({
@@ -150,12 +155,17 @@ exports.del = function(request, reply) {
 
       var findAllCache = request.tail('invalidate findAll page cache');
       process.nextTick(function() {
-        invalidatePageCache(request.server, 'findAll', [request.params.project], findAllCache);
+        invalidateCache(request.server, 'page', 'findAll', [request.params.project], findAllCache);
       });
 
       var findOneCache = request.tail('invalidate findOne page cache');
       process.nextTick(function() {
-        invalidatePageCache(request.server, 'findOne', [request.pre.project.id, request.params.page], findOneCache);
+        invalidateCache(request.server, 'page', 'findOne', [request.params.project, request.params.page], findOneCache);
+      });
+
+      var findOneProjectCache = request.tail('invalidate findOne project cache');
+      process.nextTick(function() {
+        invalidateCache(request.server, 'project', 'findOne', [request.params.project, request.params.user], findOneProjectCache);
       });
 
       reply({

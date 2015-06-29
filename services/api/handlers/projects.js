@@ -1,6 +1,13 @@
 var boom = require('boom');
 
 function invalidateProjectCache(server, funcName, keys, tail) {
+  server.debug({
+    message: 'invalidating project cache',
+    data: {
+      funcName: funcName,
+      keys: keys
+    }
+  });
   server.methods.projects[funcName].cache.drop(keys, function(err) {
     if ( err ) {
       server.log('error', {
@@ -32,7 +39,7 @@ exports.post = {
           invalidateProjectCache(
             request.server,
             'findUsersProjects',
-            [request.params.project, '*', '*'],
+            [request.params.user, '*', '*'],
             findUsersProjectsTail
           );
         });
@@ -110,7 +117,7 @@ exports.get = {
     request.server.methods.projects.findUsersProjects(
       [
         request.params.user,
-        request.pre.limit,
+        request.query.count,
         request.pre.offset
       ],
       function(err, result) {
@@ -197,7 +204,7 @@ exports.patch = {
           invalidateProjectCache(
             request.server,
             'findUsersProjects',
-            [request.params.project, '*', '*'],
+            [request.params.user, '*', '*'],
             findUsersProjectsTail
           );
         });
@@ -251,7 +258,7 @@ exports.del = function(request, reply) {
 
       var findUsersProjectsTail = request.tail();
       process.nextTick(function() {
-        invalidateProjectCache(request.server, 'findUsersProjects', [request.params.project], findUsersProjectsTail);
+        invalidateProjectCache(request.server, 'findUsersProjects', [request.params.user, '*', '*'], findUsersProjectsTail);
       });
 
       reply({
