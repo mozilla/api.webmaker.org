@@ -258,7 +258,12 @@ exports.del = function(request, reply) {
 
       var findUsersProjectsTail = request.tail();
       process.nextTick(function() {
-        invalidateProjectCache(request.server, 'findUsersProjects', [request.params.user, '*', '*'], findUsersProjectsTail);
+        invalidateProjectCache(
+          request.server,
+          'findUsersProjects',
+          [request.params.user, '*', '*'],
+          findUsersProjectsTail
+        );
       });
 
       reply({
