@@ -1,7 +1,7 @@
 var boom = require('boom');
 
 function invalidatePageCache(server, funcName, key, tail) {
-  server.methods.pages[funcName].cache.drop([key], function(err) {
+  server.methods.pages[funcName].cache.drop(key, function(err) {
     if ( err ) {
       server.log('error', {
         message: 'failed to invalidate cache for page ' + funcName + ', ' + key,
@@ -121,12 +121,12 @@ exports.patch = {
 
         var findAllCache = request.tail('invalidate findAll page cache');
         process.nextTick(function() {
-          invalidatePageCache(request.server, 'findAll', page.project_id, findAllCache);
+          invalidatePageCache(request.server, 'findAll', [page.project_id], findAllCache);
         });
 
         var findOneCache = request.tail('invalidate findOne page cache');
         process.nextTick(function() {
-          invalidatePageCache(request.server, 'findOne', page.id, findOneCache);
+          invalidatePageCache(request.server, 'findOne', [request.pre.project.id, page.id], findOneCache);
         });
 
         reply({
@@ -150,12 +150,12 @@ exports.del = function(request, reply) {
 
       var findAllCache = request.tail('invalidate findAll page cache');
       process.nextTick(function() {
-        invalidatePageCache(request.server, 'findAll', request.params.project, findAllCache);
+        invalidatePageCache(request.server, 'findAll', [request.params.project], findAllCache);
       });
 
       var findOneCache = request.tail('invalidate findOne page cache');
       process.nextTick(function() {
-        invalidatePageCache(request.server, 'findOne', request.params.page, findOneCache);
+        invalidatePageCache(request.server, 'findOne', [request.pre.project.id, request.params.page], findOneCache);
       });
 
       reply({

@@ -553,7 +553,7 @@ exports.del = {
           headers: userToken
         },
         doesNotOwnProject: {
-          url: '/users/1/projects/3/pages/1/elements/1',
+          url: '/users/2/projects/3/pages/7/elements/10',
           method: 'delete',
           headers: userToken
         }

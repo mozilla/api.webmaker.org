@@ -584,19 +584,6 @@ experiment('Project Handlers', function() {
       });
     });
 
-    test('can change count', function(done) {
-      var opts = configs.get.byUser.success.changeCount;
-
-      server.inject(opts, function(resp) {
-        expect(resp.statusCode).to.equal(200);
-        expect(resp.result.status).to.equal('success');
-        expect(resp.result.projects).to.exist();
-        expect(resp.result.projects).to.be.an.array();
-        expect(resp.result.projects.length).to.equal(3);
-        done();
-      });
-    });
-
     test('can change page', function(done) {
       var opts = configs.get.byUser.success.changePage;
 
@@ -605,53 +592,6 @@ experiment('Project Handlers', function() {
         expect(resp.result.status).to.equal('success');
         expect(resp.result.projects).to.exist();
         expect(resp.result.projects).to.be.an.array();
-        expect(resp.result.projects.length).to.equal(1);
-        done();
-      });
-    });
-
-    test('returns 0 results when page out of range', function(done) {
-      var opts = configs.get.byUser.success.returnsNoneWhenPageTooHigh;
-
-      server.inject(opts, function(resp) {
-        expect(resp.statusCode).to.equal(200);
-        expect(resp.result.status).to.equal('success');
-        expect(resp.result.projects).to.exist();
-        expect(resp.result.projects).to.be.an.array();
-        expect(resp.result.projects.length).to.equal(0);
-        done();
-      });
-    });
-
-    test('count can not be negative', function(done) {
-      var opts = configs.get.byUser.fail.query.count.negative;
-
-      server.inject(opts, function(resp) {
-        expect(resp.statusCode).to.equal(400);
-        expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.be.a.string();
-        done();
-      });
-    });
-
-    test('count can not be greater than 100', function(done) {
-      var opts = configs.get.byUser.fail.query.count.tooHigh;
-
-      server.inject(opts, function(resp) {
-        expect(resp.statusCode).to.equal(400);
-        expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.be.a.string();
-        done();
-      });
-    });
-
-    test('count can not be non-numeric', function(done) {
-      var opts = configs.get.byUser.fail.query.count.notNumber;
-
-      server.inject(opts, function(resp) {
-        expect(resp.statusCode).to.equal(400);
-        expect(resp.result.error).to.equal('Bad Request');
-        expect(resp.result.message).to.be.a.string();
         done();
       });
     });
@@ -1230,6 +1170,21 @@ experiment('Project Handlers', function() {
         done();
       });
     });
+
+    test('project tail cache error reported', function(done) {
+      var opts = configs.patch.update.fail.error;
+      var stub = sinon.stub(server.methods.projects.findOne.cache, 'drop')
+        .callsArgWith(1, mockErr());
+
+      server.once('tail', function() {
+        stub.restore();
+        done();
+      });
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+      });
+    });
   });
 
   experiment('Feature', function() {
@@ -1481,6 +1436,13 @@ experiment('Project Handlers', function() {
         .once()
         .reply(200, {
           screenshot: screenshotVal3
+        })
+        .post(
+          '/screenshotURL'
+        )
+        .once()
+        .reply(200, {
+          screenshot: screenshotVal3
         });
       done();
     });
@@ -1653,6 +1615,21 @@ experiment('Project Handlers', function() {
 
         expect(event).to.exist();
         expect(event.data.details).to.equal('Error updating project thumbnail');
+        stub.restore();
+        done();
+      });
+
+      server.inject(update, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+      });
+    });
+
+    test('findOne tail cache drop error reported', function(done) {
+      var update = configs.tail.elementSuccess.update;
+      var stub = sinon.stub(server.methods.projects.findOne.cache, 'drop')
+        .callsArgWith(1, mockErr());
+
+      server.once('tail', function() {
         stub.restore();
         done();
       });

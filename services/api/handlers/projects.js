@@ -4,7 +4,7 @@ function invalidateProjectCache(server, funcName, keys, tail) {
   server.methods.projects[funcName].cache.drop(keys, function(err) {
     if ( err ) {
       server.log('error', {
-        message: 'failed to invalidate cache for project key ' + key.join('.'),
+        message: 'failed to invalidate cache for project key ' + keys.join('.'),
         error: err
       });
     }
@@ -173,7 +173,7 @@ exports.patch = {
 
         var findOneTail = request.tail();
         process.nextTick(function() {
-          invalidateProjectCache(request.server, 'findOne', [request.params.project], findOneTail);
+          invalidateProjectCache(request.server, 'findOne', [request.params.project, request.params.user], findOneTail);
         });
 
         var findUsersProjectsTail = request.tail();
@@ -200,9 +200,8 @@ exports.patch = {
         }
 
         var tail = request.tail();
-
         process.nextTick(function() {
-          invalidateProjectCache(request.server, request.params.project, tail);
+          invalidateProjectCache(request.server, 'findFeatured', [25, 0], tail);
         });
 
         reply({
@@ -224,10 +223,14 @@ exports.del = function(request, reply) {
         return reply(err);
       }
 
-      var tail = request.tail();
-
+      var findOneTail = request.tail();
       process.nextTick(function() {
-        invalidateProjectCache(request.server, request.params.project, tail);
+        invalidateProjectCache(request.server, 'findOne', [request.params.project, request.params.user], findOneTail);
+      });
+
+      var findUsersProjectsTail = request.tail();
+      process.nextTick(function() {
+        invalidateProjectCache(request.server, 'findUsersProjects', [request.params.project], findUsersProjectsTail);
       });
 
       reply({

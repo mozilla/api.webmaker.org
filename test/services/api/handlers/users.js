@@ -241,6 +241,21 @@ experiment('User Handlers', function() {
         done();
       });
     });
+
+    test('user tail cache error reported', function(done) {
+      var opts = configs.patch.updateEverything;
+      var stub = sinon.stub(server.methods.users.find.cache, 'drop')
+        .callsArgWith(1, mockErr());
+
+      server.once('tail', function() {
+        stub.restore();
+        done();
+      });
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+      });
+    });
   });
 
   experiment('Delete', function() {

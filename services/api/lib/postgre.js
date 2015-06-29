@@ -301,16 +301,17 @@ module.exports = function (pg) {
         },
         generateKey: function(args) {
           // count + offset
-          return args.join(":");
+          return args.join('.');
         }
       });
 
       server.method('projects.findUsersProjects', function(values, done) {
         executeQuery(queries.projects.findUsersProjects, values, function(err, result) {
           var ttl = null;
+          var offset = +values[1];
           // only cache first page, indicated by a zero offset
           // We only cache the first page to simplify cache invalidations
-          if ( values[1] !== 0 ) {
+          if ( offset !== 0 ) {
             ttl = 0;
           }
           done(err, result, ttl);
@@ -322,7 +323,7 @@ module.exports = function (pg) {
         },
         generateKey: function(args) {
           // user ID + offset
-          return args.join(".");
+          return args.join('.');
         }
       });
 
@@ -336,8 +337,8 @@ module.exports = function (pg) {
           staleTimeout: 50
         },
         generateKey: function(args) {
-          // project ID
-          return '' + args[0];
+          // project ID + user ID
+          return args.join('.');
         }
       });
 
@@ -350,7 +351,7 @@ module.exports = function (pg) {
         },
         generateKey: function(args) {
           // project ID + user ID
-          return args.join(".");
+          return args.join('.');
         }
       });
 
@@ -365,7 +366,7 @@ module.exports = function (pg) {
         },
         generateKey: function(args) {
           // project ID
-          return args[0];
+          return '' + args[0];
         }
       });
 
@@ -429,8 +430,7 @@ module.exports = function (pg) {
           staleTimeout: 100
         },
         generateKey: function(args) {
-          // pageid
-          return '' + args[1];
+          return args.join('.');
         }
       });
 
