@@ -202,13 +202,34 @@ exports.get = {
         url: '/users/1/projects',
         method: 'get'
       },
+      changeCount: {
+        url: '/users/1/projects?count=3',
+        method: 'get'
+      },
       changePage: {
-        url: '/users/1/projects?page=2',
+        url: '/users/1/projects?count=2&page=2',
+        method: 'get'
+      },
+      returnsNoneWhenPageTooHigh: {
+        url: '/users/1/projects?count=50&page=2',
         method: 'get'
       }
     },
     fail: {
       query: {
+        count: {
+          negative: {
+            url: '/users/1/projects?count=-1',
+            method: 'get'
+          },
+          tooHigh: {
+            url: '/users/1/projects?count=101',
+            method: 'get'
+          },
+          notNumber: {
+            url: '/users/1/projects?count=foo'
+          }
+        },
         page: {
           negative: {
             url: '/users/1/projects?page=-1',

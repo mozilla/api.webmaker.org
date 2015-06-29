@@ -8,12 +8,7 @@ function isOwner(tokenId, userId, projectId) {
 exports.calculateOffset = {
   assign: 'offset',
   method: function(request, reply) {
-    var count = request.query.count;
-    if ( !count ) {
-      count = 25;
-    }
-    var offset = (request.query.page - 1) * count;
-    reply(offset);
+    reply((request.query.page - 1) * request.query.count);
   }
 };
 

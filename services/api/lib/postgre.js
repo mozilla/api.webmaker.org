@@ -306,23 +306,14 @@ module.exports = function (pg) {
       });
 
       server.method('projects.findUsersProjects', function(values, done) {
-        executeQuery(queries.projects.findUsersProjects, values, function(err, result) {
-          var ttl = null;
-          var offset = +values[1];
-          // only cache first page, indicated by a zero offset
-          // We only cache the first page to simplify cache invalidations
-          if ( offset !== 0 ) {
-            ttl = 0;
-          }
-          done(err, result, ttl);
-        });
+        executeQuery(queries.projects.findUsersProjects, values, done);
       }, {
         cache: {
           segment: 'projects.findUsersProjects',
           expiresIn: 1000 * 60
         },
         generateKey: function(args) {
-          // user ID + offset
+          // user ID + limit + offset
           return args.join('.');
         }
       });

@@ -51,6 +51,7 @@ var routes = [
           user: numericSchema
         },
         query: {
+          count: Joi.number().integer().min(1).max(100).default(10),
           page:Joi.number().integer().min(1).max(50).default(1)
         }
       },
@@ -106,7 +107,7 @@ var routes = [
         },
         query: {
           count: Joi.number().integer().min(1).max(100).default(10),
-          page:Joi.number().integer().min(1).default(1)
+          page: Joi.number().integer().min(1).default(1)
         }
       },
       cors: {

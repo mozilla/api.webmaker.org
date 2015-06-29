@@ -27,6 +27,16 @@ exports.post = {
           return reply(err);
         }
 
+        var findUsersProjectsTail = request.tail();
+        process.nextTick(function() {
+          invalidateProjectCache(
+            request.server,
+            'findUsersProjects',
+            [request.params.project, '*', '*'],
+            findUsersProjectsTail
+          );
+        });
+
         reply({
           status: 'created',
           project: request.server.methods.utils.formatProject(result.project),
@@ -100,6 +110,7 @@ exports.get = {
     request.server.methods.projects.findUsersProjects(
       [
         request.params.user,
+        request.pre.limit,
         request.pre.offset
       ],
       function(err, result) {
@@ -173,12 +184,22 @@ exports.patch = {
 
         var findOneTail = request.tail();
         process.nextTick(function() {
-          invalidateProjectCache(request.server, 'findOne', [request.params.project, request.params.user], findOneTail);
+          invalidateProjectCache(
+            request.server,
+            'findOne',
+            [request.params.project, request.params.user],
+            findOneTail
+          );
         });
 
         var findUsersProjectsTail = request.tail();
         process.nextTick(function() {
-          invalidateProjectCache(request.server, 'findUsersProjects', [request.params.project], findUsersProjectsTail);
+          invalidateProjectCache(
+            request.server,
+            'findUsersProjects',
+            [request.params.project, '*', '*'],
+            findUsersProjectsTail
+          );
         });
 
         reply({
@@ -201,7 +222,7 @@ exports.patch = {
 
         var tail = request.tail();
         process.nextTick(function() {
-          invalidateProjectCache(request.server, 'findFeatured', [25, 0], tail);
+          invalidateProjectCache(request.server, 'findFeatured', ['*', '*'], tail);
         });
 
         reply({

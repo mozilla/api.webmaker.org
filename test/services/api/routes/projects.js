@@ -47,6 +47,7 @@ experiment('project routes', function() {
     expect(projects.config.validate.params).to.be.an.object();
     expect(projects.config.validate.params.user).to.be.an.object();
     expect(projects.config.validate.query).to.be.an.object();
+    expect(projects.config.validate.query.count).to.be.an.object();
     expect(projects.config.validate.query.page).to.be.an.object();
     expect(projects.config.pre).to.be.an.array();
     expect(projects.config.pre.length).to.equal(2);
