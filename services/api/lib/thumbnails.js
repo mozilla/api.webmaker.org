@@ -19,18 +19,6 @@ exports.register = function(server, options, done) {
     return '/mobile-center-cropped/small/webmaker-desktop/' + new Buffer(url.format(urlObj)).toString('base64');
   }
 
-  function dropCache(project, user, tail) {
-    server.methods.projects.findOne.cache.drop([project, user], function(err) {
-      if ( err ) {
-        server.log('error', {
-          message: 'failed to invalidate cache for project ' + project,
-          error: err
-        });
-      }
-      tail();
-    });
-  }
-
   function updateThumbnail(project, user, url, tail) {
     server.methods.projects.updateThumbnail(
       [
@@ -47,7 +35,12 @@ exports.register = function(server, options, done) {
           });
         }
 
-        dropCache(project, user, tail);
+        server.methods.cache.invalidateKey(
+          'projects',
+          'findOne',
+          [project, user],
+          tail
+        );
       }
     );
   }

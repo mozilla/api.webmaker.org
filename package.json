@@ -39,11 +39,11 @@
     "lodash": "^3.7.0",
     "lout": "^6.2.2",
     "newrelic": "^1.20.1",
-    "nock": "^2.2.0",
     "pg": "^4.3.0",
+    "redis": "^0.12.1",
+    "redis-url": "^1.2.0",
     "request": "^2.55.0",
-    "scooter": "^2.0.1",
-    "sinon": "^1.14.1"
+    "scooter": "^2.0.1"
   },
   "optionalDependencies": {
     "pg-native": "^1.8.1"
@@ -53,7 +53,9 @@
     "jscs": "^1.11.3",
     "jshint": "^2.6.3",
     "lab": "^5.5.0",
-    "mofo-style": "latest"
+    "mofo-style": "latest",
+    "nock": "^2.2.0",
+    "sinon": "^1.14.1"
   },
   "engines": {
     "npm": "^2.5.1",

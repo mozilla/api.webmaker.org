@@ -1,17 +1,5 @@
 var boom = require('boom');
 
-function invalidateCache(server, type, funcName, key, tail) {
-  server.methods[type][funcName].cache.drop(key, function(err) {
-    if ( err ) {
-      server.log('error', {
-        message: 'failed to invalidate cache for ' + type + '.' + funcName + ', ' + key,
-        error: err
-      });
-    }
-    tail();
-  });
-}
-
 exports.post = {
   create: function(request, reply) {
     request.server.methods.pages.create(
@@ -29,16 +17,19 @@ exports.post = {
           return reply(err);
         }
 
-        var findOneProjectCache = request.tail('invalidate findOne project cache');
-        process.nextTick(function() {
-          invalidateCache(
-            request.server,
-            'projects',
-            'findOne',
-            [request.params.project, request.params.user],
-            findOneProjectCache
-          );
-        });
+        request.server.methods.cache.invalidateKey(
+          'projects',
+          'findOne',
+          [request.params.project, request.params.user],
+          request.tail('drop projects.findOne cache')
+        );
+
+        request.server.methods.cache.invalidateKey(
+          'pages',
+          'findAll',
+          [request.params.project],
+          request.tail('drop pages.findAll cache')
+        );
 
         reply({
           status: 'created',
@@ -130,15 +121,19 @@ exports.patch = {
           request.server.methods.projects.checkPageId(page, thumbTail);
         });
 
-        var findAllCache = request.tail('invalidate findAll page cache');
-        process.nextTick(function() {
-          invalidateCache(request.server, 'pages', 'findAll', [request.params.project], findAllCache);
-        });
+        request.server.methods.cache.invalidateKey(
+          'pages',
+          'findAll',
+          [request.params.project],
+          request.tail('drop pages.findAll cache')
+        );
 
-        var findOneCache = request.tail('invalidate findOne page cache');
-        process.nextTick(function() {
-          invalidateCache(request.server, 'pages', 'findOne', [request.params.project, page.id], findOneCache);
-        });
+        request.server.methods.cache.invalidateKey(
+          'pages',
+          'findOne',
+          [request.params.project, request.params.page],
+          request.tail('drop pages.findOne cache')
+        );
 
         reply({
           status: 'updated',
@@ -159,32 +154,26 @@ exports.del = function(request, reply) {
         return reply(err);
       }
 
-      var findAllCache = request.tail('invalidate findAll page cache');
-      process.nextTick(function() {
-        invalidateCache(request.server, 'pages', 'findAll', [request.params.project], findAllCache);
-      });
+      request.server.methods.cache.invalidateKey(
+        'pages',
+        'findAll',
+        [request.params.project],
+        request.tail('drop pages.findAll cache')
+      );
 
-      var findOneCache = request.tail('invalidate findOne page cache');
-      process.nextTick(function() {
-        invalidateCache(
-          request.server,
-          'pages',
-          'findOne',
-          [request.params.project, request.params.page],
-          findOneCache
-        );
-      });
+      request.server.methods.cache.invalidateKey(
+        'pages',
+        'findOne',
+        [request.params.project, request.params.page],
+        request.tail('drop pages.findOne cache')
+      );
 
-      var findOneProjectCache = request.tail('invalidate findOne project cache');
-      process.nextTick(function() {
-        invalidateCache(
-          request.server,
-          'projects',
-          'findOne',
-          [request.params.project, request.params.user],
-          findOneProjectCache
-        );
-      });
+      request.server.methods.cache.invalidateKey(
+        'projects',
+        'findOne',
+        [request.params.project, request.params.user],
+        request.tail('drop projects.findOne cache')
+      );
 
       reply({
         status: 'deleted'

@@ -28,7 +28,8 @@ module.exports = function(done) {
     server.register([
         require('../../services/api/lib/utils'),
         require('../../services/api/lib/postgre')(require('pg')),
-        require('../../services/api/lib/thumbnails')
+        require('../../services/api/lib/thumbnails'),
+        require('../../services/api/lib/cache')
       ], function() {
       server.route(require('../../services/api/routes'));
 

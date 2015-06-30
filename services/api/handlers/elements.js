@@ -1,17 +1,5 @@
 var boom = require('boom');
 
-function invalidateElementCache(server, funcName, keys, tail) {
-  server.methods.elements[funcName].cache.drop(keys, function(err) {
-    if ( err ) {
-      server.log('error', {
-        message: 'failed to invalidate cache for element ' + funcName + ', ' + keys,
-        error: err
-      });
-    }
-    tail();
-  });
-}
-
 exports.post = function(request, reply) {
   request.server.methods.elements.create(
     [
@@ -106,15 +94,19 @@ exports.patch = {
           request.server.methods.projects.checkPageId(request.pre.page, thumbTail);
         });
 
-        var findAllCache = request.tail('invalidate findAll element cache');
-        process.nextTick(function() {
-          invalidateElementCache(request.server, 'findAll', [request.params.page], findAllCache);
-        });
+        request.server.methods.cache.invalidateKey(
+          'elements',
+          'findAll',
+          [request.params.page],
+          request.tail('drop elements.findAll cache')
+        );
 
-        var findOneCache = request.tail('invalidate findOne element cache');
-        process.nextTick(function() {
-          invalidateElementCache(request.server, 'findOne', [request.params.element], findOneCache);
-        });
+        request.server.methods.cache.invalidateKey(
+          'elements',
+          'findOne',
+          [request.params.element],
+          request.tail('drop elements.findOne cache')
+        );
 
         reply({
           status: 'updated',
@@ -135,15 +127,19 @@ exports.del = function(request, reply) {
         return reply(err);
       }
 
-      var findAllCache = request.tail('invalidate findAll element cache');
-      process.nextTick(function() {
-        invalidateElementCache(request.server, 'findAll', [request.params.page], findAllCache);
-      });
+      request.server.methods.cache.invalidateKey(
+        'elements',
+        'findAll',
+        [request.params.page],
+        request.tail('drop elements.findAll cache')
+      );
 
-      var findOneCache = request.tail('invalidate findOne element cache');
-      process.nextTick(function() {
-        invalidateElementCache(request.server, 'findOne', [request.params.element], findOneCache);
-      });
+      request.server.methods.cache.invalidateKey(
+        'elements',
+        'findOne',
+        [request.params.element],
+        request.tail('drop elements.findOne cache')
+      );
 
       reply({
         status: 'deleted'

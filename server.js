@@ -7,6 +7,8 @@ var Hapi = require('hapi'),
 Hoek.assert(process.env.API_HOST, 'Must define API_HOST');
 Hoek.assert(process.env.PORT, 'Must define PORT');
 Hoek.assert(process.env.API_VERSION, 'Must define API_VERSION');
+Hoek.assert(process.env.REDIS_URL, 'Must define REDIS_URL');
+Hoek.assert(process.env.POSTGRE_CONNECTION_STRING, 'Must define POSTGRE_CONNECTION_STRING');
 
 var serverConfig = {
   connections: {

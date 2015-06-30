@@ -1,16 +1,5 @@
 var boom = require('boom');
 
-function invalidateUserCache(server, userId, tail) {
-  server.methods.users.find.cache.drop([userId], function(err) {
-    if ( err ) {
-      server.log('error', {
-        message: 'failed to invalidate cache for user ' + userId,
-        error: err
-      });
-    }
-    tail();
-  });
-}
 exports.get = function(request, reply) {
   request.server.methods.users.find(
     [request.params.user],
@@ -110,11 +99,12 @@ exports.patch = function(request, reply) {
             return reply(err);
           }
 
-          var tail = request.tail();
-
-          process.nextTick(function() {
-            invalidateUserCache(request.server, request.params.user, tail);
-          });
+          request.server.methods.cache.invalidateKey(
+            'users',
+            'find',
+            [request.params.user],
+            request.tail('drop users.find cache')
+          );
 
           reply({
             status: 'updated',
@@ -153,11 +143,12 @@ exports.del = function(request, reply) {
             return reply(err);
           }
 
-          var tail = request.tail();
-
-          process.nextTick(function() {
-            invalidateUserCache(request.server, request.params.user, tail);
-          });
+          request.server.methods.cache.invalidateKey(
+            'users',
+            'find',
+            [request.params.user],
+            request.tail('drop users.find cache')
+          );
 
           reply({
             status: 'deleted'

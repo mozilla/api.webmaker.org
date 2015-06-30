@@ -1,24 +1,5 @@
 var boom = require('boom');
 
-function invalidateProjectCache(server, funcName, keys, tail) {
-  server.debug({
-    message: 'invalidating project cache',
-    data: {
-      funcName: funcName,
-      keys: keys
-    }
-  });
-  server.methods.projects[funcName].cache.drop(keys, function(err) {
-    if ( err ) {
-      server.log('error', {
-        message: 'failed to invalidate cache for project key ' + keys.join('.'),
-        error: err
-      });
-    }
-    tail();
-  });
-}
-
 exports.post = {
   create: function(request, reply) {
     request.server.methods.projects.create(
@@ -34,15 +15,12 @@ exports.post = {
           return reply(err);
         }
 
-        var findUsersProjectsTail = request.tail();
-        process.nextTick(function() {
-          invalidateProjectCache(
-            request.server,
-            'findUsersProjects',
-            [request.params.user, '*', '*'],
-            findUsersProjectsTail
-          );
-        });
+        request.server.methods.cache.invalidateKeys(
+          'projects',
+          'findUsersProjects',
+          request.params.user,
+          request.tail('drop projects.findUsersProjects cache')
+        );
 
         reply({
           status: 'created',
@@ -189,25 +167,19 @@ exports.patch = {
           return reply(err);
         }
 
-        var findOneTail = request.tail();
-        process.nextTick(function() {
-          invalidateProjectCache(
-            request.server,
-            'findOne',
-            [request.params.project, request.params.user],
-            findOneTail
-          );
-        });
+        request.server.methods.cache.invalidateKey(
+          'projects',
+          'findOne',
+          [request.params.project, request.params.user],
+          request.tail('drop projects.findOne cache')
+        );
 
-        var findUsersProjectsTail = request.tail();
-        process.nextTick(function() {
-          invalidateProjectCache(
-            request.server,
-            'findUsersProjects',
-            [request.params.user, '*', '*'],
-            findUsersProjectsTail
-          );
-        });
+        request.server.methods.cache.invalidateKeys(
+          'projects',
+          'findUsersProjects',
+          request.params.user,
+          request.tail('drop projects.findUsersProjects cache')
+        );
 
         reply({
           status: 'updated',
@@ -227,10 +199,11 @@ exports.patch = {
           return reply(err);
         }
 
-        var tail = request.tail();
-        process.nextTick(function() {
-          invalidateProjectCache(request.server, 'findFeatured', ['*', '*'], tail);
-        });
+        request.server.methods.cache.invalidateKeys(
+          'projects',
+          'findFeatured',
+          request.tail('drop projects.findFeatured cache')
+        );
 
         reply({
           status: 'updated',
@@ -251,20 +224,19 @@ exports.del = function(request, reply) {
         return reply(err);
       }
 
-      var findOneTail = request.tail();
-      process.nextTick(function() {
-        invalidateProjectCache(request.server, 'findOne', [request.params.project, request.params.user], findOneTail);
-      });
+      request.server.methods.cache.invalidateKey(
+        'projects',
+        'findOne',
+        [request.params.project, request.params.user],
+        request.tail('drop projects.findOne cache')
+      );
 
-      var findUsersProjectsTail = request.tail();
-      process.nextTick(function() {
-        invalidateProjectCache(
-          request.server,
-          'findUsersProjects',
-          [request.params.user, '*', '*'],
-          findUsersProjectsTail
-        );
-      });
+      request.server.methods.cache.invalidateKeys(
+        'projects',
+        'findUsersProjects',
+        request.params.user,
+        request.tail('drop projects.findUsersProjects cache')
+      );
 
       reply({
         status: 'deleted'

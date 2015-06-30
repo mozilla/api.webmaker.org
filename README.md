@@ -11,6 +11,7 @@ You will need to download and install:
 
 * **[Nodejs >= v0.12.1](https://nodejs.org/download) OR [iojs >= v1.0.0](https://iojs.org)**
 * **[postgreSQL >= v9.4](http://www.postgresql.org/download/)**
+* **[redis >= v3.0](http://redis.io/download)**
 
 ## Installation
 
@@ -49,6 +50,7 @@ PORT                        | The port number that Hapi should listen for connec
 API_VERSION                 | The Version Number of the API, applied to newly created projects                                             | 'dev'
 LOG_LEVEL                   | given a chosen level, log events only at or above that level. debug < info < warn < error < exception < stat | info
 POSTGRE_CONNECTION_STRING   | A connection string to a PostgreSQL server                                                                   | postgresql://localhost:5432/webmaker
+REDIS_URL                   | A connection string to a redis server                                                                        | redis://localhost:6379
 ID_SERVER_CONNECTION_STRING | A connection string to a [Webmaker ID server](https://github.com/mozilla/id.webmaker.org)                    | https://id.mofostaging.net
 THUMBNAIL_SERVICE_URL       | The URL where [webmaker-screenshot](https://github.com/mozilla/webmaker-screenshot) can be reached           | undefined (screenshots disabled)
 PAGE_RENDER_URL             | The URL where [webmaker-desktop](https://github.com/mozilla/webmaker-desktop) can be reached                 | undefined (must defined if screenshots enabled)
