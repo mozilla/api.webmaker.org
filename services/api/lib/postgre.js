@@ -133,7 +133,6 @@ module.exports = function (pg) {
         var project;
         var page;
         var transaction;
-        var transactionErr;
 
         getTransactionClient().then(function(t) {
           transaction = t;
@@ -156,13 +155,15 @@ module.exports = function (pg) {
             project: project,
             page: page
           });
-        })
-        .catch(function(err) {
-          transactionErr = err;
-          return rollback(transaction);
-        }).then(function() {
-          done(transactionErr);
         }).catch(function(err) {
+          if ( transaction ) {
+            return rollback(transaction).then(function() {
+              done(err);
+            }).catch(function(rollbackErr) {
+              done(rollbackErr);
+            });
+          }
+
           done(err);
         });
       }, {});
