@@ -18,10 +18,6 @@ var newFromToken2 = {
   authorization: 'token newFromToken2'
 };
 
-var moderatorNotFound = {
-  authorization: 'token moderatorNotFound'
-};
-
 exports.pgAdapter = {
   fail: {
     url: '/discover',
@@ -451,14 +447,6 @@ exports.create = {
             title: 'new_from_token'
           },
           headers: newFromToken2
-        },
-        tokenUserError: {
-          url: '/users/1/projects',
-          method: 'post',
-          payload: {
-            title: 'new_from_token'
-          },
-          headers: moderatorNotFound
         }
       },
       error: {
@@ -485,6 +473,13 @@ exports.create = {
       checkRemixPages: {
         url: '/users/2/projects/$1/pages',
         method: 'get'
+      },
+      newUserFromRemix: {
+        url: '/users/1/projects/1/remixes',
+        method: 'post',
+        headers: {
+          authorization: 'token newFromRemix'
+        }
       }
     },
     fail: {
@@ -523,6 +518,13 @@ exports.create = {
         url: '/users/1/projects/1/remixes',
         method: 'post',
         headers: userToken
+      },
+      newUserFromRemix: {
+        url: '/users/1/projects/1/remixes',
+        method: 'post',
+        headers: {
+          authorization: 'token newFromRemix2'
+        }
       }
     }
   }

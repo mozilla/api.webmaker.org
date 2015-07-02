@@ -47,6 +47,18 @@ module.exports = {
     username: 'newFromToken2',
     prefLocale: 'en-US'
   },
+  'newFromRemix': {
+    scope: ['user', 'projects'],
+    id: '47',
+    username: 'newFromRemix',
+    prefLocale: 'en-US'
+  },
+  'newFromRemix2': {
+    scope: ['user', 'projects'],
+    id: '48',
+    username: 'newFromRemix2',
+    prefLocale: 'en-US'
+  },
   'moderatorNotFound': {
     scope: ['user', 'projects'],
     id: '78',

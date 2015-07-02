@@ -80,7 +80,7 @@ exports.getTokenUser = {
         var user = result.rows[0];
 
         if ( !user ) {
-          return reply(boom.notFound('User not found'));
+          return createUser(request, reply);
         }
 
         reply(user);

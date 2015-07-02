@@ -975,34 +975,6 @@ experiment('Project Handlers', function() {
         });
       });
 
-      test('tokenUser not found', function(done) {
-        var opts = configs.create.new.fail.auth.tokenUserError;
-
-        server.inject(opts, function(resp) {
-          expect(resp.statusCode).to.equal(404);
-          expect(resp.result.error).to.equal('Not Found');
-          expect(resp.result.message).to.equal('User not found');
-          done();
-        });
-      });
-
-      test('tokenUser Error - handles errors from postgre', function(done) {
-        var opts = configs.create.new.fail.auth.tokenUserError;
-        sinon.stub(server.methods.users, 'find')
-          .onFirstCall()
-          .callsArgWith(1, null, { rows: [{ id: 1 }] })
-          .onSecondCall()
-          .callsArgWith(1, mockErr());
-
-        server.inject(opts, function(resp) {
-          expect(resp.statusCode).to.equal(500);
-          expect(resp.result.error).to.equal('Internal Server Error');
-          expect(resp.result.message).to.be.a.string();
-          server.methods.users.find.restore();
-          done();
-        });
-      });
-
       test('handles errors from postgre', function(done) {
         var opts = configs.create.new.fail.error;
         var stub = sinon.stub(server.methods.projects, 'create')
@@ -1061,6 +1033,15 @@ experiment('Project Handlers', function() {
               done();
             });
           });
+        });
+      });
+
+      test('can remix project as a new user', function(done) {
+        var opts = configs.create.remix.success.newUserFromRemix;
+
+        server.inject(opts, function(resp) {
+          expect(resp.statusCode).to.equal(200);
+          done();
         });
       });
 
@@ -1132,6 +1113,26 @@ experiment('Project Handlers', function() {
           expect(resp.result.error).to.equal('Internal Server Error');
           expect(resp.result.message).to.equal('An internal server error occurred');
           stub.restore();
+          done();
+        });
+      });
+
+      test('handles error if getTokenUserFails', function(done) {
+        var opts = configs.create.remix.fail.newUserFromRemix;
+        sinon.stub(server.methods.users, 'find')
+          .onFirstCall()
+          .callsArgWith(1, null, {
+            rows: [userFixtures.chris_testing]
+          })
+          .onSecondCall()
+          .callsArgWith(1, mockErr());
+
+        server.inject(opts, function(resp) {
+          console.log( resp.result, resp.statusCode );
+          expect(resp.statusCode).to.equal(500);
+          expect(resp.result.error).to.equal('Internal Server Error');
+          expect(resp.result.message).to.equal('An internal server error occurred');
+          server.methods.users.find.restore();
           done();
         });
       });
