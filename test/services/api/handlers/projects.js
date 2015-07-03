@@ -1128,7 +1128,6 @@ experiment('Project Handlers', function() {
           .callsArgWith(1, mockErr());
 
         server.inject(opts, function(resp) {
-          console.log( resp.result, resp.statusCode );
           expect(resp.statusCode).to.equal(500);
           expect(resp.result.error).to.equal('Internal Server Error');
           expect(resp.result.message).to.equal('An internal server error occurred');
