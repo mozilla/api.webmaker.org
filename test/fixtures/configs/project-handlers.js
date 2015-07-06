@@ -539,7 +539,7 @@ exports.patch = {
         },
         headers: userToken
       },
-      withThumnailKey: {
+      withThumbnailKey: {
         url: '/users/1/projects/1',
         method: 'patch',
         payload: {

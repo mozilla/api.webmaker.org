@@ -8,7 +8,7 @@ var configs = require('../../../fixtures/configs/page-handlers'),
   test = lab.test,
   expect = require('code').expect,
   server,
-  thumnailServiceUrl;
+  thumbnailServiceUrl;
 
 function mockErr() {
   var e = new Error('relation does not exist');
@@ -19,7 +19,7 @@ function mockErr() {
 }
 
 before(function(done) {
-  thumnailServiceUrl = process.env.THUMBNAIL_SERVICE_URL;
+  thumbnailServiceUrl = process.env.THUMBNAIL_SERVICE_URL;
   delete process.env.THUMBNAIL_SERVICE_URL;
   require('../../../mocks/server')(function(obj) {
     server = obj;
@@ -28,7 +28,7 @@ before(function(done) {
 });
 
 after(function(done) {
-  process.env.THUMBNAIL_SERVICE_URL = thumnailServiceUrl;
+  process.env.THUMBNAIL_SERVICE_URL = thumbnailServiceUrl;
   server.stop(done);
 });
 

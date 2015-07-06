@@ -51,7 +51,7 @@ exports.register = function(server, options, done) {
     }, function(err, resp, body) {
       if ( err ) {
         server.log('error', {
-          details: 'Error requesting a new thumnail from the screenshot service',
+          details: 'Error requesting a new thumbnail from the screenshot service',
           error: err
         });
         return tail();
@@ -115,6 +115,6 @@ exports.register = function(server, options, done) {
 };
 
 exports.register.attributes = {
-  name: 'webmaker-thumnails',
+  name: 'webmaker-thumbnails',
   version: '1.0.0'
 };

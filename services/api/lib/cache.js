@@ -1,6 +1,6 @@
 /* globals Promise */
 
-exports.register = function(server, options, done) {
+exports.register = function(server, options, next) {
   var client = require('redis-url').connect(process.env.REDIS_URL);
 
   // we're using the default cache name hapi creates
@@ -82,7 +82,7 @@ exports.register = function(server, options, done) {
   server.method('cache.invalidateKey', invalidateKey, { callback: false });
   server.method('cache.invalidateKeys', invalidateKeys, { callback: false });
   server.expose('client', client);
-  done();
+  next();
 };
 
 exports.register.attributes = {

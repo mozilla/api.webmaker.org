@@ -1150,7 +1150,7 @@ experiment('Project Handlers', function() {
     });
 
     test('update with a thumbnail object succeeds, does not update thumbnail', function(done) {
-      var opts = configs.patch.update.success.withThumnailKey;
+      var opts = configs.patch.update.success.withThumbnailKey;
 
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(200);
@@ -1635,7 +1635,7 @@ experiment('Project Handlers', function() {
         }
 
         expect(event).to.exist();
-        expect(event.data.details).to.equal('Error requesting a new thumnail from the screenshot service');
+        expect(event.data.details).to.equal('Error requesting a new thumbnail from the screenshot service');
         done();
       });
 
