@@ -17,7 +17,7 @@
     "jscs": "jscs -c node_modules/mofo-style/linters/.jscsrc adapters lib services test server.js"
   },
   "author": "Mozilla Foundation",
-  "license": "MPL 2.0",
+  "license": "MPL-2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/mozilla/api.webmaker.org"
