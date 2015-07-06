@@ -44,6 +44,7 @@ You can view documentation by navigating to `http://localhost:2015/docs` in your
 
 Variable                    | Description                                                                                                  | Default
 ----------------------------|--------------------------------------------------------------------------------------------------------------|-------------------------------------
+NODE_ENV                    | A string describing the app environment. 'production' toggles pretty logs off                                | 'development'
 API_HOST                    | The Host that Hapi should listen for connections on                                                          | 0.0.0.0
 PORT                        | The port number that Hapi should listen for connections on                                                   | 2015
 API_VERSION                 | The Version Number of the API, applied to newly created projects                                             | 'dev'
