@@ -1235,7 +1235,11 @@ experiment('Project Handlers', function() {
       var stub = sinon.stub(server.methods.projects.findOne.cache, 'drop')
         .callsArgWith(1, mockErr());
 
-      server.once('tail', function() {
+      server.on('tail', function(request) {
+        if ( request.url.path !== opts.url ) {
+          return;
+        }
+        server.removeAllListeners('tail');
         stub.restore();
         done();
       });
@@ -1515,7 +1519,11 @@ experiment('Project Handlers', function() {
       var update = configs.tail.success.update;
       var check = configs.tail.success.check;
 
-      server.once('tail', function() {
+      server.on('tail', function(request) {
+        if ( request.url.path !== update.url ) {
+          return;
+        }
+        server.removeAllListeners('tail');
         server.inject(check, function(resp) {
           expect(resp.statusCode).to.equal(200);
           expect(resp.result.project.thumbnail[320]).to.equal(screenshotVal1);
@@ -1533,7 +1541,11 @@ experiment('Project Handlers', function() {
       var check = configs.tail.noOverwrite.check;
       var updateTitle = configs.tail.noOverwrite.updateTitle;
 
-      server.once('tail', function() {
+      server.on('tail', function(request) {
+        if ( request.url.path !== update.url ) {
+          return;
+        }
+        server.removeAllListeners('tail');
         server.inject(updateTitle, function(resp) {
           expect(resp.statusCode).to.equal(200);
           server.inject(check, function(resp) {
@@ -1553,7 +1565,11 @@ experiment('Project Handlers', function() {
       var update = configs.tail.noUpdate.update;
       var check = configs.tail.noUpdate.check;
 
-      server.once('tail', function() {
+      server.on('tail', function(request) {
+        if ( request.url.path !== update.url ) {
+          return;
+        }
+        server.removeAllListeners('tail');
         server.inject(check, function(resp) {
           expect(resp.statusCode).to.equal(200);
           // should not be different from previous test
@@ -1571,7 +1587,11 @@ experiment('Project Handlers', function() {
       var update = configs.tail.elementSuccess.update;
       var check = configs.tail.elementSuccess.check;
 
-      server.once('tail', function() {
+      server.on('tail', function(request) {
+        if ( request.url.path !== update.url ) {
+          return;
+        }
+        server.removeAllListeners('tail');
         server.inject(check, function(resp) {
           expect(resp.statusCode).to.equal(200);
           expect(resp.result.project.thumbnail[320]).to.equal(screenshotVal3);
@@ -1590,7 +1610,11 @@ experiment('Project Handlers', function() {
         var update = configs.tail.elementNoUpdate.update;
         var check = configs.tail.elementNoUpdate.check;
 
-        server.once('tail', function() {
+        server.on('tail', function(request) {
+          if ( request.url.path !== update.url ) {
+            return;
+          }
+          server.removeAllListeners('tail');
           server.inject(check, function(resp) {
             expect(resp.statusCode).to.equal(200);
             // should not be different from previous test
@@ -1688,7 +1712,11 @@ experiment('Project Handlers', function() {
       var stub = sinon.stub(server.methods.projects.findOne.cache, 'drop')
         .callsArgWith(1, mockErr());
 
-      server.once('tail', function() {
+      server.on('tail', function(request) {
+        if ( request.url.path !== update.url ) {
+          return;
+        }
+        server.removeAllListeners('tail');
         stub.restore();
         done();
       });

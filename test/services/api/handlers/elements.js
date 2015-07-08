@@ -856,7 +856,11 @@ experiment('Element Handlers', function() {
       var stub = sinon.stub(server.methods.elements.findOne.cache, 'drop')
         .callsArgWith(1, mockErr());
 
-      server.once('tail', function() {
+      server.on('tail', function(request) {
+        if ( request.url.path !== opts.url ) {
+          return;
+        }
+        server.removeAllListeners('tail');
         stub.restore();
         done();
       });
@@ -871,7 +875,11 @@ experiment('Element Handlers', function() {
     test('success - owner', function(done) {
       var opts = configs.del.success.owner;
 
-      server.once('tail', function() {
+      server.on('tail', function(request) {
+        if ( request.url.path !== opts.url ) {
+          return;
+        }
+        server.removeAllListeners('tail');
         server.inject(
           '/users/2/projects/3/pages/7/elements/8',
           function(resp) {

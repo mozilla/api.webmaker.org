@@ -247,7 +247,11 @@ experiment('User Handlers', function() {
       var stub = sinon.stub(server.methods.users.find.cache, 'drop')
         .callsArgWith(1, mockErr());
 
-      server.once('tail', function() {
+      server.on('tail', function(request) {
+        if ( request.url.path !== opts.url ) {
+          return;
+        }
+        server.removeAllListeners('tail');
         stub.restore();
         done();
       });

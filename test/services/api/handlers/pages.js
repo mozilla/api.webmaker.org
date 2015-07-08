@@ -635,7 +635,11 @@ experiment('Page Handlers', function() {
     test('succeeds with only x in payload', function(done) {
       var opts = configs.patch.success.onlyX;
 
-      server.once('tail', function() {
+      server.on('tail', function(request) {
+        if ( request.url.path !== opts.url ) {
+          return;
+        }
+        server.removeAllListeners('tail');
         server.inject(
           '/users/1/projects/1/pages/1',
           function(resp) {
@@ -660,7 +664,11 @@ experiment('Page Handlers', function() {
     test('succeeds with only y in payload', function(done) {
       var opts = configs.patch.success.onlyY;
 
-      server.once('tail', function() {
+      server.on('tail', function(request) {
+        if ( request.url.path !== opts.url ) {
+          return;
+        }
+        server.removeAllListeners('tail');
         server.inject(
           '/users/1/projects/1/pages/1',
           function(resp) {
@@ -685,7 +693,11 @@ experiment('Page Handlers', function() {
     test('succeeds with only styles in payload', function(done) {
       var opts = configs.patch.success.onlyStyles;
 
-      server.once('tail', function() {
+      server.on('tail', function(request) {
+        if ( request.url.path !== opts.url ) {
+          return;
+        }
+        server.removeAllListeners('tail');
         server.inject(
           '/users/1/projects/1/pages/1',
           function(resp) {
@@ -712,7 +724,11 @@ experiment('Page Handlers', function() {
     test('succeeds with all payload params', function(done) {
       var opts = configs.patch.success.all;
 
-      server.once('tail', function() {
+      server.on('tail', function(request) {
+        if ( request.url.path !== opts.url ) {
+          return;
+        }
+        server.removeAllListeners('tail');
         server.inject(
           '/users/1/projects/1/pages/1',
           function(resp) {
@@ -953,7 +969,11 @@ experiment('Page Handlers', function() {
       var stub = sinon.stub(server.methods.pages.findOne.cache, 'drop')
         .callsArgWith(1, mockErr());
 
-      server.once('tail', function() {
+      server.on('tail', function(request) {
+        if ( request.url.path !== opts.url ) {
+          return;
+        }
+        server.removeAllListeners('tail');
         stub.restore();
         done();
       });
