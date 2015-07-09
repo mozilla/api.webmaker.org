@@ -139,7 +139,7 @@ var routes = [
           user: numericSchema
         },
         payload: {
-          title: Joi.string().required(),
+          title: Joi.string().max(250).required(),
           remixed_from: Joi.number().integer().optional(),
           thumbnail: Joi.object().keys({
             320: Joi.string().optional()
@@ -169,7 +169,7 @@ var routes = [
           project: numericSchema
         },
         payload: {
-          title: Joi.string().required(),
+          title: Joi.string().max(250).required(),
           thumbnail: Joi.object().optional()
         }
       },

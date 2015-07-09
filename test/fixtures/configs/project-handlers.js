@@ -370,6 +370,27 @@ exports.create = {
           },
           headers: userToken
         },
+        titleLength: {
+          url: '/users/1/projects',
+          method: 'post',
+          payload: {
+            title: 'This is a really long title' +
+                   'This is a really long title' +
+                   'This is a really long title' +
+                   'This is a really long title' +
+                   'This is a really long title' +
+                   'This is a really long title' +
+                   'This is a really long title' +
+                   'This is a really long title' +
+                   'This is a really long title' +
+                   'This is a really long title' +
+                   'This is a really long title',
+            thumbnail: {
+              320: 'https://example.com/image.png'
+            }
+          },
+          headers: userToken
+        },
         thumb: {
           url: '/users/1/projects',
           method: 'post',
@@ -605,6 +626,27 @@ exports.patch = {
           payload: {
             thumbnail: {
               2048: 'new'
+            }
+          },
+          headers: userToken
+        },
+        titleLength: {
+          url: '/users/1/projects/1',
+          method: 'patch',
+          payload: {
+            title: 'This is a really long title' +
+                   'This is a really long title' +
+                   'This is a really long title' +
+                   'This is a really long title' +
+                   'This is a really long title' +
+                   'This is a really long title' +
+                   'This is a really long title' +
+                   'This is a really long title' +
+                   'This is a really long title' +
+                   'This is a really long title' +
+                   'This is a really long title',
+            thumbnail: {
+              320: 'https://example.com/image.png'
             }
           },
           headers: userToken
