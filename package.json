@@ -32,6 +32,7 @@
     "hapi": "^8.4.0",
     "hapi-auth-bearer-token": "^3.1.1",
     "hapi-bunyan": "^0.6.0",
+    "hapi-limiter": "^0.1.1",
     "hapi-version": "^2.1.0",
     "hoek": "^2.11.0",
     "joi": "^6.0.8",
