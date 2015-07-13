@@ -927,6 +927,17 @@ experiment('Project Handlers', function() {
         });
       });
 
+      test('Title length > 256 characters', function(done) {
+        var opts = configs.create.new.fail.payload.titleLength;
+
+        server.inject(opts, function(resp) {
+          expect(resp.statusCode).to.equal(400);
+          expect(resp.result.error).to.equal('Bad Request');
+          expect(resp.result.message).to.be.a.string();
+          done();
+        });
+      });
+
       test('404 user not found', function(done) {
         var opts = configs.create.new.fail.params.user.notFound;
 
@@ -1194,6 +1205,16 @@ experiment('Project Handlers', function() {
         done();
       });
     });
+    test('Title length > 256 characters', function(done) {
+        var opts = configs.patch.update.fail.payload.titleLength;
+
+        server.inject(opts, function(resp) {
+          expect(resp.statusCode).to.equal(400);
+          expect(resp.result.error).to.equal('Bad Request');
+          expect(resp.result.message).to.be.a.string();
+          done();
+        });
+      });
 
     test('cant update another user\'s project', function(done) {
       var opts = configs.patch.update.fail.auth.wrongUser;
