@@ -119,7 +119,18 @@ module.exports = function (pg) {
 
       server.method('users.find', function(values, done) {
         executeQuery(queries.users.find, values, done);
-      }, {});
+      }, {
+        cache: {
+          segment: 'users.find',
+          expiresIn: 1000 * 60 * 60 * 24,
+          staleIn: 1000 * 60 * 60 * 12,
+          staleTimeout: 50
+        },
+        generateKey: function(args) {
+          // user ID
+          return '' + args[0];
+        }
+      });
 
       server.method('users.update', function(values, done) {
         executeQuery(queries.users.update, values, done);
@@ -283,27 +294,87 @@ module.exports = function (pg) {
 
       server.method('projects.findAll', function(values, done) {
         executeQuery(queries.projects.findAll, values, done);
-      }, {});
+      }, {
+        cache: {
+          segment: 'projects.findAll',
+          expiresIn: 1000 * 15
+        },
+        generateKey: function(args) {
+          // count + offset
+          return args.join('.');
+        }
+      });
 
       server.method('projects.findUsersProjects', function(values, done) {
         executeQuery(queries.projects.findUsersProjects, values, done);
-      }, {});
+      }, {
+        cache: {
+          segment: 'projects.findUsersProjects',
+          expiresIn: 1000 * 60
+        },
+        generateKey: function(args) {
+          // user ID + limit + offset
+          return args.join('.');
+        }
+      });
 
       server.method('projects.findOne', function(values, done) {
         executeQuery(queries.projects.findOne, values, done);
-      }, {});
+      }, {
+        cache: {
+          segment: 'projects.findOne',
+          expiresIn: 1000 * 60 * 5,
+          staleIn: 1000 * 60,
+          staleTimeout: 50
+        },
+        generateKey: function(args) {
+          // project ID + user ID
+          return args.join('.');
+        }
+      });
 
       server.method('projects.findRemixes', function(values, done) {
         executeQuery(queries.projects.findRemixes, values, done);
-      }, {});
+      }, {
+        cache: {
+          segment: 'projects.findRemixes',
+          expiresIn: 1000 * 15
+        },
+        generateKey: function(args) {
+          // project ID + user ID
+          return args.join('.');
+        }
+      });
 
       server.method('projects.findDataForRemix', function(values, done) {
         executeQuery(queries.projects.findDataForRemix, values, done);
-      }, {});
+      }, {
+        cache: {
+          segment: 'projects.findDataForRemix',
+          expiresIn: 1000 * 60 * 5,
+          staleIn: 1000 * 60,
+          staleTimeout: 100
+        },
+        generateKey: function(args) {
+          // project ID
+          return '' + args[0];
+        }
+      });
 
       server.method('projects.findFeatured', function(values, done) {
         executeQuery(queries.projects.findFeatured, values, done);
-      }, {});
+      }, {
+        cache: {
+          segment: 'projects.findFeatured',
+          expiresIn: 1000 * 60 * 60,
+          staleIn: 1000 * 60 * 5,
+          staleTimeout: 100
+        },
+        generateKey: function(args) {
+          // count + offset
+          return args.join('.');
+        }
+      });
 
       server.method('projects.update', function(values, done) {
         executeQuery(queries.projects.update, values, done);
@@ -327,11 +398,32 @@ module.exports = function (pg) {
 
       server.method('pages.findAll', function(values, done) {
         executeQuery(queries.pages.findAll, values, done);
-      }, {});
+      }, {
+        cache: {
+          segment: 'pages.findAll',
+          expiresIn: 1000 * 60,
+          staleIn: 1000 * 30,
+          staleTimeout: 100
+        },
+        generateKey: function(args) {
+          // projectId
+          return '' + args[0];
+        }
+      });
 
       server.method('pages.findOne', function(values, done) {
         executeQuery(queries.pages.findOne, values, done);
-      }, {});
+      }, {
+        cache: {
+          segment: 'pages.findOne',
+          expiresIn: 1000 * 60,
+          staleIn: 1000 * 30,
+          staleTimeout: 100
+        },
+        generateKey: function(args) {
+          return args.join('.');
+        }
+      });
 
       server.method('pages.update', function(values, done) {
         executeQuery(queries.pages.update, values, done);
@@ -351,11 +443,33 @@ module.exports = function (pg) {
 
       server.method('elements.findAll', function(values, done) {
         executeQuery(queries.elements.findAll, values, done);
-      }, {});
+      }, {
+        cache: {
+          segment: 'elements.findAll',
+          expiresIn: 1000 * 60,
+          staleIn: 1000 * 30,
+          staleTimeout: 100
+        },
+        generateKey: function(args) {
+          // pageId
+          return '' + args[0];
+        }
+      });
 
       server.method('elements.findOne', function(values, done) {
         executeQuery(queries.elements.findOne, values, done);
-      }, {});
+      }, {
+        cache: {
+          segment: 'elements.findOne',
+          expiresIn: 1000 * 60,
+          staleIn: 1000 * 30,
+          staleTimeout: 100
+        },
+        generateKey: function(args) {
+          // elementId
+          return '' + args[0];
+        }
+      });
 
       server.method('elements.update', function(values, done) {
         executeQuery(queries.elements.update, values, done);

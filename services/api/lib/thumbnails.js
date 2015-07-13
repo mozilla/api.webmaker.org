@@ -3,7 +3,6 @@ exports.register = function(server, options, done) {
   var url = require('url');
   var qs = require('querystring');
   var request = require('request');
-  var thumnailServiceUrl = process.env.THUMBNAIL_SERVICE_URL;
   var pageRenderUrl = process.env.PAGE_RENDER_URL;
   var req;
 
@@ -20,7 +19,7 @@ exports.register = function(server, options, done) {
     return '/mobile-center-cropped/small/webmaker-desktop/' + new Buffer(url.format(urlObj)).toString('base64');
   }
 
-  function updateThumbnail(project, url, tail) {
+  function updateThumbnail(project, user, url, tail) {
     server.methods.projects.updateThumbnail(
       [
         JSON.stringify({
@@ -36,7 +35,12 @@ exports.register = function(server, options, done) {
           });
         }
 
-        tail();
+        server.methods.cache.invalidateKey(
+          'projects',
+          'findOne',
+          [project, user],
+          tail
+        );
       }
     );
   }
@@ -47,7 +51,7 @@ exports.register = function(server, options, done) {
     }, function(err, resp, body) {
       if ( err ) {
         server.log('error', {
-          details: 'Error requesting a new thumnail from the screenshot service',
+          details: 'Error requesting a new thumbnail from the screenshot service',
           error: err
         });
         return tail();
@@ -61,13 +65,17 @@ exports.register = function(server, options, done) {
         return tail(new Error('Thumbnail update failed'));
       }
 
-      updateThumbnail(row.project_id, body.screenshot, tail);
+      updateThumbnail(row.project_id, row.user_id, body.screenshot, tail);
     });
   }
 
   // Check if the given page has the lowest id in its parent project
   // If it is, then request a new thumbnail
   function checkPageId(page, tail) {
+    if ( !process.env.THUMBNAIL_SERVICE_URL ) {
+      return tail();
+    }
+
     server.methods.pages.min([
       page.project_id
     ], function(err, result) {
@@ -90,39 +98,23 @@ exports.register = function(server, options, done) {
     });
   }
 
-  // this becomes the server method if no thumbnail service is defined.
-  function skipCheck(page, tail) {
-    tail();
-  }
+  req = request.defaults({
+    baseUrl: process.env.THUMBNAIL_SERVICE_URL,
+    method: 'post',
+    json: true,
+    headers: {
+      accept: 'application/json'
+    },
+    body: {
+      wait: true
+    }
+  });
 
-  var updateStrategy;
-
-  if ( thumnailServiceUrl ) {
-    server.debug('Automatic thumbnail updates enabled, using: ' + thumnailServiceUrl);
-
-    updateStrategy = checkPageId;
-
-    req = request.defaults({
-      baseUrl: thumnailServiceUrl,
-      method: 'post',
-      json: true,
-      headers: {
-        accept: 'application/json'
-      },
-      body: {
-        wait: true
-      }
-    });
-  } else {
-    server.debug('Automatic thumbnail updates disabled. define THUMBNAIL_SERVICE_URL to enable');
-    updateStrategy = skipCheck;
-  }
-
-  server.method('projects.checkPageId', updateStrategy);
+  server.method('projects.checkPageId', checkPageId);
   done();
 };
 
 exports.register.attributes = {
-  name: 'webmaker-thumnails',
+  name: 'webmaker-thumbnails',
   version: '1.0.0'
 };

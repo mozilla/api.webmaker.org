@@ -89,10 +89,24 @@ exports.patch = {
           return reply(err);
         }
 
-        var tail = request.tail('updating project thumbnail');
+        var thumbTail = request.tail('updating project thumbnail');
         process.nextTick(function() {
-          request.server.methods.projects.checkPageId(request.pre.page, tail);
+          request.server.methods.projects.checkPageId(request.pre.page, thumbTail);
         });
+
+        request.server.methods.cache.invalidateKey(
+          'elements',
+          'findAll',
+          [request.params.page],
+          request.tail('drop elements.findAll cache')
+        );
+
+        request.server.methods.cache.invalidateKey(
+          'elements',
+          'findOne',
+          [request.params.element],
+          request.tail('drop elements.findOne cache')
+        );
 
         reply({
           status: 'updated',
@@ -112,6 +126,20 @@ exports.del = function(request, reply) {
       if ( err ) {
         return reply(err);
       }
+
+      request.server.methods.cache.invalidateKey(
+        'elements',
+        'findAll',
+        [request.params.page],
+        request.tail('drop elements.findAll cache')
+      );
+
+      request.server.methods.cache.invalidateKey(
+        'elements',
+        'findOne',
+        [request.params.element],
+        request.tail('drop elements.findOne cache')
+      );
 
       reply({
         status: 'deleted'

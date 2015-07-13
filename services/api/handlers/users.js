@@ -99,6 +99,13 @@ exports.patch = function(request, reply) {
             return reply(err);
           }
 
+          request.server.methods.cache.invalidateKey(
+            'users',
+            'find',
+            [request.params.user],
+            request.tail('drop users.find cache')
+          );
+
           reply({
             status: 'updated',
             user: request.server.methods.utils.formatUser(result.rows[0])
@@ -135,6 +142,13 @@ exports.del = function(request, reply) {
           if ( err ) {
             return reply(err);
           }
+
+          request.server.methods.cache.invalidateKey(
+            'users',
+            'find',
+            [request.params.user],
+            request.tail('drop users.find cache')
+          );
 
           reply({
             status: 'deleted'

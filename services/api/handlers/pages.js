@@ -17,6 +17,20 @@ exports.post = {
           return reply(err);
         }
 
+        request.server.methods.cache.invalidateKey(
+          'projects',
+          'findOne',
+          [request.params.project, request.params.user],
+          request.tail('drop projects.findOne cache')
+        );
+
+        request.server.methods.cache.invalidateKey(
+          'pages',
+          'findAll',
+          [request.params.project],
+          request.tail('drop pages.findAll cache')
+        );
+
         reply({
           status: 'created',
           page: request.server.methods.utils.formatPage(result.rows)
@@ -102,11 +116,24 @@ exports.patch = {
         }
 
         var page = request.server.methods.utils.formatPage(result.rows);
-
-        var tail = request.tail('updating project thumbnail');
+        var thumbTail = request.tail('updating project thumbnail');
         process.nextTick(function() {
-          request.server.methods.projects.checkPageId(page, tail);
+          request.server.methods.projects.checkPageId(page, thumbTail);
         });
+
+        request.server.methods.cache.invalidateKey(
+          'pages',
+          'findAll',
+          [request.params.project],
+          request.tail('drop pages.findAll cache')
+        );
+
+        request.server.methods.cache.invalidateKey(
+          'pages',
+          'findOne',
+          [request.params.project, request.params.page],
+          request.tail('drop pages.findOne cache')
+        );
 
         reply({
           status: 'updated',
@@ -126,6 +153,27 @@ exports.del = function(request, reply) {
       if ( err ) {
         return reply(err);
       }
+
+      request.server.methods.cache.invalidateKey(
+        'pages',
+        'findAll',
+        [request.params.project],
+        request.tail('drop pages.findAll cache')
+      );
+
+      request.server.methods.cache.invalidateKey(
+        'pages',
+        'findOne',
+        [request.params.project, request.params.page],
+        request.tail('drop pages.findOne cache')
+      );
+
+      request.server.methods.cache.invalidateKey(
+        'projects',
+        'findOne',
+        [request.params.project, request.params.user],
+        request.tail('drop projects.findOne cache')
+      );
 
       reply({
         status: 'deleted'

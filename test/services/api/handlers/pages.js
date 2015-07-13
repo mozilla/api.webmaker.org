@@ -7,7 +7,8 @@ var configs = require('../../../fixtures/configs/page-handlers'),
   after = lab.after,
   test = lab.test,
   expect = require('code').expect,
-  server;
+  server,
+  thumbnailServiceUrl;
 
 function mockErr() {
   var e = new Error('relation does not exist');
@@ -18,6 +19,8 @@ function mockErr() {
 }
 
 before(function(done) {
+  thumbnailServiceUrl = process.env.THUMBNAIL_SERVICE_URL;
+  delete process.env.THUMBNAIL_SERVICE_URL;
   require('../../../mocks/server')(function(obj) {
     server = obj;
     done();
@@ -25,6 +28,7 @@ before(function(done) {
 });
 
 after(function(done) {
+  process.env.THUMBNAIL_SERVICE_URL = thumbnailServiceUrl;
   server.stop(done);
 });
 
@@ -631,9 +635,11 @@ experiment('Page Handlers', function() {
     test('succeeds with only x in payload', function(done) {
       var opts = configs.patch.success.onlyX;
 
-      server.inject(opts, function(resp) {
-        expect(resp.statusCode).to.equal(200);
-        expect(resp.result.status).to.equal('updated');
+      server.on('tail', function(request) {
+        if ( request.url.path !== opts.url ) {
+          return;
+        }
+        server.removeAllListeners('tail');
         server.inject(
           '/users/1/projects/1/pages/1',
           function(resp) {
@@ -648,14 +654,21 @@ experiment('Page Handlers', function() {
           }
         );
       });
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+        expect(resp.result.status).to.equal('updated');
+      });
     });
 
     test('succeeds with only y in payload', function(done) {
       var opts = configs.patch.success.onlyY;
 
-      server.inject(opts, function(resp) {
-        expect(resp.statusCode).to.equal(200);
-        expect(resp.result.status).to.equal('updated');
+      server.on('tail', function(request) {
+        if ( request.url.path !== opts.url ) {
+          return;
+        }
+        server.removeAllListeners('tail');
         server.inject(
           '/users/1/projects/1/pages/1',
           function(resp) {
@@ -670,14 +683,21 @@ experiment('Page Handlers', function() {
           }
         );
       });
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+        expect(resp.result.status).to.equal('updated');
+      });
     });
 
     test('succeeds with only styles in payload', function(done) {
       var opts = configs.patch.success.onlyStyles;
 
-      server.inject(opts, function(resp) {
-        expect(resp.statusCode).to.equal(200);
-        expect(resp.result.status).to.equal('updated');
+      server.on('tail', function(request) {
+        if ( request.url.path !== opts.url ) {
+          return;
+        }
+        server.removeAllListeners('tail');
         server.inject(
           '/users/1/projects/1/pages/1',
           function(resp) {
@@ -694,14 +714,21 @@ experiment('Page Handlers', function() {
           }
         );
       });
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+        expect(resp.result.status).to.equal('updated');
+      });
     });
 
     test('succeeds with all payload params', function(done) {
       var opts = configs.patch.success.all;
 
-      server.inject(opts, function(resp) {
-        expect(resp.statusCode).to.equal(200);
-        expect(resp.result.status).to.equal('updated');
+      server.on('tail', function(request) {
+        if ( request.url.path !== opts.url ) {
+          return;
+        }
+        server.removeAllListeners('tail');
         server.inject(
           '/users/1/projects/1/pages/1',
           function(resp) {
@@ -717,6 +744,11 @@ experiment('Page Handlers', function() {
             done();
           }
         );
+      });
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+        expect(resp.result.status).to.equal('updated');
       });
     });
 
@@ -929,6 +961,25 @@ experiment('Page Handlers', function() {
         expect(resp.result.message).to.be.a.string();
         stub.restore();
         done();
+      });
+    });
+
+    test('pages tail cache error reported', function(done) {
+      var opts = configs.patch.fail.error;
+      var stub = sinon.stub(server.methods.pages.findOne.cache, 'drop')
+        .callsArgWith(1, mockErr());
+
+      server.on('tail', function(request) {
+        if ( request.url.path !== opts.url ) {
+          return;
+        }
+        server.removeAllListeners('tail');
+        stub.restore();
+        done();
+      });
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(200);
       });
     });
   });

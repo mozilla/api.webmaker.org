@@ -15,6 +15,13 @@ exports.post = {
           return reply(err);
         }
 
+        request.server.methods.cache.invalidateKeys(
+          'projects',
+          'findUsersProjects',
+          request.params.user,
+          request.tail('drop projects.findUsersProjects cache')
+        );
+
         reply({
           status: 'created',
           project: request.server.methods.utils.formatProject(result.project),
@@ -160,6 +167,20 @@ exports.patch = {
           return reply(err);
         }
 
+        request.server.methods.cache.invalidateKey(
+          'projects',
+          'findOne',
+          [request.params.project, request.params.user],
+          request.tail('drop projects.findOne cache')
+        );
+
+        request.server.methods.cache.invalidateKeys(
+          'projects',
+          'findUsersProjects',
+          request.params.user,
+          request.tail('drop projects.findUsersProjects cache')
+        );
+
         reply({
           status: 'updated',
           project: request.server.methods.utils.formatProject(result.rows[0])
@@ -177,6 +198,12 @@ exports.patch = {
         if ( err ) {
           return reply(err);
         }
+
+        request.server.methods.cache.invalidateKeys(
+          'projects',
+          'findFeatured',
+          request.tail('drop projects.findFeatured cache')
+        );
 
         reply({
           status: 'updated',
@@ -196,6 +223,20 @@ exports.del = function(request, reply) {
       if ( err ) {
         return reply(err);
       }
+
+      request.server.methods.cache.invalidateKey(
+        'projects',
+        'findOne',
+        [request.params.project, request.params.user],
+        request.tail('drop projects.findOne cache')
+      );
+
+      request.server.methods.cache.invalidateKeys(
+        'projects',
+        'findUsersProjects',
+        request.params.user,
+        request.tail('drop projects.findUsersProjects cache')
+      );
 
       reply({
         status: 'deleted'

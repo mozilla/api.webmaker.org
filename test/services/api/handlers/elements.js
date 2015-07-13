@@ -850,15 +850,36 @@ experiment('Element Handlers', function() {
         done();
       });
     });
+
+    test('element tail cache error reported', function(done) {
+      var opts = configs.patch.fail.error;
+      var stub = sinon.stub(server.methods.elements.findOne.cache, 'drop')
+        .callsArgWith(1, mockErr());
+
+      server.on('tail', function(request) {
+        if ( request.url.path !== opts.url ) {
+          return;
+        }
+        server.removeAllListeners('tail');
+        stub.restore();
+        done();
+      });
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+      });
+    });
   });
 
   experiment('Delete Element', function() {
     test('success - owner', function(done) {
       var opts = configs.del.success.owner;
 
-      server.inject(opts, function(resp) {
-        expect(resp.statusCode).to.equal(200);
-        expect(resp.result.status).to.equal('deleted');
+      server.on('tail', function(request) {
+        if ( request.url.path !== opts.url ) {
+          return;
+        }
+        server.removeAllListeners('tail');
         server.inject(
           '/users/2/projects/3/pages/7/elements/8',
           function(resp) {
@@ -866,6 +887,11 @@ experiment('Element Handlers', function() {
             done();
           }
         );
+      });
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+        expect(resp.result.status).to.equal('deleted');
       });
     });
 
@@ -922,9 +948,9 @@ experiment('Element Handlers', function() {
       var opts = configs.del.fail.params.user.doesNotOwnProject;
 
       server.inject(opts, function(resp) {
-        expect(resp.statusCode).to.equal(404);
-        expect(resp.result.error).to.equal('Not Found');
-        expect(resp.result.message).to.be.a.string();
+        expect(resp.statusCode).to.equal(403);
+        expect(resp.result.error).to.equal('Forbidden');
+        expect(resp.result.message).to.equal('Insufficient permissions');
         done();
       });
     });
