@@ -28,11 +28,11 @@ npm install
 # copy default environment config
 cp env.sample .env
 
-# create a database
-createdb webmaker
+# create a database; -U and -W are only necessary if your pg instance needs authentication
+createdb -U dbusername -W dbuserpassword webmaker
 
-# create tables
-psql -d webmaker -f scripts/create-tables.sql
+# create tables; -U and -W are only necessary if your pg instance needs authentication
+psql -U dbusername -W dbuserpassword -d webmaker -f scripts/create-tables.sql
 ```
 
 ## Run
