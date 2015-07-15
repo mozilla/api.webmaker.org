@@ -3,6 +3,7 @@ try {
 } catch (ex) {
   console.warn('Native pg bindings failed to load or are not installed:', ex);
   pg = require('pg');
+  console.warn('Connected to pg using non-native bindings.\n');
 }
 
 exports.register = function api(server, options, next) {
