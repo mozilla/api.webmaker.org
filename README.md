@@ -113,6 +113,116 @@ Run database migrations with the following command `npm run migrate -- webmaker`
 Substitute 'webmaker' in the last command with whichever database name your api is using.
 It will apply all migration scripts in the migrations file in order.
 
+## Bulk Action API
+
+A bulk api endpoint exists to enable the client to execute many actions on the user's project, pages, elements in a single HTTP request instead of many individual ones.
+
+* **URL**
+
+  /user/{user}/bulk
+
+* **Method**
+
+  POST
+
+* **Authentication**
+
+  The Authorization header should contain a valid OAuth token provided by [id.webmaker.org](https://github.com/mozilla/id.webmaker.org/blob/develop/docs/oauth.md)
+
+  `Authorization: token myoauth2tokenforwebmaker`
+
+* **Body**
+
+  Post body should be valid JSON. It should contain a single attribute, `actions`, an array of at least one, and at most 1000 individual actions to execute in serial.
+
+  Each action should contain three properties, `type`, `method`, and `data`.
+  Type must be one of 'projects', 'pages', or 'elements'.
+  Method must be one of 'create', 'update' or 'remove'.
+  Data must contain attributes and values specific to the type and method of the action:
+
+  * projects
+    * create
+      * `title`
+        * String, required, up to 256 characters
+      * `thumbnail`
+        * Object, containing a key ("320") which is the URL of the thumnail.
+    * update
+      * `id`
+        * Number, or string containing decimal digits, representing the unique id of a project
+      * `title`
+        * String, required, up to 256 characters
+    * remove
+      * `id`
+        * Number, or string containing decimal digits, representing the unique id of a project
+  * pages
+    * create
+      * `projectId`
+        * Number, or string containing decimal digits, representing a project's unique id
+      * `x`
+        * Number, the x coordinate of the page
+      * `y`
+        * Number, the y coordinate of the page
+      * `styles`
+        * Optional object containing styles values for the page. defaults to `{}`
+    * update
+      * `id`
+        * Number, or string containing decimal digits, representing the unique id of a page
+      * `x`
+        * Number, the x coordinate of the page
+      * `y`
+        * Number, the y coordinate of the page
+      * `styles`
+        * Optional object containing styles values for the page. defaults to `{}`
+    * remove
+      * `id`
+        * Number, or string containing decimal digits, representing the unique id of a page
+  * elements
+    * create
+      * `pageId`
+        * Number, or string containing decimal digits, representing the unique id of a page
+      * `type`
+        * String, represents the element type
+      * `styles`
+        * Optional object containing styles values for the page. defaults to `{}`
+      * `attributes`
+        * Optional object containing attributes values for the page. defaults to `{}`
+    * update
+      * `id`
+        * Number, or string containing decimal digits, representing the unique id of a element
+      * `styles`
+        * Optional object containing styles values for the page. defaults to `{}`
+      * `attributes`
+        * Optional object containing attributes values for the page. defaults to `{}`
+    * remove
+      * `id`
+        * Number, or string containing decimal digits, representing the unique id of a element
+
+
+  You can reference future id values using the following syntax: `$1.id`, where the number following the dollar sign represents the index of the action, and the path following it is used to grab the id you're looking for. For example:
+
+  ```json
+  {
+    "actions": [
+      {
+        "type": "projects",
+        "method": "create",
+        "data": {
+          "title": "My Project"
+        }
+      },
+      {
+        "type": "pages",
+        "method": "create",
+        "data": {
+          "projectId": "$0.id",
+          "x": 0,
+          "y": 0
+        }
+      }
+    ]
+  }
+  ```
+
 ## Diagrams
 
 The Webmaker API uses [id.webmaker.org](https://github.com/mozilla/id.webmaker.org) to authenticate users and requests using

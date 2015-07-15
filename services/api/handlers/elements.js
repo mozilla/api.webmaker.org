@@ -14,6 +14,13 @@ exports.post = function(request, reply) {
         return reply(err);
       }
 
+      request.server.methods.cache.invalidateKey(
+        'elements',
+        'findAll',
+        [request.params.page],
+        request.tail('drop elements.findAll cache')
+      );
+
       reply({
         status: 'created',
         element: result.rows[0]

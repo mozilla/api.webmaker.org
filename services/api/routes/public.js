@@ -17,6 +17,7 @@ var prerequisites = require('../lib/prerequisites');
 var projects = require('../handlers/projects');
 var pages = require('../handlers/pages');
 var elements = require('../handlers/elements');
+var bulk = require('../handlers/bulk');
 
 var numericSchema = Joi.alternatives().try(
   Joi.number().integer().positive(),
@@ -113,6 +114,20 @@ var routes = [
       },
       cors: {
         methods: ['GET', 'OPTIONS']
+      }
+    }
+  }, {
+    path: '/users/{user}/bulk',
+    method: 'options',
+    handler: bulk.options,
+    config: {
+      validate: {
+        params: {
+          user: numericSchema
+        }
+      },
+      cors: {
+        methods: ['POST', 'OPTIONS']
       }
     }
   }, {
