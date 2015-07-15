@@ -20,6 +20,7 @@ var users = require('../handlers/users');
 var projects = require('../handlers/projects');
 var pages = require('../handlers/pages');
 var elements = require('../handlers/elements');
+var bulk = require('../handlers/bulk');
 
 var numericSchema = Joi.alternatives().try(
   Joi.number().integer(),
@@ -153,6 +154,35 @@ var routes = [
       ],
       cors: {
         methods: ['OPTIONS', 'POST', 'GET']
+      }
+    }
+  }, {
+    path: '/users/{user}/bulk',
+    method: 'post',
+    handler: bulk.post,
+    config: {
+      auth: {
+        scope: 'projects'
+      },
+      validate: {
+        params: {
+          user: numericSchema
+        },
+        payload: {
+          actions: Joi.array().required().items(
+            Joi.object().keys({
+              method: Joi.string().valid('create', 'update', 'remove').required(),
+              type: Joi.string().valid('projects', 'pages', 'elements').required(),
+              data: Joi.object().required()
+            })
+          ).min(1)
+        }
+      },
+      pre: [
+        prerequisites.getUser
+      ],
+      cors: {
+        methods: ['POST', 'OPTIONS']
       }
     }
   }, {

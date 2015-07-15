@@ -1,6 +1,6 @@
-/* globals Promise */
-
 var Hoek = require('hoek');
+var Boom = require('boom');
+var BPromise = require('bluebird');
 var format = require('util').format;
 var queries = require('./queries');
 var connString = process.env.POSTGRE_CONNECTION_STRING;
@@ -11,7 +11,7 @@ module.exports = function (pg) {
   var postgreAdapter = {
     register: function(server, options, done) {
       function getTransactionClient() {
-        return new Promise(function(resolve, reject) {
+        return new BPromise(function(resolve, reject) {
           pg.connect(connString, function(err, client, release) {
             if ( err ) {
               server.debug(err);
@@ -28,7 +28,7 @@ module.exports = function (pg) {
       }
 
       function begin(transaction) {
-        return new Promise(function(resolve, reject) {
+        return new BPromise(function(resolve, reject) {
           transaction.client.query('BEGIN', function(err, result) {
             if ( err ) {
               server.debug('Failed to begin transaction', err);
@@ -42,7 +42,7 @@ module.exports = function (pg) {
       }
 
       function executeTransaction(transaction, text, values) {
-        return new Promise(function(resolve, reject) {
+        return new BPromise(function(resolve, reject) {
           server.debug(format('Executing Transaction Query: %s - params: %s', text, values.join(', ')));
           transaction.client.query({
             text: text,
@@ -60,7 +60,7 @@ module.exports = function (pg) {
       }
 
       function commit(transaction) {
-        return new Promise(function(resolve, reject) {
+        return new BPromise(function(resolve, reject) {
           transaction.client.query('COMMIT', function(err, result) {
             if ( err ) {
               server.debug('Failed to commit transaction', err);
@@ -76,7 +76,7 @@ module.exports = function (pg) {
 
 
       function rollback(transaction) {
-        return new Promise(function(resolve, reject) {
+        return new BPromise(function(resolve, reject) {
           transaction.client.query('ROLLBACK', function(err, result) {
             transaction.release();
             if ( err ) {
@@ -204,8 +204,8 @@ module.exports = function (pg) {
           remixedProject = result.rows[0];
           remixedPages = [];
           remixedElements = [];
-          return Promise.resolve(dataToRemix.pages.map(function(page) {
-            return new Promise(function(resolve, reject) {
+          return BPromise.resolve(dataToRemix.pages.map(function(page) {
+            return new BPromise(function(resolve, reject) {
               var remixPage;
               executeTransaction(transaction, queries.pages.create,
                 [
@@ -218,7 +218,7 @@ module.exports = function (pg) {
               ).then(function(result) {
                 remixPage = result.rows[0];
                 remixedPages.push(remixPage);
-                return Promise.resolve(page.elements.map(function(element) {
+                return BPromise.resolve(page.elements.map(function(element) {
                   if ( element.type === 'link' ) {
                     element.attributes.targetProjectId = remixedProject.id;
                     element.attributes.targetUserId = userId;
@@ -234,7 +234,7 @@ module.exports = function (pg) {
                   );
                 }));
               }).then(function(elementPromises) {
-                return Promise.all(elementPromises);
+                return BPromise.all(elementPromises);
               }).then(function(results) {
                 remixedElements.push.apply(remixedElements, results.map(function(result) {
                   return result.rows[0];
@@ -244,12 +244,12 @@ module.exports = function (pg) {
             });
           }));
         }).then(function(pagePromises) {
-          return Promise.all(pagePromises);
+          return BPromise.all(pagePromises);
         }).then(function() {
           var remixLinks = remixedElements.filter(function(elem) {
             return elem.type === 'link';
           });
-          return Promise.resolve(remixLinks.map(function(link) {
+          return BPromise.resolve(remixLinks.map(function(link) {
             var targetX;
             var targetY;
             var foundTargetPage = dataToRemix.pages.some(function(page) {
@@ -282,7 +282,7 @@ module.exports = function (pg) {
             );
           }));
         }).then(function(linkPromises) {
-          return Promise.all(linkPromises);
+          return BPromise.all(linkPromises);
         }).then(function() {
           return commit(transaction);
         }).then(function() {
@@ -299,6 +299,174 @@ module.exports = function (pg) {
           done(err);
         });
       });
+
+      var reachRegex = /^\$(\d+)\.(.*)$/;
+
+      function getValuesForQuery(type, method, data) {
+        switch (type) {
+          case 'projects':
+            switch (method) {
+              case 'create':
+                return [
+                  data.user,
+                  null,
+                  server.methods.utils.version(),
+                  data.title,
+                  JSON.stringify(data.thumbnail || {})
+                ];
+              case 'update':
+                return [
+                  data.title,
+                  data.id
+                ];
+              case 'remove':
+                return [
+                  data.id
+                ];
+            }
+            break;
+          case 'pages':
+            switch (method) {
+              case 'create':
+                return [
+                  data.projectId,
+                  data.x,
+                  data.y,
+                  JSON.stringify(data.styles || {})
+                ];
+              case 'update':
+                return [
+                  data.x,
+                  data.y,
+                  JSON.stringify(data.styles || {}),
+                  data.id
+                ];
+              case 'remove':
+                return [
+                  data.id
+                ];
+            }
+            break;
+          case 'elements':
+            switch (method) {
+              case 'create':
+                return [
+                  data.pageId,
+                  data.type,
+                  JSON.stringify(data.attributes || {}),
+                  JSON.stringify(data.styles || {})
+                ];
+              case 'update':
+                return [
+                  JSON.stringify(data.styles || {}),
+                  JSON.stringify(data.attributes || {}),
+                  data.id
+                ];
+              case 'remove':
+                return [
+                  data.id
+                ];
+            }
+        }
+      }
+
+      server.method('projects.bulk', function(actions, done) {
+        var transaction;
+        var transactionResults = [];
+        getTransactionClient()
+        .then(function(t) {
+          transaction = t;
+          return begin(transaction);
+        })
+        .then(function() {
+          return BPromise.resolve(actions);
+        })
+        .map(function(action) {
+          return new BPromise(function(resolve, reject) {
+            Object.keys(action.data).forEach(function(key) {
+              var reachString;
+              var value;
+              var idx;
+              if ( !reachRegex.test(action.data[key]) ) {
+                return;
+              }
+              action.data[key] = action.data[key].replace(reachRegex, function($1, $2, $3) {
+                idx = +$2;
+                reachString = $3;
+                if ( idx <= transactionResults.length ) {
+                  value = Hoek.reach(transactionResults[idx], reachString);
+                }
+                return value;
+              });
+              if ( !action.data[key] ) {
+                return reject(Boom.badRequest(
+                  'Invalid ID Reference',
+                  {
+                    key: key,
+                    index: idx
+                  }
+                ));
+              }
+            });
+
+            var query = queries[action.type][action.method];
+            var values = getValuesForQuery(action.type, action.method, action.data);
+
+            executeTransaction(transaction, query, values)
+            .then(function(result){
+              if ( action.method == 'remove' ) {
+                transactionResults.push({
+                  status: 'deleted'
+                });
+                return resolve();
+              }
+              switch (action.type) {
+                case 'projects':
+                  if ( action.method === 'create' ) {
+                    result = server.methods.utils.formatProject(result.rows[0]);
+                    break;
+                  }
+                  result = server.methods.utils.formatProject(result.rows[0]);
+                  break;
+                case 'pages':
+                  result = server.methods.utils.formatPage(result.rows);
+                  break;
+                case 'elements':
+                  result = result.rows[0];
+              }
+              transactionResults.push(result);
+              resolve();
+            })
+            .catch(function(err) {
+              reject(Boom.badRequest(
+                'failed to execute query',
+                {
+                  err: err.toString(),
+                  action: action
+                }
+              ));
+            });
+          });
+        }, {
+          concurrency: 1
+        })
+        .then(function() {
+          return commit(transaction);
+        })
+        .then(function() {
+          done(null, transactionResults);
+        })
+        .catch(function(err) {
+          if ( transaction ) {
+            return rollback(transaction)
+              .then(function() {
+                done(err);
+              }).catch(function(rollbackErr) {
+                done(rollbackErr);
+              });
+          }
+        });
+      }, {});
 
       server.method('projects.findAll', function(values, done) {
         executeQuery(queries.projects.findAll, values, done);
