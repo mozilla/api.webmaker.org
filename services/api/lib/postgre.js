@@ -308,14 +308,14 @@ module.exports = function (pg) {
 
       var reachRegex = /^\$(\d+)\.(.*)$/;
 
-      function getValuesForQuery(type, method, data) {
+      function getValuesForQuery(userId, type, method, data) {
         var values;
         switch (type) {
           case 'projects': {
             switch (method) {
               case 'create': {
                 values = [
-                  data.user,
+                  userId,
                   null,
                   server.methods.utils.version(),
                   data.title,
@@ -399,7 +399,7 @@ module.exports = function (pg) {
         return values;
       }
 
-      server.method('projects.bulk', function(actions, done) {
+      server.method('projects.bulk', function(actions, userId, done) {
         var transaction;
         var transactionResults;
         getTransactionClient()
@@ -465,7 +465,7 @@ module.exports = function (pg) {
             }
 
             var query = queries[action.type][action.method];
-            var values = getValuesForQuery(action.type, action.method, action.data);
+            var values = getValuesForQuery(userId, action.type, action.method, action.data);
 
             executeTransaction(transaction, query, values)
             .then(function(result) {
