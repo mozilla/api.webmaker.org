@@ -35,6 +35,24 @@ createdb -U dbusername -W dbuserpassword webmaker
 psql -U dbusername -W dbuserpassword -d webmaker -f scripts/create-tables.sql
 ```
 
+### Note: this will set up an empty database
+
+In order to quickly get up and running for development purposes, you will also want to create
+at least one user by logging into your postgresql instance:
+
+```
+$> psql -d webmaker -U dbusername
+```
+
+and then issuing the following user record creation instruction:
+
+```
+pg> insert into users (id, username, language, country) VALUES (1, 'testuser', 'en', 'US');
+```
+
+This will let you call any of the API endpoints with userid **`1`** without running into
+API errors due to missing users.
+
 ## Run
 
 Start the server with `npm start`
@@ -55,7 +73,16 @@ ID_SERVER_CONNECTION_STRING | A connection string to a [Webmaker ID server](http
 THUMBNAIL_SERVICE_URL       | The URL where [webmaker-screenshot](https://github.com/mozilla/webmaker-screenshot) can be reached           | undefined (screenshots disabled)
 PAGE_RENDER_URL             | The URL where [webmaker-desktop](https://github.com/mozilla/webmaker-desktop) can be reached                 | undefined (must defined if screenshots enabled)
 
-#### New Relic
+### An important note for default PostgreSQL installations:
+
+If you are using a vanilla PostgreSQL instance, you will either need to allow unauthenticated connections, or modify the `POSTGRE_CONNECTION_STRING` such that it is using the correct username and password, by using for following format instead of the one that is used in the `sample.env` file:
+
+```
+export POSTGRE_CONNECTION_STRING=postgresql://username:password@localhost:5432/webmaker
+```
+For default installations, this will have username `postgres`, with the password that you had to fill in during the PostgreSQL installation process.
+
+#### Successfully working with New Relic
 
 See the guide for [configuring New Relic using environment variables](https://docs.newrelic.com/docs/agents/nodejs-agent/installation-configuration/configuring-nodejs-environment-variables) to configure the New Relic agent
 
