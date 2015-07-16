@@ -63,10 +63,14 @@ server.register(require('./adapters/plugins'), function(err) {
     throw err;
   }
 
+  var authConfig = require('./lib/auth-config');
+  var tokenValidator = process.env.MOCKED_AUTH ?
+    require('./lib/mockValidator') : require('./lib/tokenValidator');
+
   server.auth.strategy(
     'token',
     'bearer-access-token',
-    require('./lib/auth-config')(require('./lib/tokenValidator'))
+    authConfig(tokenValidator)
   );
 });
 

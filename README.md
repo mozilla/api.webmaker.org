@@ -86,6 +86,12 @@ For default installations, this will have username `postgres`, with the password
 
 See the guide for [configuring New Relic using environment variables](https://docs.newrelic.com/docs/agents/nodejs-agent/installation-configuration/configuring-nodejs-environment-variables) to configure the New Relic agent
 
+## Optional Configuration
+
+Variable                    | Description
+----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------
+MOCKED_AUTH                 | If used the server will bypass token validation. The header "Authorization:token <token>" is still required, but will always succeed
+
 ## Test
 
 The tests require access to a postgreSQL database named `webmaker_testing`. Create it by running the command `createdb webmaker_testing`, the test script will automatically create tables and populate them with data.
