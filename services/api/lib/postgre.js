@@ -303,76 +303,99 @@ module.exports = function (pg) {
       var reachRegex = /^\$(\d+)\.(.*)$/;
 
       function getValuesForQuery(type, method, data) {
+        var values;
         switch (type) {
-          case 'projects':
+          case 'projects': {
             switch (method) {
-              case 'create':
-                return [
+              case 'create': {
+                values = [
                   data.user,
                   null,
                   server.methods.utils.version(),
                   data.title,
                   JSON.stringify(data.thumbnail || {})
                 ];
-              case 'update':
-                return [
+                break;
+              }
+              case 'update': {
+                values = [
                   data.title,
                   data.id
                 ];
-              case 'remove':
-                return [
+                break;
+              }
+              case 'remove': {
+                values = [
                   data.id
                 ];
+                break;
+              }
             }
             break;
-          case 'pages':
+          }
+          case 'pages': {
             switch (method) {
-              case 'create':
-                return [
+              case 'create': {
+                values = [
                   data.projectId,
                   data.x,
                   data.y,
                   JSON.stringify(data.styles || {})
                 ];
-              case 'update':
-                return [
+                break;
+              }
+              case 'update': {
+                values = [
                   data.x,
                   data.y,
                   JSON.stringify(data.styles || {}),
                   data.id
                 ];
-              case 'remove':
-                return [
+                break;
+              }
+              case 'remove': {
+                values = [
                   data.id
                 ];
+                break;
+              }
             }
             break;
-          case 'elements':
+          }
+          case 'elements': {
             switch (method) {
-              case 'create':
-                return [
+              case 'create': {
+                values = [
                   data.pageId,
                   data.type,
                   JSON.stringify(data.attributes || {}),
                   JSON.stringify(data.styles || {})
                 ];
-              case 'update':
-                return [
+                break;
+              }
+              case 'update': {
+                values = [
                   JSON.stringify(data.styles || {}),
                   JSON.stringify(data.attributes || {}),
                   data.id
                 ];
-              case 'remove':
-                return [
+                break;
+              }
+              case 'remove': {
+                values = [
                   data.id
                 ];
+                break;
+              }
             }
+          }
         }
+        return values;
       }
 
       server.method('projects.bulk', function(actions, done) {
         var transaction;
-        var transactionResults = [];
+        var transactionResults;
         getTransactionClient()
         .then(function(t) {
           transaction = t;
@@ -381,65 +404,94 @@ module.exports = function (pg) {
         .then(function() {
           return BPromise.resolve(actions);
         })
-        .map(function(action) {
+        .reduce(function(results, action, actionIndex) {
           return new BPromise(function(resolve, reject) {
-            Object.keys(action.data).forEach(function(key) {
+            var failureData;
+            var errorReason;
+            var shouldReject = !Object.keys(action.data).every(function(key) {
               var reachString;
-              var value;
-              var idx;
+              var valid = true;
               if ( !reachRegex.test(action.data[key]) ) {
-                return;
+                return true;
               }
               action.data[key] = action.data[key].replace(reachRegex, function($1, $2, $3) {
-                idx = +$2;
+                var reachIdx = +$2;
+                var value;
                 reachString = $3;
-                if ( idx <= transactionResults.length ) {
-                  value = Hoek.reach(transactionResults[idx], reachString);
+                if ( reachIdx <= results.length ) {
+                  value = Hoek.reach(results[reachIdx], reachString);
+                } else {
+                  errorReason = 'Array reference out of bounds for ' + key + ' in action at index ' + actionIndex;
+                  failureData = {
+                    key: key,
+                    reachIdx: reachIdx,
+                    actionIndex: actionIndex
+                  };
+                  valid = false;
+                  return;
                 }
+
+                if ( !value ) {
+                  errorReason = 'Invalid reference to value using key \'' +
+                    key +
+                    '\' in action at index ' +
+                    actionIndex;
+                  failureData = {
+                    key: key,
+                    reachIdx: reachIdx,
+                    actionIndex: actionIndex
+                  };
+                  valid = false;
+                  return;
+                }
+
                 return value;
               });
-              if ( !action.data[key] ) {
-                return reject(Boom.badRequest(
-                  'Invalid ID Reference',
-                  {
-                    key: key,
-                    index: idx
-                  }
-                ));
-              }
+
+              return valid;
             });
+
+            if ( shouldReject ) {
+              return reject(Boom.badRequest(
+                errorReason,
+                failureData
+              ));
+            }
 
             var query = queries[action.type][action.method];
             var values = getValuesForQuery(action.type, action.method, action.data);
 
             executeTransaction(transaction, query, values)
-            .then(function(result){
-              if ( action.method == 'remove' ) {
-                transactionResults.push({
+            .then(function(result) {
+              if ( action.method === 'remove' ) {
+                results.push({
                   status: 'deleted'
                 });
-                return resolve();
+                return resolve(results);
               }
               switch (action.type) {
-                case 'projects':
+                case 'projects': {
                   if ( action.method === 'create' ) {
                     result = server.methods.utils.formatProject(result.rows[0]);
                     break;
                   }
                   result = server.methods.utils.formatProject(result.rows[0]);
                   break;
-                case 'pages':
+                }
+                case 'pages': {
                   result = server.methods.utils.formatPage(result.rows);
                   break;
-                case 'elements':
+                }
+                case 'elements': {
                   result = result.rows[0];
+                }
               }
-              transactionResults.push(result);
-              resolve();
+              results.push(result);
+              resolve(results);
             })
             .catch(function(err) {
               reject(Boom.badRequest(
-                'failed to execute query',
+                'failed to execute query for action at index ' + actionIndex,
                 {
                   err: err.toString(),
                   action: action
@@ -447,10 +499,9 @@ module.exports = function (pg) {
               ));
             });
           });
-        }, {
-          concurrency: 1
-        })
-        .then(function() {
+        }, [])
+        .then(function(results) {
+          transactionResults = results;
           return commit(transaction);
         })
         .then(function() {
@@ -465,6 +516,8 @@ module.exports = function (pg) {
                 done(rollbackErr);
               });
           }
+
+          done(err);
         });
       }, {});
 
