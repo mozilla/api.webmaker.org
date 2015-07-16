@@ -3,6 +3,7 @@ var Boom = require('boom');
 exports.post = function(request, reply) {
   request.server.methods.projects.bulk(
     request.payload.actions,
+    request.params.user,
     function(err, results) {
       if ( err ) {
         return reply(Boom.wrap(err));
