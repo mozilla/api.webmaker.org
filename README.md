@@ -37,9 +37,8 @@ psql -U dbusername -W dbuserpassword -d webmaker -f scripts/create-tables.sql
 
 ### Note: this will set up an empty database
 
-In order to quickly get up and running
-for development purposes, you will also want to create at least one user by logging
-into your postgresql instance:
+In order to quickly get up and running for development purposes, you will also want to create
+at least one user by logging into your postgresql instance:
 
 ```
 $> psql -d webmaker -U dbusername
@@ -51,7 +50,8 @@ and then issuing the following user record creation instruction:
 pg> insert into users (id, username, language, country) VALUES (1, 'testuser', 'en', 'US');
 ```
 
-This will let you call any of the API endpoints with userid **`1`** without running into API errors due to missing users.
+This will let you call any of the API endpoints with userid **`1`** without running into
+API errors due to missing users.
 
 ## Run
 
