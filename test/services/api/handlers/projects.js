@@ -1371,14 +1371,14 @@ experiment('Project Handlers', function() {
               var otherFixedLink = pagesResp.result.pages[1].elements[2];
               expect(fixedLink.attributes.targetUserId).to.equal('2');
               expect(fixedLink.attributes.targetProjectId).to.equal(projectId);
-              expect(fixedLink.attributes.targetPageId).to.equal('22');
+              expect(fixedLink.attributes.targetPageId).to.equal('26');
               expect(wasAlreadyBrokenLink.attributes.targetUserId).to.equal('2');
               expect(wasAlreadyBrokenLink.attributes.targetProjectId).to.equal(projectId);
               // original project page deleted/missing, targetPageId was deleted
               expect(wasAlreadyBrokenLink.attributes.targetPageId).to.not.exist();
               expect(otherFixedLink.attributes.targetUserId).to.equal('2');
               expect(otherFixedLink.attributes.targetProjectId).to.equal(projectId);
-              expect(otherFixedLink.attributes.targetPageId).to.equal('21');
+              expect(otherFixedLink.attributes.targetPageId).to.equal('25');
               done();
             });
           });
