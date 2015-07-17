@@ -32,4 +32,4 @@ SET user_id = (
     FROM user_ids_for_elements
     WHERE user_ids_for_elements.element_id = elements.id
   )
-WHERE user_id IS NULL;
+WHERE elements.user_id IS NULL;
