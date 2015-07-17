@@ -130,8 +130,8 @@ module.exports = {
   pages: {
     // Create page
     // Params: project_id bigint, x integer, y integer, styles jsonb
-    create: "INSERT INTO pages (project_id, x, y, styles) VALUES ($1, $2, $3, $4) RETURNING id, project_id, x, y," +
-      " created_at, updated_at, styles;",
+    create: "INSERT INTO pages (project_id, user_id, x, y, styles) VALUES ($1, $2, $3, $4, $5) RETURNING id," +
+      " project_id, user_id, x, y, created_at, updated_at, styles;",
 
     // Find all pages in a project
     // Params: project_id bigint
@@ -161,8 +161,8 @@ module.exports = {
   elements: {
     // Create element
     // Params: page_id bigint, type varchar, attributes jsonb, styles jsonb
-    create: "INSERT into elements (page_id, type, attributes, styles) VALUES ($1, $2, $3, $4) RETURNING id, type," +
-      " page_id, created_at, updated_at, attributes, styles",
+    create: "INSERT into elements (page_id, user_id, type, attributes, styles) VALUES ($1, $2, $3, $4, $5) RETURNING" +
+      " id, type, page_id, user_id, created_at, updated_at, attributes, styles",
 
     // Find all elements in a page
     // Params page_id bigint

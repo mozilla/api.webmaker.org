@@ -98,6 +98,13 @@ The tests require access to a postgreSQL database named `webmaker_testing`. Crea
 
 Run the tests with `npm test`
 
+## Migrations
+
+Run database migrations with the following command `npm run migrate -- webmaker`
+
+Substitute 'webmaker' in the last command with whichever database name your api is using.
+It will apply all migration scripts in the migrations file in order.
+
 ## Diagrams
 
 The Webmaker API uses [id.webmaker.org](https://github.com/mozilla/id.webmaker.org) to authenticate users and requests using

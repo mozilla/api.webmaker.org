@@ -5,6 +5,7 @@ exports.post = {
     request.server.methods.pages.create(
       [
         request.pre.project.id,
+        request.pre.user.id,
         request.payload.x,
         request.payload.y,
         JSON.stringify(request.payload.styles)

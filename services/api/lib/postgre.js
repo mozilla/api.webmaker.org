@@ -155,6 +155,7 @@ module.exports = function (pg) {
           project = result.rows[0];
           return executeTransaction(transaction, queries.pages.create, [
             project.id,
+            project.user_id,
             0,
             0,
             '{}'
@@ -207,6 +208,7 @@ module.exports = function (pg) {
               executeTransaction(transaction, queries.pages.create,
                 [
                   remixedProject.id,
+                  userId,
                   page.x,
                   page.y,
                   page.styles
@@ -222,6 +224,7 @@ module.exports = function (pg) {
                   return executeTransaction(transaction, queries.elements.create,
                     [
                       remixPage.id,
+                      userId,
                       element.type,
                       element.attributes,
                       element.styles
