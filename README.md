@@ -33,6 +33,9 @@ createdb -U dbusername -W dbuserpassword webmaker
 
 # create tables; -U and -W are only necessary if your pg instance needs authentication
 psql -U dbusername -W dbuserpassword -d webmaker -f scripts/create-tables.sql
+
+# Run migration scripts (uses the PostgreSQL Connection string specified in .env)
+npm run migrate
 ```
 
 ### Note: this will set up an empty database
