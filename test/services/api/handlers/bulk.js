@@ -106,9 +106,34 @@ experiment('Bulk Projects API', function() {
       .callsArgWith(1, userFixtures.chris_testing);
 
     sinon.stub(server.plugins['webmaker-postgre-adapter'].pg, 'connect')
-      .callsArgWith(1, null, clientStub, function() {})
-      .onSecondCall()
       .callsArgWith(1, mockErr());
+
+    server.inject(opts, function(resp) {
+      server.plugins['webmaker-postgre-adapter'].pg.connect.restore();
+      expect(resp.statusCode).to.equal(500);
+      expect(resp.result.error).to.equal('Internal Server Error');
+      expect(resp.result.message).to.equal('An internal server error occurred');
+      done();
+    });
+  });
+
+  test('handles error if rollback query fails', function(done) {
+    var opts = bulkConfig.failure.rollbackFailure;
+    var clientStub = {
+      query: sinon.stub()
+    };
+
+    clientStub.query.onFirstCall()
+      .callsArgWith(1, userFixtures.chris_testing)
+      .onSecondCall()
+      .callsArgWith(1, null, {})
+      .onThirdCall()
+      .callsArgWith(1, null, {})
+      .onCall(3)
+      .callsArgWith(1, mockErr());
+
+    sinon.stub(server.plugins['webmaker-postgre-adapter'].pg, 'connect')
+      .callsArgWith(1, null, clientStub, function() {});
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(500);
@@ -118,31 +143,4 @@ experiment('Bulk Projects API', function() {
       done();
     });
   });
-
-  test('handles error if rollback query fails', function(done) {
-      var opts = bulkConfig.failure.rollbackFailure;
-      var clientStub = {
-        query: sinon.stub()
-      };
-
-      clientStub.query.onFirstCall()
-        .callsArgWith(1, userFixtures.chris_testing)
-        .onSecondCall()
-        .callsArgWith(1, null, {})
-        .onThirdCall()
-        .callsArgWith(1, null, {})
-        .onCall(3)
-        .callsArgWith(1, mockErr());
-
-      sinon.stub(server.plugins['webmaker-postgre-adapter'].pg, 'connect')
-        .callsArgWith(1, null, clientStub, function() {});
-
-      server.inject(opts, function(resp) {
-        expect(resp.statusCode).to.equal(500);
-        expect(resp.result.error).to.equal('Internal Server Error');
-        expect(resp.result.message).to.equal('An internal server error occurred');
-        server.plugins['webmaker-postgre-adapter'].pg.connect.restore();
-        done();
-      });
-    });
 });

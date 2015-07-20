@@ -24,6 +24,7 @@ function formatUser(user) {
 function formatProject(project) {
   var formatted = {};
   formatted.id = project.id;
+  formatted.user_id = project.user_id;
   formatted.version = project.version;
   formatted.title = project.title;
   formatted.remixed_from = project.remixed_from;
@@ -62,6 +63,7 @@ function formatPage(rows) {
     }
     elements.push({
       id: row.elem_id,
+      user_id: row.user_id,
       type: row.elem_type,
       attributes: row.elem_attributes,
       styles: row.elem_styles,
@@ -75,6 +77,7 @@ function formatPage(rows) {
   return {
     id: rows[0].id,
     project_id: rows[0].project_id,
+    user_id: rows[0].user_id,
     x: rows[0].x,
     y: rows[0].y,
     styles: rows[0].styles,
@@ -105,6 +108,7 @@ function formatPages(rows) {
 function formatElement(el) {
   return {
     id: el.id,
+    user_id: el.user_id,
     page_id: el.page_id,
     type: el.type,
     attributes: el.attributes,

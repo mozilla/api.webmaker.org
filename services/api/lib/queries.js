@@ -7,6 +7,10 @@ var projectCols = [
   "projects.created_at",
   "projects.updated_at",
   "projects.thumbnail",
+  "projects.user_id"
+].join(", ");
+
+var projectUserCols = projectCols + ', ' + [
   "users.username",
   "users.id as user_id",
   "users.language as user_language",
@@ -20,6 +24,7 @@ var projectCols = [
 var pageCols = [
   "pages.id",
   "pages.project_id",
+  "pages.user_id",
   "pages.x",
   "pages.y",
   "pages.created_at",
@@ -31,6 +36,17 @@ var pageCols = [
   "elements.updated_at AS elem_updated_at",
   "elements.styles AS elem_styles",
   "elements.attributes as elem_attributes"
+].join(", ");
+
+var elementCols = [
+  "elements.id",
+  "elements.page_id",
+  "elements.user_id",
+  "elements.type",
+  "elements.created_at",
+  "elements.updated_at",
+  "elements.styles",
+  "elements.attributes"
 ].join(", ");
 
 var remixCols = [
@@ -79,18 +95,22 @@ module.exports = {
 
     // Find all projects, sorted by created_at DESC
     // Params: limit integer, offset integer
-    findAll: "SELECT " + projectCols + " FROM projects INNER JOIN users ON users.id = projects.user_id WHERE " +
-    "projects.deleted_at is NULL AND projects.deleted_at IS NULL ORDER BY created_at DESC LIMIT $1 OFFSET $2",
+    findAll: "SELECT " + projectUserCols + " FROM projects INNER JOIN users ON users.id = projects.user_id WHERE " +
+      "projects.deleted_at is NULL AND projects.deleted_at IS NULL ORDER BY created_at DESC LIMIT $1 OFFSET $2",
 
     // Find projects created by given user
     // Params: user_id bigint, offset integer
-    findUsersProjects: "SELECT " + projectCols + " FROM projects INNER JOIN users ON users.id = projects.user_id " +
-    "WHERE projects.user_id = $1 AND projects.deleted_at IS NULL ORDER BY created_at DESC LIMIT $2 OFFSET $3",
+    findUsersProjects: "SELECT " + projectUserCols + " FROM projects INNER JOIN users ON users.id = projects.user_id " +
+      "WHERE projects.user_id = $1 AND projects.deleted_at IS NULL ORDER BY created_at DESC LIMIT $2 OFFSET $3",
 
-    // Find one project by id
+    // Find one project by id and user_id
     // params: project_id bigint, user_id bigint
-    findOne: "SELECT " + projectCols + " FROM projects INNER JOIN users ON users.id = projects.user_id WHERE " +
+    findOne: "SELECT " + projectUserCols + " FROM projects INNER JOIN users ON users.id = projects.user_id WHERE " +
       " projects.deleted_at IS NULL AND projects.id = $1 AND projects.user_id = $2;",
+
+    // Find one project by ID
+    // params: project id
+    findOneById: "SELECT projects.user_id, projects.id FROM projects WHERE projects.deleted_at IS NULL AND projects.id = $1;",
 
     // Retrieve data in a project for remixing (joins pages and elements)
     // params: project_id bigint
@@ -119,12 +139,12 @@ module.exports = {
 
     // Find remixes of a project
     // Params: remixed_from bigint, offset integer, limit integer
-    findRemixes: "SELECT " + projectCols + " FROM projects INNER JOIN users ON users.id = projects.user_id WHERE" +
+    findRemixes: "SELECT " + projectUserCols + " FROM projects INNER JOIN users ON users.id = projects.user_id WHERE" +
       " projects.deleted_at IS NULL AND remixed_from = $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3;",
 
     // Find featured projects
     // Params: offset integer, limit integer
-    findFeatured: "SELECT " + projectCols + " FROM projects INNER JOIN users ON users.id = projects.user_id WHERE" +
+    findFeatured: "SELECT " + projectUserCols + " FROM projects INNER JOIN users ON users.id = projects.user_id WHERE" +
       " projects.deleted_at IS NULL AND projects.featured = TRUE ORDER BY created_at DESC LIMIT $1 OFFSET $2;"
   },
   pages: {
@@ -136,13 +156,19 @@ module.exports = {
     // Find all pages in a project
     // Params: project_id bigint
     findAll: "SELECT " + pageCols + " FROM pages LEFT OUTER JOIN elements ON elements.page_id = pages.id AND " +
-    " elements.deleted_at IS NULL WHERE pages.project_id = $1 AND pages.deleted_at IS NULL;",
+      " elements.deleted_at IS NULL WHERE pages.project_id = $1 AND pages.deleted_at IS NULL;",
 
-    // Find one page in a project
+    // Find one page by page id and project id
     // Params: project_id bigint, page_id bigint
     findOne: "SELECT " + pageCols + " FROM pages LEFT OUTER JOIN elements ON elements.page_id = $2 AND " +
-    " elements.deleted_at IS NULL WHERE pages.project_id = $1 AND pages.id = $2 AND pages.deleted_at IS NULL",
+      " elements.deleted_at IS NULL WHERE pages.project_id = $1 AND pages.id = $2 AND pages.deleted_at IS NULL",
 
+    // Find one page by id
+    // Params: page_id bigint
+    findOneById: "SELECT pages.id, pages.user_id, pages.project_id FROM pages WHERE pages.deleted_at IS NULL " +
+      "AND pages.id = $1;",
+
+    //
     // Update page
     // Params: x integer, y integer, styles jsonb, page_id bigint
     update: "UPDATE pages SET (x, y, styles) = ($1, $2, $3) WHERE id = $4 AND deleted_at IS NULL" +
@@ -171,8 +197,12 @@ module.exports = {
 
     // Find one element by id and page_id
     // Params: element_id bigint, page_id bigint
-    findOne: "SELECT id, page_id, type, attributes, styles, created_at, updated_at FROM elements WHERE " +
-      "id = $1 AND page_id = $2 AND deleted_at IS NULL;",
+    findOne: "SELECT " + elementCols + " FROM elements WHERE elements.id = $1 AND " +
+      "page_id = $2 AND deleted_at IS NULL;",
+
+    // Find one element by id and page_id
+    // Params: element_id bigint, page_id bigint
+    findOneById: "SELECT id, user_id, page_id FROM elements WHERE elements.deleted_at IS NULL AND elements.id = $1;",
 
     // Update element
     // Params: styles jsonb, attributes jsonb, element_id bigint
