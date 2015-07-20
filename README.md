@@ -82,6 +82,8 @@ export POSTGRE_CONNECTION_STRING=postgresql://username:password@localhost:5432/w
 ```
 For default installations, this will have username `postgres`, with the password that you had to fill in during the PostgreSQL installation process.
 
+The tests assume the user `postgres` exists and has no password set. They also assume that a database named `webmaker_testing` has been created, and that `postgres` has owner permissions. Create the database with `createdb -U postgres webmaker_testing`
+
 #### Successfully working with New Relic
 
 See the guide for [configuring New Relic using environment variables](https://docs.newrelic.com/docs/agents/nodejs-agent/installation-configuration/configuring-nodejs-environment-variables) to configure the New Relic agent
@@ -97,6 +99,13 @@ MOCKED_AUTH                 | If used the server will bypass token validation. T
 The tests require access to a postgreSQL database named `webmaker_testing`. Create it by running the command `createdb webmaker_testing`, the test script will automatically create tables and populate them with data.
 
 Run the tests with `npm test`
+
+## Migrations
+
+Run database migrations with the following command `npm run migrate -- webmaker`
+
+Substitute 'webmaker' in the last command with whichever database name your api is using.
+It will apply all migration scripts in the migrations file in order.
 
 ## Diagrams
 

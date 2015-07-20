@@ -4,6 +4,7 @@ exports.post = function(request, reply) {
   request.server.methods.elements.create(
     [
       request.pre.page.id,
+      request.pre.user.id,
       request.payload.type,
       JSON.stringify(request.payload.attributes),
       JSON.stringify(request.payload.styles)
