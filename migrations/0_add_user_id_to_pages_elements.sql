@@ -1,3 +1,5 @@
+BEGIN;
+
 ALTER TABLE pages
 ADD COLUMN user_id bigint REFERENCES users(id);
 
@@ -33,3 +35,5 @@ SET user_id = (
     WHERE user_ids_for_elements.element_id = elements.id
   )
 WHERE elements.user_id IS NULL;
+
+COMMIT;
