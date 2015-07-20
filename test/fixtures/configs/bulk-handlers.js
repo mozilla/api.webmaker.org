@@ -118,7 +118,7 @@ module.exports = {
             type: 'pages',
             method: 'create',
             data: {
-              pageId: '$0.id',
+              projectId: '$0.id',
               x: 0,
               y: 0,
               styles: {}

@@ -344,6 +344,7 @@ module.exports = function (pg) {
               case 'create': {
                 values = [
                   data.projectId,
+                  userId,
                   data.x,
                   data.y,
                   JSON.stringify(data.styles || {})
@@ -373,6 +374,7 @@ module.exports = function (pg) {
               case 'create': {
                 values = [
                   data.pageId,
+                  userId,
                   data.type,
                   JSON.stringify(data.attributes || {}),
                   JSON.stringify(data.styles || {})
@@ -397,6 +399,65 @@ module.exports = function (pg) {
           }
         }
         return values;
+      }
+
+      function hasPermissionsForAction(userId, type, method, data, results, transaction) {
+        return new Promise(function(resolve, reject) {
+          var lookupType;
+          var lookupId;
+          if ( method === 'create' ) {
+            switch (type) {
+              case 'projects': {
+                return resolve(true);
+              }
+              case 'pages': {
+                lookupType = 'projects';
+                lookupId = data.projectId;
+                break;
+              }
+              case 'elements': {
+                lookupType = 'pages';
+                lookupId = data.pageId;
+                break;
+              }
+            }
+          } else {
+            lookupType = type;
+            lookupId = data.id;
+          }
+
+          // coerce these values to string, because bigints come in from PG as strings
+          lookupId = '' + lookupId;
+          userId = '' + userId;
+
+          var txResult;
+          for (var i = 0; i < results.length; ++i) {
+            var result = results[i];
+            if (
+              result.method === 'create' &&
+              result.type === lookupType &&
+              result.id === lookupId )
+            {
+              txResult = result;
+              break;
+            }
+          }
+
+          // this action refers to an object created earlier in the transaction
+          if ( txResult ) {
+            return resolve(txResult.user_id === userId);
+          }
+          executeTransaction(transaction, queries[lookupType].findOneById, [lookupId])
+          .then(function(results) {
+            if ( !results.rows.length || results.rows[0].user_id !== userId ) {
+              return resolve(false);
+            }
+            resolve(true);
+          })
+          .catch(function(err) {
+            reject(err);
+          });
+        });
       }
 
       server.method('projects.bulk', function(actions, userId, done) {
@@ -467,7 +528,13 @@ module.exports = function (pg) {
             var query = queries[action.type][action.method];
             var values = getValuesForQuery(userId, action.type, action.method, action.data);
 
-            executeTransaction(transaction, query, values)
+            hasPermissionsForAction(userId, action.type, action.method, action.data, results, transaction)
+            .then(function(hasPermission) {
+              if ( !hasPermission ) {
+                throw new Error('Insufficient permissions to execute action');
+              }
+              return executeTransaction(transaction, query, values);
+            })
             .then(function(result) {
               if ( action.method === 'remove' ) {
                 results.push({
@@ -477,10 +544,10 @@ module.exports = function (pg) {
               }
               switch (action.type) {
                 case 'projects': {
-                  if ( action.method === 'create' ) {
-                    result = server.methods.utils.formatProject(result.rows[0]);
-                    break;
-                  }
+                  // if ( action.method === 'create' ) {
+                  //   result = server.methods.utils.formatProject(result.rows[0]);
+                  //   break;
+                  // }
                   result = server.methods.utils.formatProject(result.rows[0]);
                   break;
                 }
@@ -492,6 +559,8 @@ module.exports = function (pg) {
                   result = result.rows[0];
                 }
               }
+              result.type = action.type;
+              result.method = action.method;
               results.push(result);
               resolve(results);
             })
@@ -522,7 +591,6 @@ module.exports = function (pg) {
                 done(rollbackErr);
               });
           }
-
           done(err);
         });
       }, {});
@@ -566,6 +634,10 @@ module.exports = function (pg) {
           // project ID + user ID
           return args.join('.');
         }
+      });
+
+      server.method('projects.findOneById', function(values, done) {
+        executeQuery(queries.projects.findOneById, values, done);
       });
 
       server.method('projects.findRemixes', function(values, done) {
@@ -675,6 +747,10 @@ module.exports = function (pg) {
         }
       });
 
+      server.method('pages.findOneById', function(values, done) {
+        executeQuery(queries.pages.findOneById, values, done);
+      });
+
       server.method('pages.update', function(values, done) {
         executeQuery(queries.pages.update, values, done);
       }, {});
@@ -719,6 +795,10 @@ module.exports = function (pg) {
           // elementId
           return '' + args[0];
         }
+      });
+
+      server.method('elements.findOneById', function(values, done) {
+        executeQuery(queries.elements.findOneById, values, done);
       });
 
       server.method('elements.update', function(values, done) {
