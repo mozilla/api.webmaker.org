@@ -1083,6 +1083,11 @@ experiment('Project Handlers', function() {
     });
 
     experiment('Remix', function() {
+      before(function(done) {
+        // clear remix data cache
+        server.methods.cache.invalidateKey('projects', 'findDataForRemix', [1], done);
+      });
+
       test('success', function(done) {
         var opts = configs.create.remix.success.remix;
         var checkRemixProject = configs.create.remix.success.checkRemixProject;
@@ -1220,7 +1225,6 @@ experiment('Project Handlers', function() {
           .callsArgWith(1, mockErr());
 
         server.inject(opts, function(resp) {
-          console.log( resp.result, resp.statusCode );
           expect(resp.statusCode).to.equal(500);
           expect(resp.result.error).to.equal('Internal Server Error');
           expect(resp.result.message).to.equal('An internal server error occurred');
