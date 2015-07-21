@@ -662,7 +662,7 @@ experiment('Project Handlers', function() {
         expect(resp.result.status).to.equal('success');
         expect(resp.result.projects).to.exist();
         expect(resp.result.projects).to.be.an.array();
-        expect(resp.result.projects.length).to.equal(2);
+        expect(resp.result.projects.length).to.equal(5);
         done();
       });
     });

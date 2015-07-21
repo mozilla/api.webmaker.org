@@ -62,7 +62,6 @@ experiment('Bulk Projects API', function() {
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
-      console.log( resp.result );
       expect(resp.result.message).to.contain('Array reference out of bounds');
       done();
     });
