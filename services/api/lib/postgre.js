@@ -300,8 +300,11 @@ module.exports = function (pg) {
         });
       });
 
+      // matches string like '$0.id' where '$0' is the action result at the 0th index and the value on that object keyed with 'id'
       var reachRegex = /^\$(\d+)\.(.*)$/;
 
+      // Build an array of values to pass to each type of query that can be run in a bulk transaction
+      // array values are determined by type and method.
       function getValuesForQuery(userId, type, method, data) {
         var values;
         switch (type) {
@@ -399,23 +402,29 @@ module.exports = function (pg) {
         return new Promise(function(resolve, reject) {
           var lookupType;
           var lookupId;
+
+          // determine the type of query to run, and the id value to look up
           if ( method === 'create' ) {
             switch (type) {
               case 'projects': {
+                // the user should always be able to create new projects under their account, so resolve true now
                 return resolve(true);
               }
               case 'pages': {
+                // look up the project that this page should be created for, to ensure the current user owns it
                 lookupType = 'projects';
                 lookupId = data.projectId;
                 break;
               }
               case 'elements': {
+                // look up the page this element is to be created for, to ensure the current user owns it
                 lookupType = 'pages';
                 lookupId = data.pageId;
                 break;
               }
             }
           } else {
+            // update / delete need to look up the target type by id to verify ownership
             lookupType = type;
             lookupId = data.id;
           }
@@ -425,6 +434,9 @@ module.exports = function (pg) {
           userId = '' + userId;
 
           var txResult;
+
+          // if the type being acted upon depends on a type created earlier in the transaction,
+          // we won't be able to query for it, so lets find it now
           for (var i = 0; i < results.length; ++i) {
             var result = results[i];
             if (
@@ -441,6 +453,8 @@ module.exports = function (pg) {
           if ( txResult ) {
             return resolve(txResult.user_id === userId);
           }
+
+          // look up the parent type for this action, to verify the user has ownership
           executeTransaction(transaction, queries[lookupType].findOneById, [lookupId])
           .then(function(results) {
             if ( !results.rows.length || results.rows[0].user_id !== userId ) {
@@ -457,61 +471,70 @@ module.exports = function (pg) {
       server.method('projects.bulk', function(actions, userId, done) {
         var transaction;
         var transactionResults;
-        getTransactionClient()
-        .then(function(t) {
-          transaction = t;
-          return begin(transaction);
-        })
-        .then(function() {
-          return BPromise.resolve(actions);
-        })
-        .reduce(function(results, action, actionIndex) {
-          return new BPromise(function(resolve, reject) {
-            var failureData;
-            var errorReason;
-            var shouldReject = !Object.keys(action.data).every(function(key) {
-              var reachString;
-              var valid = true;
-              if ( !reachRegex.test(action.data[key]) ) {
-                return true;
+        var failureData;
+        var errorReason;
+
+        // reduce the Array of actions, building a new array of transaction results
+        function reduceActions(results, action, actionIndex) {
+
+          // check if a key on the action object should be resolved to a value
+          // returned by a previous action in the transaction
+          function everyActionKey(key) {
+            // if there's a problem resolving the key to a value, this is set to false
+            var valid = true;
+
+            // grab the index ($2) of the action results to reach into, and grab the value described by reachString ($3) using Hoek.reach()
+            function replace(match, $2, $3) {
+              var reachString = $3;
+              var reachIdx = +$2;
+              var value;
+
+              if ( reachIdx <= results.length ) {
+                value = Hoek.reach(results[reachIdx], reachString);
+              } else {
+                errorReason = 'Array reference out of bounds for ' + key + ' in action at index ' + actionIndex;
+                failureData = {
+                  key: key,
+                  reachIdx: reachIdx,
+                  actionIndex: actionIndex
+                };
+                valid = false;
+                return;
               }
-              action.data[key] = action.data[key].replace(reachRegex, function($1, $2, $3) {
-                var reachIdx = +$2;
-                var value;
-                reachString = $3;
-                if ( reachIdx <= results.length ) {
-                  value = Hoek.reach(results[reachIdx], reachString);
-                } else {
-                  errorReason = 'Array reference out of bounds for ' + key + ' in action at index ' + actionIndex;
-                  failureData = {
-                    key: key,
-                    reachIdx: reachIdx,
-                    actionIndex: actionIndex
-                  };
-                  valid = false;
-                  return;
-                }
 
-                if ( !value ) {
-                  errorReason = 'Invalid reference to value using key \'' +
-                    key +
-                    '\' in action at index ' +
-                    actionIndex;
-                  failureData = {
-                    key: key,
-                    reachIdx: reachIdx,
-                    actionIndex: actionIndex
-                  };
-                  valid = false;
-                  return;
-                }
+              if ( !value ) {
+                errorReason = 'Invalid reference to value using key \'' +
+                  key +
+                  '\' in action at index ' +
+                  actionIndex;
+                failureData = {
+                  key: key,
+                  reachIdx: reachIdx,
+                  actionIndex: actionIndex
+                };
+                valid = false;
+                return;
+              }
 
-                return value;
-              });
+              return value;
+            }
 
+            // if the key's value isn't a reach string, return valid
+            if ( !reachRegex.test(action.data[key]) ) {
               return valid;
-            });
+            }
 
+            action.data[key] = action.data[key].replace(reachRegex, replace);
+            return valid;
+          }
+
+          // return a Promise of the result of a transaction for this action
+          return new BPromise(function(resolve, reject) {
+            // Check every key of the action's data to see if it should be replaced with
+            // the result of a previous action.
+            var shouldReject = !Object.keys(action.data).every(everyActionKey);
+
+            // if true, everyActionKey() encountered a problem processing data and set the error details to errorReason and failureData
             if ( shouldReject ) {
               return reject(Boom.badRequest(
                 errorReason,
@@ -519,9 +542,13 @@ module.exports = function (pg) {
               ));
             }
 
+            // select query to execute for thie action based on type and method params
             var query = queries[action.type][action.method];
+
+            // create an array of values to pass to the query, based on type and method
             var values = getValuesForQuery(userId, action.type, action.method, action.data);
 
+            // verify the user executing the bulk request has permission to execute this action
             hasPermissionsForAction(userId, action.type, action.method, action.data, results, transaction)
             .then(function(hasPermission) {
               if ( !hasPermission ) {
@@ -530,18 +557,17 @@ module.exports = function (pg) {
               return executeTransaction(transaction, query, values);
             })
             .then(function(result) {
+              // if we're deleting something, just push the status to the results array
               if ( action.method === 'remove' ) {
                 results.push({
                   status: 'deleted'
                 });
                 return resolve(results);
               }
+
+              // format the response data based on the type
               switch (action.type) {
                 case 'projects': {
-                  // if ( action.method === 'create' ) {
-                  //   result = server.methods.utils.formatProject(result.rows[0]);
-                  //   break;
-                  // }
                   result = server.methods.utils.formatProject(result.rows[0]);
                   break;
                 }
@@ -553,8 +579,11 @@ module.exports = function (pg) {
                   result = result.rows[0];
                 }
               }
+
+              // note the type and method for the action, to assist permission validation
               result.type = action.type;
               result.method = action.method;
+
               results.push(result);
               resolve(results);
             })
@@ -568,7 +597,17 @@ module.exports = function (pg) {
               ));
             });
           });
-        }, [])
+        }
+
+        getTransactionClient()
+        .then(function(t) {
+          transaction = t;
+          return begin(transaction);
+        })
+        .then(function() {
+          return BPromise.resolve(actions);
+        })
+        .reduce(reduceActions, [])
         .then(function(results) {
           transactionResults = results;
           return commit(transaction);
