@@ -1,4 +1,5 @@
 var BPromise = require('bluebird');
+var Hoek = require('hoek');
 
 exports.register = function(server, options, done) {
   var queryValuesMap =  {
@@ -114,9 +115,68 @@ exports.register = function(server, options, done) {
       }
   }
 
+  function getReplaceFunc(processResult, key, actionIndex, txResults) {
+    // grab the index ($2) of the action results to reach into, and grab the value described by reachString ($3) using Hoek.reach()
+    return function replace(match, $2, $3) {
+      var reachString = $3;
+      var reachIdx = +$2;
+      var value;
+
+      if ( reachIdx < txResults.length ) {
+        value = Hoek.reach(txResults[reachIdx], reachString);
+      } else {
+        processResult.invalid = true;
+        processResult.errorReason = 'Array reference out of bounds for ' + key + ' in action at index ' + actionIndex;
+        processResult.failureData = {
+          key: key,
+          reachIdx: reachIdx,
+          actionIndex: actionIndex
+        };
+        return;
+      }
+
+      if ( !value ) {
+        processResult.invalid = true;
+        processResult.errorReason = 'Invalid reference to value using key \'' +
+          key +
+          '\' in action at index ' +
+          actionIndex;
+        processResult.failureData = {
+          key: key,
+          reachIdx: reachIdx,
+          actionIndex: actionIndex
+        };
+        return;
+      }
+
+      return value;
+    };
+  }
+
+  // matches string like '$0.id' where '$0' is the action result at the 0th index and the value on that object keyed with 'id'
+  var reachRegex = /^\$(\d+)\.(.*)$/;
+
+  // check if a key on the action object should be resolved to a value
+  // returned by a previous action in the transaction
+  function generateEveryCallback(processResult, action, actionIndex, txResults) {
+    return function everyCallback(key) {
+      // if the key's value isn't a reach string, return valid
+      if ( !reachRegex.test(action.data[key]) ) {
+        return processResult;
+      }
+
+      action.data[key] = action.data[key].replace(
+        reachRegex,
+        getReplaceFunc(processResult, key, actionIndex, txResults)
+      );
+      return processResult;
+    };
+  }
+
   server.method('bulk.getLookupData', getLookupData, { callback: false });
   server.method('bulk.getTxActionResult', getTxActionResult, { callback: false });
   server.method('bulk.getQueryValues', getQueryValues, { callback: false });
+  server.method('bulk.generateEveryCallback', generateEveryCallback, { callback: false });
   done();
 };
 
