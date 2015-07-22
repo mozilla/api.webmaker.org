@@ -10,8 +10,8 @@ addons:
   postgresql: "9.4"
 before_script:
  - psql -c 'create database webmaker_testing' -U postgres
-after_script:
- - npm run test:reportcoverage
+script:
+ - npm run test:travis
 services:
   - redis-server
 deploy:
