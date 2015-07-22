@@ -12,7 +12,7 @@
     "test:droptables": "node scripts/drop-tables",
     "test:createtables": "node scripts/create-tables",
     "test:insertdata": "node scripts/test-data",
-    "test:reportcoverage": "npm run test:setup && lab -r lcov | ./node_modules/.bin/coveralls",
+    "test:travis": "npm run test:api -- -r lcov -r console | ./node_modules/.bin/coveralls",
     "lint": "npm run jshint && npm run jscs",
     "jshint": "jshint -c node_modules/mofo-style/linters/.jshintrc adapters lib services test server.js",
     "jscs": "jscs -c node_modules/mofo-style/linters/.jscsrc adapters lib services test server.js"
