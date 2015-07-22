@@ -10,7 +10,7 @@ exports.register = function(server, options, done) {
           null,
           server.methods.utils.version(),
           data.title,
-          JSON.stringify(data.thumbnail || {})
+          JSON.stringify(data.thumbnail)
         ];
       },
       update: function(userId, data) {
@@ -30,14 +30,14 @@ exports.register = function(server, options, done) {
           userId,
           data.x,
           data.y,
-          JSON.stringify(data.styles || {})
+          JSON.stringify(data.styles)
         ];
       },
       update: function(userId, data) {
         return [
           data.x,
           data.y,
-          JSON.stringify(data.styles || {}),
+          JSON.stringify(data.styles),
           data.id
         ];
       },
@@ -51,14 +51,14 @@ exports.register = function(server, options, done) {
           data.pageId,
           userId,
           data.type,
-          JSON.stringify(data.attributes || {}),
-          JSON.stringify(data.styles || {})
+          JSON.stringify(data.attributes),
+          JSON.stringify(data.styles)
         ];
       },
       update: function(userId, data) {
         return [
-          JSON.stringify(data.styles || {}),
-          JSON.stringify(data.attributes || {}),
+          JSON.stringify(data.styles),
+          JSON.stringify(data.attributes),
           data.id
         ];
       },
@@ -97,22 +97,23 @@ exports.register = function(server, options, done) {
   }
 
   function getTxActionResult(lookups, results) {
-      var type = lookups.type;
-      var id = lookups.id;
-      var len = results.length;
+    var type = lookups.type;
+    var id = lookups.id;
+    var len = results.length;
 
-      // if the type being acted upon depends on a type created earlier in the transaction,
-      // we won't be able to query for it, so lets find it now
-      for (var i = 0; i < len; ++i) {
-        var result = results[i];
-        if (
-          result.method === 'create' &&
-          result.type === type &&
-          result.id === id )
-        {
-          return result;
-        }
+    // if the type being acted upon depends on a type created earlier in the transaction,
+    // we won't be able to query for it, so lets find it now
+    for (var i = 0; i < len; ++i) {
+      var result = results[i];
+      if (
+        result.method === 'create' &&
+        result.type === type &&
+        result.id === id )
+      {
+        return result;
       }
+    }
+    return undefined;
   }
 
   function getReplaceFunc(processResult, key, actionIndex, txResults) {
