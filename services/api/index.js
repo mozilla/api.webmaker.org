@@ -11,7 +11,8 @@ exports.register = function api(server, options, next) {
       require('./lib/utils'),
       require('./lib/postgre')(pg),
       require('./lib/thumbnails'),
-      require('./lib/cache')
+      require('./lib/cache'),
+      require('./lib/bulk')
     ], function(err) {
     if ( err ) {
       return next(err);

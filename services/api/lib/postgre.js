@@ -300,174 +300,6 @@ module.exports = function (pg) {
         });
       });
 
-      // matches string like '$0.id' where '$0' is the action result at the 0th index and the value on that object keyed with 'id'
-      var reachRegex = /^\$(\d+)\.(.*)$/;
-
-      // Build an array of values to pass to each type of query that can be run in a bulk transaction
-      // array values are determined by type and method.
-      function getValuesForQuery(userId, type, method, data) {
-        var values;
-        switch (type) {
-          case 'projects': {
-            switch (method) {
-              case 'create': {
-                values = [
-                  userId,
-                  null,
-                  server.methods.utils.version(),
-                  data.title,
-                  JSON.stringify(data.thumbnail || {})
-                ];
-                break;
-              }
-              case 'update': {
-                values = [
-                  data.title,
-                  data.id
-                ];
-                break;
-              }
-              case 'remove': {
-                values = [
-                  data.id
-                ];
-                break;
-              }
-            }
-            break;
-          }
-          case 'pages': {
-            switch (method) {
-              case 'create': {
-                values = [
-                  data.projectId,
-                  userId,
-                  data.x,
-                  data.y,
-                  JSON.stringify(data.styles || {})
-                ];
-                break;
-              }
-              case 'update': {
-                values = [
-                  data.x,
-                  data.y,
-                  JSON.stringify(data.styles || {}),
-                  data.id
-                ];
-                break;
-              }
-              case 'remove': {
-                values = [
-                  data.id
-                ];
-                break;
-              }
-            }
-            break;
-          }
-          case 'elements': {
-            switch (method) {
-              case 'create': {
-                values = [
-                  data.pageId,
-                  userId,
-                  data.type,
-                  JSON.stringify(data.attributes || {}),
-                  JSON.stringify(data.styles || {})
-                ];
-                break;
-              }
-              case 'update': {
-                values = [
-                  JSON.stringify(data.styles || {}),
-                  JSON.stringify(data.attributes || {}),
-                  data.id
-                ];
-                break;
-              }
-              case 'remove': {
-                values = [
-                  data.id
-                ];
-                break;
-              }
-            }
-          }
-        }
-        return values;
-      }
-
-      function hasPermissionsForAction(userId, type, method, data, results, transaction) {
-        return new Promise(function(resolve, reject) {
-          var lookupType;
-          var lookupId;
-
-          // determine the type of query to run, and the id value to look up
-          if ( method === 'create' ) {
-            switch (type) {
-              case 'projects': {
-                // the user should always be able to create new projects under their account, so resolve true now
-                return resolve(true);
-              }
-              case 'pages': {
-                // look up the project that this page should be created for, to ensure the current user owns it
-                lookupType = 'projects';
-                lookupId = data.projectId;
-                break;
-              }
-              case 'elements': {
-                // look up the page this element is to be created for, to ensure the current user owns it
-                lookupType = 'pages';
-                lookupId = data.pageId;
-                break;
-              }
-            }
-          } else {
-            // update / delete need to look up the target type by id to verify ownership
-            lookupType = type;
-            lookupId = data.id;
-          }
-
-          // coerce these values to string, because bigints come in from PG as strings
-          lookupId = '' + lookupId;
-          userId = '' + userId;
-
-          var txResult;
-
-          // if the type being acted upon depends on a type created earlier in the transaction,
-          // we won't be able to query for it, so lets find it now
-          for (var i = 0; i < results.length; ++i) {
-            var result = results[i];
-            if (
-              result.method === 'create' &&
-              result.type === lookupType &&
-              result.id === lookupId )
-            {
-              txResult = result;
-              break;
-            }
-          }
-
-          // this action refers to an object created earlier in the transaction
-          if ( txResult ) {
-            return resolve(txResult.user_id === userId);
-          }
-
-          // look up the parent type for this action, to verify the user has ownership
-          executeTransaction(transaction, queries[lookupType].findOneById, [lookupId])
-          .then(function(results) {
-            if ( !results.rows.length || results.rows[0].user_id !== userId ) {
-              return resolve(false);
-            }
-            resolve(true);
-          })
-          .catch(function(err) {
-            reject(err);
-          });
-        });
-      }
-
       server.method('projects.bulk', function(actions, userId, done) {
         var transaction;
         var transactionResults;
@@ -482,6 +314,9 @@ module.exports = function (pg) {
           function everyActionKey(key) {
             // if there's a problem resolving the key to a value, this is set to false
             var valid = true;
+
+            // matches string like '$0.id' where '$0' is the action result at the 0th index and the value on that object keyed with 'id'
+            var reachRegex = /^\$(\d+)\.(.*)$/;
 
             // grab the index ($2) of the action results to reach into, and grab the value described by reachString ($3) using Hoek.reach()
             function replace(match, $2, $3) {
@@ -546,10 +381,40 @@ module.exports = function (pg) {
             var query = queries[action.type][action.method];
 
             // create an array of values to pass to the query, based on type and method
-            var values = getValuesForQuery(userId, action.type, action.method, action.data);
+            var values = server.methods.bulk.getQueryValues(
+              action.type,
+              action.method,
+              userId,
+              action.data
+            );
 
-            // verify the user executing the bulk request has permission to execute this action
-            hasPermissionsForAction(userId, action.type, action.method, action.data, results, transaction)
+            BPromise.resolve()
+            .then(function() {
+              if ( action.type === 'projects' && action.method === 'create' ) {
+                return BPromise.resolve(true);
+              }
+
+              var lookups = server.methods.bulk.getLookupData(
+                userId,
+                action.type,
+                action.method,
+                action.data
+              );
+
+              var txResult = server.methods.bulk.getTxActionResult(lookups, results);
+
+              if ( txResult ) {
+                return BPromise.resolve(txResult.user_id === userId);
+              }
+
+              executeTransaction(transaction, queries[lookups.type].findOneById, [lookups.id])
+              .then(function(results) {
+                resolve(!results.rows.length || results.rows[0].user_id !== userId);
+              })
+              .catch(function(err) {
+                reject(err);
+              });
+            })
             .then(function(hasPermission) {
               if ( !hasPermission ) {
                 throw new Error('Insufficient permissions to execute action');
