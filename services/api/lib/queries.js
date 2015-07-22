@@ -10,7 +10,7 @@ var projectCols = [
   "projects.user_id"
 ].join(", ");
 
-var projectUserCols = projectCols + ', ' + [
+var projectUserCols = projectCols + ", " + [
   "users.username",
   "users.id as user_id",
   "users.language as user_language",
@@ -105,11 +105,12 @@ module.exports = {
     // Find one project by id and user_id
     // params: project_id bigint, user_id bigint
     findOne: "SELECT " + projectUserCols + " FROM projects INNER JOIN users ON users.id = projects.user_id WHERE " +
-      " projects.deleted_at IS NULL AND projects.id = $1 AND projects.user_id = $2;",
+      "projects.deleted_at IS NULL AND projects.id = $1 AND projects.user_id = $2;",
 
     // Find one project by ID
     // params: project id
-    findOneById: "SELECT projects.user_id, projects.id FROM projects WHERE projects.deleted_at IS NULL AND projects.id = $1;",
+    findOneById: "SELECT projects.user_id, projects.id FROM projects WHERE projects.deleted_at IS NULL AND " +
+      "projects.id = $1;",
 
     // Retrieve data in a project for remixing (joins pages and elements)
     // params: project_id bigint

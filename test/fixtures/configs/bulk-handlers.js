@@ -39,7 +39,7 @@ module.exports = {
             data: {
               projectId: '$0.id',
               x: 0,
-              y: 0
+              y: 1
             }
           },
           {
@@ -56,6 +56,24 @@ module.exports = {
             data: {
               id: '$1.id',
               x: 1,
+              y: 0
+            }
+          },
+          {
+            type: 'pages',
+            method: 'create',
+            data: {
+              projectId: '$0.id',
+              x: 0,
+              y: 0
+            }
+          },
+          {
+            type: 'pages',
+            method: 'update',
+            data: {
+              id: '$4.id',
+              x: 2,
               y: 0
             }
           },
@@ -89,10 +107,34 @@ module.exports = {
             }
           },
           {
+            type: 'pages',
+            method: 'remove',
+            data: {
+              id: '$4.id'
+            }
+          },
+          {
             type: 'projects',
             method: 'remove',
             data: {
               id: '$0.id'
+            }
+          }
+        ]
+      }
+    },
+    updateExisting: {
+      url: '/users/1/bulk',
+      method: 'post',
+      headers: userToken,
+      payload: {
+        actions: [
+          {
+            type: 'projects',
+            method: 'update',
+            data: {
+              id: 1,
+              title: 'test_project_1'
             }
           }
         ]
@@ -203,6 +245,40 @@ module.exports = {
               projectId: '$0.not.here',
               x: 0,
               y: 0
+            }
+          }
+        ]
+      }
+    },
+    insufficientPermissions: {
+      url: '/users/1/bulk',
+      method: 'post',
+      headers: userToken,
+      payload: {
+        actions: [
+          {
+            type: 'projects',
+            method: 'update',
+            data: {
+              id: 3,
+              title: 'you can not update this'
+            }
+          }
+        ]
+      }
+    },
+    lookupNotFound: {
+      url: '/users/1/bulk',
+      method: 'post',
+      headers: userToken,
+      payload: {
+        actions: [
+          {
+            type: 'projects',
+            method: 'update',
+            data: {
+              id: 300,
+              title: 'this project does not exist, therefore you can not update it'
             }
           }
         ]

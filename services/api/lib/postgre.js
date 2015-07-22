@@ -324,7 +324,8 @@ module.exports = function (pg) {
               server.methods.bulk.generateEveryCallback(processResult, action, actionIndex, results)
             );
 
-            // if true, everyActionKey() encountered a problem processing data and set the error details to errorReason and failureData
+            // if true, everyActionKey() encountered a problem processing data and set
+            // the error details to errorReason and failureData
             if ( processResult.invalid ) {
               return reject(Boom.badRequest(
                 processResult.errorReason,
@@ -362,17 +363,27 @@ module.exports = function (pg) {
                 return BPromise.resolve(txResult.user_id === userId);
               }
 
-              executeTransaction(transaction, queries[lookups.type].findOneById, [lookups.id])
+              return executeTransaction(transaction, queries[lookups.type].findOneById, [lookups.id])
               .then(function(results) {
-                resolve(!results.rows.length || results.rows[0].user_id !== userId);
-              })
-              .catch(function(err) {
-                reject(err);
+                if ( !results.rows.length ) {
+                  throw Boom.badRequest(
+                    lookups.type + ' not found for action at index ' + actionIndex,
+                    {
+                      action: action
+                    }
+                  );
+                }
+                return BPromise.resolve(results.rows[0].user_id === userId);
               });
             })
             .then(function(hasPermission) {
               if ( !hasPermission ) {
-                throw new Error('Insufficient permissions to execute action');
+                throw Boom.badRequest(
+                  'Insufficient permissions to execute action at index ' + actionIndex,
+                  {
+                    action: action
+                  }
+                );
               }
               return executeTransaction(transaction, query, values);
             })
@@ -380,7 +391,9 @@ module.exports = function (pg) {
               // if we're deleting something, just push the status to the results array
               if ( action.method === 'remove' ) {
                 results.push({
-                  status: 'deleted'
+                  status: 'deleted',
+                  type: action.type,
+                  method: action.method
                 });
                 return resolve(results);
               }
@@ -397,11 +410,14 @@ module.exports = function (pg) {
               // note the type and method for the action, to assist permission validation
               result.type = action.type;
               result.method = action.method;
-
               results.push(result);
               resolve(results);
             })
             .catch(function(err) {
+              if ( err.isBoom ) {
+                return reject(err);
+              }
+
               reject(Boom.badRequest(
                 'failed to execute query for action at index ' + actionIndex,
                 {
@@ -481,10 +497,6 @@ module.exports = function (pg) {
           // project ID + user ID
           return args.join('.');
         }
-      });
-
-      server.method('projects.findOneById', function(values, done) {
-        executeQuery(queries.projects.findOneById, values, done);
       });
 
       server.method('projects.findRemixes', function(values, done) {
@@ -594,10 +606,6 @@ module.exports = function (pg) {
         }
       });
 
-      server.method('pages.findOneById', function(values, done) {
-        executeQuery(queries.pages.findOneById, values, done);
-      });
-
       server.method('pages.update', function(values, done) {
         executeQuery(queries.pages.update, values, done);
       }, {});
@@ -642,10 +650,6 @@ module.exports = function (pg) {
           // elementId
           return '' + args[0];
         }
-      });
-
-      server.method('elements.findOneById', function(values, done) {
-        executeQuery(queries.elements.findOneById, values, done);
       });
 
       server.method('elements.update', function(values, done) {

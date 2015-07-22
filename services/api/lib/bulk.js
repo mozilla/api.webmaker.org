@@ -1,4 +1,3 @@
-var BPromise = require('bluebird');
 var Hoek = require('hoek');
 
 exports.register = function(server, options, done) {
@@ -105,19 +104,15 @@ exports.register = function(server, options, done) {
     // we won't be able to query for it, so lets find it now
     for (var i = 0; i < len; ++i) {
       var result = results[i];
-      if (
-        result.method === 'create' &&
-        result.type === type &&
-        result.id === id )
-      {
+      if ( result.method === 'create' && result.type === type && result.id === id ) {
         return result;
       }
     }
-    return undefined;
   }
 
   function getReplaceFunc(processResult, key, actionIndex, txResults) {
-    // grab the index ($2) of the action results to reach into, and grab the value described by reachString ($3) using Hoek.reach()
+    // grab the index ($2) of the action results to reach into, and grab the value
+    // described by reachString ($3) using Hoek.reach()
     return function replace(match, $2, $3) {
       var reachString = $3;
       var reachIdx = +$2;
@@ -154,7 +149,8 @@ exports.register = function(server, options, done) {
     };
   }
 
-  // matches string like '$0.id' where '$0' is the action result at the 0th index and the value on that object keyed with 'id'
+  // matches string like '$0.id' where '$0' is the action result at the
+  // 0th index and the value on that object keyed with 'id'
   var reachRegex = /^\$(\d+)\.(.*)$/;
 
   // check if a key on the action object should be resolved to a value
