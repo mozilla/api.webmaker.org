@@ -324,7 +324,7 @@ module.exports = function (pg) {
               var reachIdx = +$2;
               var value;
 
-              if ( reachIdx <= results.length ) {
+              if ( reachIdx < results.length ) {
                 value = Hoek.reach(results[reachIdx], reachString);
               } else {
                 errorReason = 'Array reference out of bounds for ' + key + ' in action at index ' + actionIndex;
