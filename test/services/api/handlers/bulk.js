@@ -76,8 +76,78 @@ experiment('Bulk Projects API', function() {
     });
   });
 
-  test('Returns 400 if user has insufficient permissions for an action ', function(done) {
-    var opts = bulkConfig.failure.insufficientPermissions;
+  test('Returns 400 if user has insufficient permissions to update a project', function(done) {
+    var opts = bulkConfig.failure.insufficientPermissions.updateProject;
+
+    server.inject(opts, function(resp) {
+      expect(resp.statusCode).to.equal(400);
+      expect(resp.result.message).to.contain('Insufficient permissions to execute action at index');
+      done();
+    });
+  });
+
+  test('Returns 400 if user has insufficient permissions to remove a project', function(done) {
+    var opts = bulkConfig.failure.insufficientPermissions.removeProject;
+
+    server.inject(opts, function(resp) {
+      expect(resp.statusCode).to.equal(400);
+      expect(resp.result.message).to.contain('Insufficient permissions to execute action at index');
+      done();
+    });
+  });
+
+  test('Returns 400 if user has insufficient permissions to update a page', function(done) {
+    var opts = bulkConfig.failure.insufficientPermissions.updatePage;
+
+    server.inject(opts, function(resp) {
+      expect(resp.statusCode).to.equal(400);
+      expect(resp.result.message).to.contain('Insufficient permissions to execute action at index');
+      done();
+    });
+  });
+
+  test('Returns 400 if user has insufficient permissions to remove a page', function(done) {
+    var opts = bulkConfig.failure.insufficientPermissions.removePage;
+
+    server.inject(opts, function(resp) {
+      expect(resp.statusCode).to.equal(400);
+      expect(resp.result.message).to.contain('Insufficient permissions to execute action at index');
+      done();
+    });
+  });
+
+  test('Returns 400 if user has insufficient permissions to update an element', function(done) {
+    var opts = bulkConfig.failure.insufficientPermissions.updateElement;
+
+    server.inject(opts, function(resp) {
+      expect(resp.statusCode).to.equal(400);
+      expect(resp.result.message).to.contain('Insufficient permissions to execute action at index');
+      done();
+    });
+  });
+
+  test('Returns 400 if user has insufficient permissions to remove an element', function(done) {
+    var opts = bulkConfig.failure.insufficientPermissions.removeElement;
+
+    server.inject(opts, function(resp) {
+      expect(resp.statusCode).to.equal(400);
+      expect(resp.result.message).to.contain('Insufficient permissions to execute action at index');
+      done();
+    });
+  });
+
+  test('Returns 400 if user has insufficient permissions to create a page', function(done) {
+    var opts = bulkConfig.failure.insufficientPermissions.createPage;
+
+    server.inject(opts, function(resp) {
+      expect(resp.statusCode).to.equal(400);
+      expect(resp.result.message).to.contain('Insufficient permissions to execute action at index');
+      done();
+    });
+  });
+
+  test('Returns 400 if user has insufficient permissions to create an element', function(done) {
+    var opts = bulkConfig.failure.insufficientPermissions.createElement;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);

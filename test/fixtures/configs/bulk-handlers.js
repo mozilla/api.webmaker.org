@@ -251,20 +251,144 @@ module.exports = {
       }
     },
     insufficientPermissions: {
-      url: '/users/1/bulk',
-      method: 'post',
-      headers: userToken,
-      payload: {
-        actions: [
-          {
-            type: 'projects',
-            method: 'update',
-            data: {
-              id: 3,
-              title: 'you can not update this'
+      updateProject: {
+        url: '/users/1/bulk',
+        method: 'post',
+        headers: userToken,
+        payload: {
+          actions: [
+            {
+              type: 'projects',
+              method: 'update',
+              data: {
+                id: 3,
+                title: 'you can not update this'
+              }
             }
-          }
-        ]
+          ]
+        }
+      },
+      removeProject: {
+        url: '/users/1/bulk',
+        method: 'post',
+        headers: userToken,
+        payload: {
+          actions: [
+            {
+              type: 'projects',
+              method: 'remove',
+              data: {
+                id: 3
+              }
+            }
+          ]
+        }
+      },
+      updatePage: {
+        url: '/users/1/bulk',
+        method: 'post',
+        headers: userToken,
+        payload: {
+          actions: [
+            {
+              type: 'pages',
+              method: 'update',
+              data: {
+                id: 7,
+                x: 123,
+                y: 456
+              }
+            }
+          ]
+        }
+      },
+      removePage: {
+        url: '/users/1/bulk',
+        method: 'post',
+        headers: userToken,
+        payload: {
+          actions: [
+            {
+              type: 'pages',
+              method: 'remove',
+              data: {
+                id: 7
+              }
+            }
+          ]
+        }
+      },
+      updateElement: {
+        url: '/users/1/bulk',
+        method: 'post',
+        headers: userToken,
+        payload: {
+          actions: [
+            {
+              type: 'elements',
+              method: 'update',
+              data: {
+                id: 8,
+                attributes: {
+                  some: 'value'
+                }
+              }
+            }
+          ]
+        }
+      },
+      removeElement: {
+        url: '/users/1/bulk',
+        method: 'post',
+        headers: userToken,
+        payload: {
+          actions: [
+            {
+              type: 'elements',
+              method: 'remove',
+              data: {
+                id: 8
+              }
+            }
+          ]
+        }
+      },
+      createPage: {
+        url: '/users/1/bulk',
+        method: 'post',
+        headers: userToken,
+        payload: {
+          actions: [
+            {
+              type: 'pages',
+              method: 'create',
+              data: {
+                projectId: 3,
+                x: 123,
+                y: 456
+              }
+            }
+          ]
+        }
+      },
+      createElement: {
+        url: '/users/1/bulk',
+        method: 'post',
+        headers: userToken,
+        payload: {
+          actions: [
+            {
+              type: 'elements',
+              method: 'create',
+              data: {
+                pageId: 7,
+                type: 'text',
+                styles: {},
+                attributes: {}
+              }
+            }
+          ]
+        }
       }
     },
     lookupNotFound: {
