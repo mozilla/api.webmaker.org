@@ -48,6 +48,15 @@ experiment('Bulk Projects API', function() {
     });
   });
 
+  test('Succeeds - update existing data', function(done) {
+    var opts = bulkConfig.success.updateExisting;
+
+    server.inject(opts, function(resp) {
+      expect(resp.statusCode).to.equal(200);
+      done();
+    });
+  });
+
   test('Succeeds - with provided jsonb fields', function(done) {
     var opts = bulkConfig.success.thumbnailsStylesAttributes;
 
@@ -63,6 +72,26 @@ experiment('Bulk Projects API', function() {
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
       expect(resp.result.message).to.contain('Array reference out of bounds');
+      done();
+    });
+  });
+
+  test('Returns 400 if user has insufficient permissions for an action ', function(done) {
+    var opts = bulkConfig.failure.insufficientPermissions;
+
+    server.inject(opts, function(resp) {
+      expect(resp.statusCode).to.equal(400);
+      expect(resp.result.message).to.contain('Insufficient permissions to execute action at index');
+      done();
+    });
+  });
+
+  test('Returns 400 if validation lookup does not return rows' , function(done) {
+    var opts = bulkConfig.failure.lookupNotFound;
+
+    server.inject(opts, function(resp) {
+      expect(resp.statusCode).to.equal(400);
+      expect(resp.result.message).to.contain('not found for action at index');
       done();
     });
   });
