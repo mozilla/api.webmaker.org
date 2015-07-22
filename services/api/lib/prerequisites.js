@@ -7,7 +7,6 @@ function isOwner(tokenId, userId, projectId) {
   return (tokenId === userId && userId === projectId);
 }
 
-
 exports.calculateOffset = {
   assign: 'offset',
   method: function(request, reply) {
