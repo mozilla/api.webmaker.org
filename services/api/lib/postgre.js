@@ -309,77 +309,26 @@ module.exports = function (pg) {
       server.method('projects.bulk', function(actions, userId, done) {
         var transaction;
         var transactionResults;
-        var failureData;
-        var errorReason;
 
         // reduce the Array of actions, building a new array of transaction results
         function reduceActions(results, action, actionIndex) {
-
-          // check if a key on the action object should be resolved to a value
-          // returned by a previous action in the transaction
-          function everyActionKey(key) {
-            // if there's a problem resolving the key to a value, this is set to false
-            var valid = true;
-
-            // matches string like '$0.id' where '$0' is the action result at the 0th index and the value on that object keyed with 'id'
-            var reachRegex = /^\$(\d+)\.(.*)$/;
-
-            // grab the index ($2) of the action results to reach into, and grab the value described by reachString ($3) using Hoek.reach()
-            function replace(match, $2, $3) {
-              var reachString = $3;
-              var reachIdx = +$2;
-              var value;
-
-              if ( reachIdx < results.length ) {
-                value = Hoek.reach(results[reachIdx], reachString);
-              } else {
-                errorReason = 'Array reference out of bounds for ' + key + ' in action at index ' + actionIndex;
-                failureData = {
-                  key: key,
-                  reachIdx: reachIdx,
-                  actionIndex: actionIndex
-                };
-                valid = false;
-                return;
-              }
-
-              if ( !value ) {
-                errorReason = 'Invalid reference to value using key \'' +
-                  key +
-                  '\' in action at index ' +
-                  actionIndex;
-                failureData = {
-                  key: key,
-                  reachIdx: reachIdx,
-                  actionIndex: actionIndex
-                };
-                valid = false;
-                return;
-              }
-
-              return value;
-            }
-
-            // if the key's value isn't a reach string, return valid
-            if ( !reachRegex.test(action.data[key]) ) {
-              return valid;
-            }
-
-            action.data[key] = action.data[key].replace(reachRegex, replace);
-            return valid;
-          }
-
           // return a Promise of the result of a transaction for this action
           return new BPromise(function(resolve, reject) {
+            var processResult = {
+              invalid: false
+            };
+
             // Check every key of the action's data to see if it should be replaced with
             // the result of a previous action.
-            var shouldReject = !Object.keys(action.data).every(everyActionKey);
+            Object.keys(action.data).forEach(
+              server.methods.bulk.generateEveryCallback(processResult, action, actionIndex, results)
+            );
 
             // if true, everyActionKey() encountered a problem processing data and set the error details to errorReason and failureData
-            if ( shouldReject ) {
+            if ( processResult.invalid ) {
               return reject(Boom.badRequest(
-                errorReason,
-                failureData
+                processResult.errorReason,
+                processResult.failureData
               ));
             }
 
