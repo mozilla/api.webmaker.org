@@ -437,18 +437,12 @@ module.exports = function (pg) {
               }
 
               // format the response data based on the type
-              switch (action.type) {
-                case 'projects': {
-                  result = server.methods.utils.formatProject(result.rows[0]);
-                  break;
-                }
-                case 'pages': {
-                  result = server.methods.utils.formatPage(result.rows);
-                  break;
-                }
-                case 'elements': {
-                  result = result.rows[0];
-                }
+              if ( action.type === 'projects' ) {
+                result = server.methods.utils.formatProject(result.rows[0]);
+              } else if ( action.type === 'pages' ) {
+                result = server.methods.utils.formatPage(result.rows);
+              } else {
+                result = server.methods.utils.formatElement(result.rows[0]);
               }
 
               // note the type and method for the action, to assist permission validation
