@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS "pages"
 (
   id bigserial NOT NULL,
   project_id bigint REFERENCES projects(id),
+  user_id bigint REFERENCES users(id),
   x integer NOT NULL,
   y integer NOT NULL,
   created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -46,6 +47,7 @@ CREATE TABLE IF NOT EXISTS "elements"
   id bigserial NOT NULL,
   type varchar NOT NULL,
   page_id bigint REFERENCES pages(id),
+  user_id bigint REFERENCES users(id),
   created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   deleted_at timestamp DEFAULT NULL,
