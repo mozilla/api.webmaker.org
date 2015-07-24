@@ -15,6 +15,7 @@ var authRouteConfig = {
   }
 };
 
+var locale = require('../lib/locale');
 var prerequisites = require('../lib/prerequisites');
 var users = require('../handlers/users');
 var projects = require('../handlers/projects');
@@ -86,8 +87,8 @@ var routes = [
         },
         payload: {
           username: Joi.string().max(20).optional(),
-          language: Joi.string().length(2).optional(),
-          country: Joi.string().length(2).optional()
+          // Wrote this regex to accept every language string on transifex.com/languages
+          language: Joi.string().min(2).max(20).regex(locale.languageRegex)
         }
       },
       cors: {

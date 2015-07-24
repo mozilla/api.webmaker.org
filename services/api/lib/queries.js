@@ -10,7 +10,6 @@ var projectCols = [
   "users.username",
   "users.id as user_id",
   "users.language as user_language",
-  "users.country as user_country",
   "users.created_at as user_created_at",
   "users.updated_at as user_updated_at",
   "users.staff as user_staff",
@@ -51,20 +50,20 @@ var remixCols = [
 module.exports = {
   users: {
     // Create user
-    // Params: id bigint, username varchar, language varchar, country varchar
-    create: "INSERT INTO users (id, username, language, country) VALUES($1, $2, $3, $4) RETURNING id, username, " +
-      " created_at, updated_at, language, country, moderator, staff;",
+    // Params: id bigint, username varchar, language varchar
+    create: "INSERT INTO users (id, username, language) VALUES($1, $2, $3) RETURNING id, username, " +
+      " created_at, updated_at, language, moderator, staff;",
 
     // Find user
     // Params: id bigint
-    find: "SELECT id, username, created_at, updated_at, language, country, moderator, staff " +
+    find: "SELECT id, username, created_at, updated_at, language, moderator, staff " +
       "FROM users WHERE deleted_at IS NULL AND id = $1;",
 
     // Update user
-    // Params username varchar, language varchar, country varchar, id bigint
-    update: "UPDATE users SET (username, language, country) = " +
-      "($1, $2, $3) WHERE deleted_at IS NULL AND id = $4 RETURNING id, username, " +
-      " created_at, updated_at, language, country, moderator, staff;",
+    // Params username varchar, language varchar, id bigint
+    update: "UPDATE users SET (username, language) = " +
+      "($1, $2) WHERE deleted_at IS NULL AND id = $3 RETURNING id, username, " +
+      " created_at, updated_at, language, moderator, staff;",
 
     // Soft delete user
     // Params: id bigint
@@ -125,7 +124,19 @@ module.exports = {
     // Find featured projects
     // Params: offset integer, limit integer
     findFeatured: "SELECT " + projectCols + " FROM projects INNER JOIN users ON users.id = projects.user_id WHERE" +
-      " projects.deleted_at IS NULL AND projects.featured = TRUE ORDER BY created_at DESC LIMIT $1 OFFSET $2;"
+      " projects.deleted_at IS NULL AND projects.featured = TRUE ORDER BY created_at DESC LIMIT $1 OFFSET $2;",
+
+    // Find featured projects
+    // Params: language string, offset integer, limit integer
+    findFeaturedByLanguage: "SELECT " + projectCols +
+      " FROM projects INNER JOIN users ON users.id = projects.user_id WHERE" +
+      " projects.deleted_at IS NULL AND projects.featured = TRUE" +
+      " ORDER BY" +
+      "   CASE users.language" +
+      "     WHEN $1 THEN 1" +
+      "     ELSE 2" +
+      "   END, " +
+      " projects.created_at DESC LIMIT $2 OFFSET $3;"
   },
   pages: {
     // Create page

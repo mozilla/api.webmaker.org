@@ -27,13 +27,11 @@ exports.get = function(request, reply) {
 };
 
 exports.post = function(request, reply) {
-  var prefLocale = request.auth.credentials.prefLocale.split('-');
   request.server.methods.users.create(
     [
       request.auth.credentials.id,
       request.auth.credentials.username,
-      prefLocale[0],
-      prefLocale[1]
+      request.auth.credentials.prefLocale
     ],
     function(err, result) {
       if ( err ) {
@@ -80,15 +78,10 @@ exports.patch = function(request, reply) {
         user.language = request.payload.language;
       }
 
-      if ( request.payload.country ) {
-        user.country = request.payload.country;
-      }
-
       request.server.methods.users.update(
         [
           user.username,
           user.language,
-          user.country,
           request.params.user
         ],
         function(err, result) {

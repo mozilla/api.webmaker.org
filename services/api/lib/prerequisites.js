@@ -19,8 +19,7 @@ function createUser(request, reply) {
     [
       request.auth.credentials.id,
       request.auth.credentials.username,
-      request.auth.credentials.prefLocale.split('-')[0],
-      request.auth.credentials.prefLocale.split('-')[1]
+      request.auth.credentials.prefLocale
     ],
     function(err, result) {
       if ( err ) {

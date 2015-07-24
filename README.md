@@ -33,9 +33,6 @@ createdb -U dbusername -W dbuserpassword webmaker
 
 # create tables; -U and -W are only necessary if your pg instance needs authentication
 psql -U dbusername -W dbuserpassword -d webmaker -f scripts/create-tables.sql
-
-# Run migration scripts (uses the PostgreSQL Connection string specified in .env)
-npm run migrate
 ```
 
 ### Note: this will set up an empty database
@@ -50,11 +47,17 @@ $> psql -d webmaker -U dbusername
 and then issuing the following user record creation instruction:
 
 ```
-pg> insert into users (id, username, language, country) VALUES (1, 'testuser', 'en', 'US');
+pg> insert into users (id, username, language) VALUES (1, 'testuser', 'en-US');
 ```
 
 This will let you call any of the API endpoints with userid **`1`** without running into
 API errors due to missing users.
+
+## Migration
+
+Migration scripts can be found in the `migrations` folder.
+
+You can run all the scripts in order with `npm run migrate` or run each individually for a partial migration `psql -U username -d dbname -f migrations/{migration_script}.sql`
 
 ## Run
 

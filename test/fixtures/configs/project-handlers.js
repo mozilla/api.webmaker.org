@@ -104,6 +104,92 @@ exports.get = {
       }
     }
   },
+  discoverByLanguage: {
+    success: {
+      default: {
+        url: '/discover/en-US',
+        method: 'get'
+      },
+      changeLanguageENGB: {
+        url: '/discover/en-GB',
+        method: 'get'
+      },
+      changeLanguageBNBD: {
+        url: '/discover/bn-BD',
+        method: 'get'
+      },
+      changeLanguageIDID: {
+        url: '/discover/id-ID',
+        method: 'get'
+      },
+      changeLanguageLolRofl: {
+        url: '/discover/lol-rofl',
+        method: 'get'
+      },
+      changeCount: {
+        url: '/discover/en-US?count=3',
+        method: 'get'
+      },
+      changePage: {
+        url: '/discover/en-US?count=3&page=2',
+        method: 'get'
+      },
+      returnsNoneWhenPageTooHigh: {
+        url: '/discover/en-US?count=50&page=2',
+        method: 'get'
+      }
+    },
+    fail: {
+      query: {
+        count: {
+          negative: {
+            url: '/discover?count=-1',
+            method: 'get'
+          },
+          tooHigh: {
+            url: '/discover?count=101',
+            method: 'get'
+          },
+          notNumber: {
+            url: '/discover?count=foo'
+          }
+        },
+        page: {
+          negative: {
+            url: '/discover?page=-1',
+            method: 'get'
+          },
+          tooHigh: {
+            url: '/discover?page=51',
+            method: 'get'
+          },
+          notNumber: {
+            url: '/discover?page=foo'
+          }
+        }
+      },
+      params: {
+        language: {
+          changeLanguageNonsense: {
+            url: '/discover/-.@',
+            method: 'get'
+          },
+          changeLanguageNewline: {
+            url: '/discover/-.@',
+            method: 'get'
+          },
+          changeLanguageNumber: {
+            url: '/discover/2',
+            method: 'get'
+          }
+        }
+      },
+      error: {
+        url: '/discover/en-US',
+        method: 'get'
+      }
+    }
+  },
   one: {
     success: {
       url: '/users/1/projects/1',
