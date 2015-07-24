@@ -1,8 +1,10 @@
 var boom = require('boom');
 
 function isOwner(tokenId, userId, projectId) {
-  return (tokenId === userId) &&
-    (userId === projectId);
+  tokenId = '' + tokenId;
+  userId = '' + userId;
+  projectId = '' + projectId;
+  return (tokenId === userId && userId === projectId);
 }
 
 exports.calculateOffset = {
