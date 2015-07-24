@@ -386,6 +386,7 @@ module.exports = function (pg) {
 
       server.method('projects.findFeaturedByLanguage', function(values, done) {
         executeQuery(queries.projects.findFeaturedByLanguage, values, done);
+console.log(format('Executing Query: %s - params: %s', queries.projects.findFeaturedByLanguage, values.join(', ')));
       }, {
         cache: {
           segment: 'projects.findFeaturedByLanguage',

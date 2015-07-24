@@ -25,13 +25,13 @@ module.exports = {
   },
   'createToken1': {
     scope: ['user', 'projects'],
-    id: '5',
+    id: '8',
     username: 'newuser',
     prefLocale: 'en-CA'
   },
   'createToken2': {
     scope: ['user', 'projects'],
-    id: '6',
+    id: '9',
     username: 'newuser',
     prefLocale: 'en-US'
   },

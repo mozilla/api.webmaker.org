@@ -131,7 +131,7 @@ module.exports = {
     // Params: country string, language string, offset integer, limit integer
     findFeaturedByLanguage: "SELECT " + projectCols + " FROM projects INNER JOIN users ON users.id = projects.user_id WHERE" +
       " projects.deleted_at IS NULL AND projects.featured = TRUE" +
-      " ORDER BY"
+      " ORDER BY" +
       "   CASE users.language" +
       "     WHEN $1 THEN 1" +
       "     ELSE 2" +

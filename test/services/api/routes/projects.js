@@ -230,6 +230,16 @@ experiment('project routes', function() {
     done();
   });
 
+  test('applies config to options /discover/{language}', function(done) {
+    var projects = routes.at('options /discover');
+    expect(projects).to.be.an.object();
+    expect(projects.method).to.equal('options');
+    expect(projects.config.auth).to.be.false();
+    expect(projects.config.cors).to.be.an.object();
+    expect(projects.config.cors.methods).to.include(['GET', 'OPTIONS']);
+    done();
+  });
+
   test('applies config to options /projects', function(done) {
     var projects = routes.at('options /projects');
     expect(projects).to.be.an.object();

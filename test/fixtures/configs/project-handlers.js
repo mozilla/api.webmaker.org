@@ -104,6 +104,76 @@ exports.get = {
       }
     }
   },
+  discoverByLanguage: {
+    success: {
+      default: {
+        url: '/discover/en-US',
+        method: 'get'
+      },
+      changeLanguageGB: {
+        url: '/discover/en-GB',
+        method: 'get'
+      },
+      changeLanguageBD: {
+        url: '/discover/bn-BD',
+        method: 'get'
+      },
+      changeLanguageID: {
+        url: '/discover/id-ID',
+        method: 'get'
+      },
+      changeLanguageROFL: {
+        url: '/discover/lol-rofl',
+        method: 'get'
+      },
+      changeCount: {
+        url: '/discover/en-US?count=3',
+        method: 'get'
+      },
+      changePage: {
+        url: '/discover/en-US?count=3&page=2',
+        method: 'get'
+      },
+      returnsNoneWhenPageTooHigh: {
+        url: '/discover/en-US?count=50&page=2',
+        method: 'get'
+      }
+    },
+    fail: {
+      query: {
+        count: {
+          negative: {
+            url: '/discover?count=-1',
+            method: 'get'
+          },
+          tooHigh: {
+            url: '/discover?count=101',
+            method: 'get'
+          },
+          notNumber: {
+            url: '/discover?count=foo'
+          }
+        },
+        page: {
+          negative: {
+            url: '/discover?page=-1',
+            method: 'get'
+          },
+          tooHigh: {
+            url: '/discover?page=51',
+            method: 'get'
+          },
+          notNumber: {
+            url: '/discover?page=foo'
+          }
+        }
+      },
+      error: {
+        url: '/discover',
+        method: 'get'
+      }
+    }
+  },
   one: {
     success: {
       url: '/users/1/projects/1',
