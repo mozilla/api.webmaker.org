@@ -109,6 +109,16 @@ exports.patch = {
           request.tail('drop elements.findOne cache')
         );
 
+        request.server.methods.cache.invalidateKey(
+          'pages',
+          'findOne',
+          [
+            request.params.project,
+            request.params.page
+          ],
+          request.tail('drop pages findOne cache')
+        );
+
         reply({
           status: 'updated',
           element: result.rows[0]
