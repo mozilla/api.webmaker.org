@@ -384,6 +384,21 @@ module.exports = function (pg) {
         }
       });
 
+      server.method('projects.findFeaturedByLanguage', function(values, done) {
+        executeQuery(queries.projects.findFeaturedByLanguage, values, done);
+      }, {
+        cache: {
+          segment: 'projects.findFeaturedByLanguage',
+          expiresIn: 1000 * 60 * 60,
+          staleIn: 1000 * 60 * 5,
+          staleTimeout: 100
+        },
+        generateKey: function(args) {
+          // count + offset
+          return args.join('.');
+        }
+      });
+
       server.method('projects.update', function(values, done) {
         executeQuery(queries.projects.update, values, done);
       }, {});

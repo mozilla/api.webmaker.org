@@ -125,7 +125,18 @@ module.exports = {
     // Find featured projects
     // Params: offset integer, limit integer
     findFeatured: "SELECT " + projectCols + " FROM projects INNER JOIN users ON users.id = projects.user_id WHERE" +
-      " projects.deleted_at IS NULL AND projects.featured = TRUE ORDER BY created_at DESC LIMIT $1 OFFSET $2;"
+      " projects.deleted_at IS NULL AND projects.featured = TRUE ORDER BY created_at DESC LIMIT $1 OFFSET $2;",
+
+    // Find featured projects
+    // Params: country string, language string, offset integer, limit integer
+    findFeaturedByLanguage: "SELECT " + projectCols + " FROM projects INNER JOIN users ON users.id = projects.user_id WHERE" +
+      " projects.deleted_at IS NULL AND projects.featured = TRUE" +
+      " ORDER BY"
+      "   CASE users.language" +
+      "     WHEN $1 THEN 1" +
+      "     ELSE 2" +
+      "   END, " +
+      " projects.created_at DESC LIMIT $2 OFFSET $3;"
   },
   pages: {
     // Create page

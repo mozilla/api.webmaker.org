@@ -20,6 +20,22 @@ experiment('project routes', function() {
     done();
   });
 
+  test('applies config to get /discover/{language}', function(done) {
+    var discover = routes.at('get /discover/{language}');
+    expect(discover).to.be.an.object();
+    expect(discover.method).to.equal('get');
+    expect(discover.config.auth).to.be.false();
+    expect(discover.config.cors).to.be.an.object();
+    expect(discover.config.cors.methods).to.include(['GET', 'OPTIONS']);
+    expect(discover.config.validate).to.be.an.object();
+    expect(discover.config.validate.query).to.be.an.object();
+    expect(discover.config.validate.query.count).to.be.an.object();
+    expect(discover.config.validate.query.page).to.be.an.object();
+    expect(discover.config.validate.params).to.be.an.object();
+    expect(discover.config.validate.params.language).to.be.an.object();
+    done();
+  });
+
   test('applies config to get /projects', function(done) {
     var projects = routes.at('get /projects');
     expect(projects).to.be.an.object();

@@ -152,6 +152,27 @@ exports.get = {
         });
       }
     );
+  },
+  featuredByLanguage: function(request, reply) {
+    request.server.methods.projects.findFeaturedByLanguage(
+      [
+        request.params.language,
+        request.query.count,
+        request.pre.offset
+      ],
+      function(err, result) {
+        if ( err ) {
+          return reply(err);
+        }
+
+        reply({
+          status: 'success',
+          projects: result.rows.map(function(project) {
+            return request.server.methods.utils.formatProject(project);
+          })
+        });
+      }
+    );
   }
 };
 
