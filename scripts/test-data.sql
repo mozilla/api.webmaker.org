@@ -15,14 +15,14 @@ DECLARE
 BEGIN
 
   -- create users
-  INSERT INTO users (id, username, language, country, moderator, staff) VALUES
-    (1, 'chris_testing', 'en', 'CA', FALSE, FALSE),
-    (2, 'jon_testing', 'en', 'US', FALSE, FALSE),
-    (3, 'andrew_testing', 'en', 'GB', TRUE, FALSE),
-    (4, 'kate_testing', 'en', 'GB', FALSE, TRUE),
-    (5, 'atique_testing', 'bn', 'BD', FALSE, TRUE),
-    (6, 'ina_testing', 'id', 'ID', FALSE, TRUE),
-    (7, 'bobby_testing', 'lol', 'rolf', FALSE, TRUE);
+  INSERT INTO users (id, username, language, moderator, staff) VALUES
+    (1, 'chris_testing', 'en-CA', FALSE, FALSE),
+    (2, 'jon_testing', 'en-US', FALSE, FALSE),
+    (3, 'andrew_testing', 'en-GB', TRUE, FALSE),
+    (4, 'kate_testing', 'en-GB', FALSE, TRUE),
+    (5, 'atique_testing', 'bn-BD', FALSE, TRUE),
+    (6, 'ina_testing', 'id-ID', FALSE, TRUE),
+    (7, 'bobby_testing', 'lol-rofl', FALSE, TRUE);
 
   -- some helper functions
   CREATE OR REPLACE FUNCTION get_user_id(varchar) RETURNS bigint AS

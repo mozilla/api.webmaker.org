@@ -110,19 +110,19 @@ exports.get = {
         url: '/discover/en-US',
         method: 'get'
       },
-      changeLanguageGB: {
+      changeLanguageENGB: {
         url: '/discover/en-GB',
         method: 'get'
       },
-      changeLanguageBD: {
+      changeLanguageBNBD: {
         url: '/discover/bn-BD',
         method: 'get'
       },
-      changeLanguageID: {
+      changeLanguageIDID: {
         url: '/discover/id-ID',
         method: 'get'
       },
-      changeLanguageROFL: {
+      changeLanguageLolRofl: {
         url: '/discover/lol-rofl',
         method: 'get'
       },
@@ -168,8 +168,24 @@ exports.get = {
           }
         }
       },
+      params: {
+        language: {
+          changeLanguageNonsense: {
+            url: '/discover/-.@',
+            method: 'get'
+          },
+          changeLanguageNewline: {
+            url: '/discover/-.@',
+            method: 'get'
+          },
+          changeLanguageNumber: {
+            url: '/discover/2',
+            method: 'get'
+          }
+        }
+      },
       error: {
-        url: '/discover',
+        url: '/discover/en-US',
         method: 'get'
       }
     }

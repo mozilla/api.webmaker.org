@@ -55,8 +55,7 @@ exports.patch = {
     },
     payload: {
       username: 'changed',
-      language: 'es',
-      country: 'US'
+      language: 'es-US'
     }
   },
   username: {
@@ -76,7 +75,7 @@ exports.patch = {
       authorization: 'token userToken'
     },
     payload: {
-      language: 'fr'
+      language: 'fr-CA'
     }
   },
   userNotFound: {
@@ -87,8 +86,7 @@ exports.patch = {
     },
     payload: {
       username: 'error',
-      language: 'es',
-      country: 'US'
+      language: 'es-US'
     }
   },
   unauthorized: {
@@ -99,8 +97,7 @@ exports.patch = {
     },
     payload: {
       username: 'changed',
-      language: 'es',
-      country: 'US'
+      language: 'es-US'
     }
   },
   duplicateUsername: {

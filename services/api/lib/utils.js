@@ -4,8 +4,7 @@ function formatUser(user) {
   formatted.username = user.username;
 
   formatted.locale = {
-    language: user.language,
-    country: user.country
+    language: user.language
   };
 
   formatted.history = {
@@ -37,7 +36,6 @@ function formatProject(project) {
       created_at: project.user_created_at,
       updated_at: project.user_updated_at,
       language: project.user_language,
-      country: project.user_country,
       staff: project.user_staff,
       moderator: project.user_moderator
     });

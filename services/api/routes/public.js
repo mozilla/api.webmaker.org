@@ -12,6 +12,7 @@ var publicRouteConfig = {
   }
 };
 
+var locale = require('../lib/locale');
 var prerequisites = require('../lib/prerequisites');
 var projects = require('../handlers/projects');
 var pages = require('../handlers/pages');
@@ -188,11 +189,11 @@ var routes = [
       validate: {
         query: {
           count: Joi.number().integer().min(1).max(100).default(10),
-          page: Joi.number().integer().min(1).max(50).default(1),
+          page: Joi.number().integer().min(1).max(50).default(1)
         },
         params: {
           // Wrote this regex to accept every language string on transifex.com/languages
-          language: Joi.string().min(2).max(5).regex(/^[\w]{2,}($|((-[\w]{2,})?((@|\.)[\w]{2,})?)$)/)
+          language: Joi.string().min(2).max(20).regex(locale.languageRegex)
         }
       },
       pre: [

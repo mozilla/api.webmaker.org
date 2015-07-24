@@ -461,7 +461,7 @@ experiment('Project Handlers', function() {
     });
 
     test('can change language to en-GB', function(done) {
-      var opts = configs.get.discoverByLanguage.success.changeLanguageBD;
+      var opts = configs.get.discoverByLanguage.success.changeLanguageENGB;
 
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(200);
@@ -476,14 +476,14 @@ experiment('Project Handlers', function() {
         expect(resp.result.projects[2].author.locale.language).to.be.a.string();
         expect(resp.result.projects[2].author.locale.language).to.equal('en-GB');
         expect(resp.result.projects[3].author.locale.language).to.be.a.string();
-        expect(resp.result.projects[3].author.locale.language).to.equal('en-GB');
+        expect(resp.result.projects[3].author.locale.language).to.not.equal('en-GB');
 
         done();
       });
     });
 
     test('can change language to bn-BD', function(done) {
-      var opts = configs.get.discoverByLanguage.success.changeLanguageBD;
+      var opts = configs.get.discoverByLanguage.success.changeLanguageBNBD;
 
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(200);
@@ -496,16 +496,14 @@ experiment('Project Handlers', function() {
         expect(resp.result.projects[1].author.locale.language).to.be.a.string();
         expect(resp.result.projects[1].author.locale.language).to.equal('bn-BD');
         expect(resp.result.projects[2].author.locale.language).to.be.a.string();
-        expect(resp.result.projects[2].author.locale.language).to.equal('bn-BD');
-        expect(resp.result.projects[3].author.locale.language).to.be.a.string();
-        expect(resp.result.projects[3].author.locale.language).to.equal('bn-BD');
+        expect(resp.result.projects[2].author.locale.language).to.not.equal('bn-BD');
 
         done();
       });
     });
 
     test('can change language to id-ID', function(done) {
-      var opts = configs.get.discoverByLanguage.success.changeLanguageID;
+      var opts = configs.get.discoverByLanguage.success.changeLanguageIDID;
 
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(200);
@@ -520,13 +518,13 @@ experiment('Project Handlers', function() {
         expect(resp.result.projects[2].author.locale.language).to.be.a.string();
         expect(resp.result.projects[2].author.locale.language).to.equal('id-ID');
         expect(resp.result.projects[3].author.locale.language).to.be.a.string();
-        expect(resp.result.projects[3].author.locale.language).to.equal('id-ID');
+        expect(resp.result.projects[3].author.locale.language).to.not.equal('id-ID');
         done();
       });
     });
 
-    test('can change language to lol-ROFL', function(done) {
-      var opts = configs.get.discoverByLanguage.success.changeLanguageROFL;
+    test('can change language to lol-rofl', function(done) {
+      var opts = configs.get.discoverByLanguage.success.changeLanguageLolRofl;
 
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(200);
@@ -535,13 +533,15 @@ experiment('Project Handlers', function() {
         expect(resp.result.projects).to.be.an.array();
         expect(resp.result.projects.length).to.equal(10);
         expect(resp.result.projects[0].author.locale.language).to.be.a.string();
-        expect(resp.result.projects[0].author.locale.language).to.equal('lol-ROFL');
+        expect(resp.result.projects[0].author.locale.language).to.equal('lol-rofl');
         expect(resp.result.projects[1].author.locale.language).to.be.a.string();
-        expect(resp.result.projects[1].author.locale.language).to.equal('lol-ROFL');
+        expect(resp.result.projects[1].author.locale.language).to.equal('lol-rofl');
         expect(resp.result.projects[2].author.locale.language).to.be.a.string();
-        expect(resp.result.projects[2].author.locale.language).to.equal('lol-ROFL');
+        expect(resp.result.projects[2].author.locale.language).to.equal('lol-rofl');
         expect(resp.result.projects[3].author.locale.language).to.be.a.string();
-        expect(resp.result.projects[3].author.locale.language).to.equal('lol-ROFL');
+        expect(resp.result.projects[3].author.locale.language).to.equal('lol-rofl');
+        expect(resp.result.projects[4].author.locale.language).to.be.a.string();
+        expect(resp.result.projects[4].author.locale.language).to.not.equal('lol-rofl');
         done();
       });
     });
@@ -651,9 +651,42 @@ experiment('Project Handlers', function() {
       });
     });
 
+    test('can\'t change language to nonsense string', function(done) {
+      var opts = configs.get.discoverByLanguage.fail.params.language.changeLanguageNonsense;
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(400);
+        expect(resp.result.error).to.equal('Bad Request');
+        expect(resp.result.message).to.be.a.string();
+        done();
+      });
+    });
+
+    test('can\'t change language to newline', function(done) {
+      var opts = configs.get.discoverByLanguage.fail.params.language.changeLanguageNewline;
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(400);
+        expect(resp.result.error).to.equal('Bad Request');
+        expect(resp.result.message).to.be.a.string();
+        done();
+      });
+    });
+
+    test('can\'t change language to number', function(done) {
+      var opts = configs.get.discoverByLanguage.fail.params.language.changeLanguageNumber;
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(400);
+        expect(resp.result.error).to.equal('Bad Request');
+        expect(resp.result.message).to.be.a.string();
+        done();
+      });
+    });
+
     test('Handles errors from postgre', function(done) {
       var opts = configs.get.discoverByLanguage.fail.error;
-      var stub = sinon.stub(server.methods.projects, 'findFeatured')
+      var stub = sinon.stub(server.methods.projects, 'findFeaturedByLanguage')
         .callsArgWith(1, mockErr());
 
       server.inject(opts, function(resp) {

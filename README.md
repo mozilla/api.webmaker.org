@@ -50,7 +50,7 @@ $> psql -d webmaker -U dbusername
 and then issuing the following user record creation instruction:
 
 ```
-pg> insert into users (id, username, language, country) VALUES (1, 'testuser', 'en', 'US');
+pg> insert into users (id, username, language) VALUES (1, 'testuser', 'en-US');
 ```
 
 This will let you call any of the API endpoints with userid **`1`** without running into

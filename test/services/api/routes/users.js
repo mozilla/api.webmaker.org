@@ -107,7 +107,6 @@ experiment('users routes', function() {
     expect(users.config.validate.payload).to.be.an.object();
     expect(users.config.validate.payload.username).to.be.an.object();
     expect(users.config.validate.payload.language).to.be.an.object();
-    expect(users.config.validate.payload.country).to.be.an.object();
     expect(users.config.cors).to.be.an.object();
     expect(users.config.cors.methods).to.include(['OPTIONS', 'GET', 'PATCH', 'DELETE']);
     done();

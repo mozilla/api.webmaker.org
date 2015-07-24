@@ -4,7 +4,6 @@ exports.chris_testing = {
   created_at: '2015-05-21 13:32:11.905489',
   updated_at: '2015-05-21 13:32:11.905489',
   language: '',
-  country: '',
   moderator: false,
   staff: false
 };
