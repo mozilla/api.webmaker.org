@@ -24,6 +24,7 @@
     "url": "https://github.com/mozilla/api.webmaker.org"
   },
   "dependencies": {
+    "bassmaster": "^1.8.0",
     "blankie": "^1.1.0",
     "bluebird": "^2.9.34",
     "boom": "^2.7.1",

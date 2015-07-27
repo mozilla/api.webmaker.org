@@ -6,5 +6,11 @@ module.exports = [
   },
   require('lout'),
   require('hapi-auth-bearer-token'),
-  require('hapi-version')
+  require('hapi-version'),
+  {
+    register: require('bassmaster'),
+    options: {
+      batchEndpoint: '/batch'
+    }
+  }
 ];
