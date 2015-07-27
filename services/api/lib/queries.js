@@ -23,7 +23,6 @@ var projectUserCols = projectCols + ", " + [
 var pageCols = [
   "pages.id",
   "pages.project_id",
-  "pages.user_id",
   "pages.x",
   "pages.y",
   "pages.created_at",
@@ -40,7 +39,6 @@ var pageCols = [
 var elementCols = [
   "elements.id",
   "elements.page_id",
-  "elements.user_id",
   "elements.type",
   "elements.created_at",
   "elements.updated_at",
@@ -163,7 +161,7 @@ module.exports = {
     // Create page
     // Params: project_id bigint, x integer, y integer, styles jsonb
     create: "INSERT INTO pages (project_id, user_id, x, y, styles) VALUES ($1, $2, $3, $4, $5) RETURNING id," +
-      " project_id, user_id, x, y, created_at, updated_at, styles;",
+      " project_id, x, y, created_at, updated_at, styles;",
 
     // Find all pages in a project
     // Params: project_id bigint
@@ -177,7 +175,7 @@ module.exports = {
 
     // Find one page by id
     // Params: page_id bigint
-    findOneById: "SELECT pages.id, pages.user_id, pages.project_id FROM pages WHERE pages.deleted_at IS NULL " +
+    findOneById: "SELECT pages.id, pages.project_id FROM pages WHERE pages.deleted_at IS NULL " +
       "AND pages.id = $1;",
 
     //
@@ -199,8 +197,8 @@ module.exports = {
   elements: {
     // Create element
     // Params: page_id bigint, type varchar, attributes jsonb, styles jsonb
-    create: "INSERT into elements (page_id, user_id, type, attributes, styles) VALUES ($1, $2, $3, $4, $5) RETURNING" +
-      " id, type, page_id, user_id, created_at, updated_at, attributes, styles",
+    create: "INSERT into elements (page_id, type, attributes, styles) VALUES ($1, $2, $3, $4, $5) RETURNING" +
+      " id, type, page_id, created_at, updated_at, attributes, styles",
 
     // Find all elements in a page
     // Params page_id bigint
@@ -214,7 +212,7 @@ module.exports = {
 
     // Find one element by id and page_id
     // Params: element_id bigint, page_id bigint
-    findOneById: "SELECT id, user_id, page_id FROM elements WHERE elements.deleted_at IS NULL AND elements.id = $1;",
+    findOneById: "SELECT id, page_id FROM elements WHERE elements.deleted_at IS NULL AND elements.id = $1;",
 
     // Update element
     // Params: styles jsonb, attributes jsonb, element_id bigint
