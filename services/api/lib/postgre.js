@@ -107,8 +107,14 @@ module.exports = function (pg) {
               return callback(err);
             }
 
+            var ttl = null;
+
+            if (!result.rows.length) {
+              ttl = 0;
+            }
+
             server.debug('Query succeeded', result);
-            callback(null, result);
+            callback(null, result, ttl);
           });
         });
       }
