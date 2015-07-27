@@ -27,13 +27,30 @@ npm install
 
 # copy default environment config
 cp env.sample .env
+```
 
+You will then also need to create a database and set up the table definitions.
+
+If you have installed PostgreSQL in a way that works without requiring a username and password, use:
+
+```
 # create a database; -U and -W are only necessary if your pg instance needs authentication
-createdb -U dbusername -W dbuserpassword webmaker
+createdb webmaker
 
 # create tables; -U and -W are only necessary if your pg instance needs authentication
-psql -U dbusername -W dbuserpassword -d webmaker -f scripts/create-tables.sql
+psql -d webmaker -f scripts/create-tables.sql
 ```
+
+If you installed PostgreSQL in such a way as to require a username and password, use:
+
+```
+# create a database; -U and -W are only necessary if your pg instance needs authentication
+createdb -U dbusername webmaker
+
+# create tables; -U and -W are only necessary if your pg instance needs authentication
+psql -U dbusername -d webmaker -f scripts/create-tables.sql
+```
+If you did, note that both these commands will require you to type in your password. If you want your password to be automatically picked up by psql utilities, you can define an environment variable `PGPASSWORD` and set this to your password (but this really only makes sense if you only use psql for dev/testing purposes)
 
 ### Note: this will set up an empty database
 
