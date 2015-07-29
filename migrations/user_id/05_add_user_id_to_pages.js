@@ -8,4 +8,4 @@ exports.down = function(knex) {
   return knex.schema.table('pages', function(t) {
     t.dropColumn('user_id');
   });
-}
+};

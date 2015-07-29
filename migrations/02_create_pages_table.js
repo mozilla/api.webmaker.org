@@ -9,7 +9,7 @@ exports.up = function(knex) {
     t.timestamp('deleted_at').defaultTo(null);
     t.timestamp('created_at').notNullable().defaultTo(knex.raw('now()'));
     t.timestamp('updated_at').notNullable().defaultTo(knex.raw('now()'));
-  })
+  });
 };
 
 exports.down = function(knex) {

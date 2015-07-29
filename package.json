@@ -14,8 +14,8 @@
     "test:insertdata": "node scripts/test-data",
     "test:reportcoverage": "npm run test:setup && lab -r lcov | ./node_modules/.bin/coveralls",
     "lint": "npm run jshint && npm run jscs",
-    "jshint": "jshint -c node_modules/mofo-style/linters/.jshintrc adapters lib services test server.js",
-    "jscs": "jscs -c node_modules/mofo-style/linters/.jscsrc adapters lib services test server.js"
+    "jshint": "jshint -c node_modules/mofo-style/linters/.jshintrc migrations adapters lib services test server.js",
+    "jscs": "jscs -c node_modules/mofo-style/linters/.jscsrc migrations adapters lib services test server.js"
   },
   "author": "Mozilla Foundation",
   "license": "MPL-2.0",
