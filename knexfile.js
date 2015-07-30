@@ -1,5 +1,5 @@
 const path = require('path');
-require('habitat').load();
+require('habitat').load(process.argv[3]);
 
 module.exports = {
   development: {
