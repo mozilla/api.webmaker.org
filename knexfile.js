@@ -4,7 +4,7 @@ module.exports = {
   development: {
     client: 'pg',
     debug: true,
-    connection: 'postgresql://localhost:5432/webmaker',
+    connection: process.env.POSTGRE_CONNECTION_STRING,
     directory: './migrations',
     migrations: {
       tableName: 'migrations'
@@ -13,7 +13,7 @@ module.exports = {
   testing: {
     client: 'pg',
     debug: true,
-    connection: 'postgresql://localhost:5432/webmaker-testing',
+    connection: process.env.POSTGRE_CONNECTION_STRING,
     directory: './migrations',
     migrations: {
       tableName: 'migraitons'
@@ -22,7 +22,7 @@ module.exports = {
   production: {
     client: 'pg',
     debug: false,
-    connection: 'postgresql://localhost:5432/webmaker',
+    connection: process.env.POSTGRE_CONNECTION_STRING,
     directory: './migrations',
     migrations: {
       tableName: 'migrations'
