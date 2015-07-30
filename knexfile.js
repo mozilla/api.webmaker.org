@@ -1,4 +1,5 @@
 const path = require('path');
+require('habitat').load();
 
 module.exports = {
   development: {
