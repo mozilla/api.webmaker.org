@@ -8,6 +8,8 @@ exports.up = function(knex) {
         t.integer('y').notNullable();
         t.json('styles', true).defaultTo('{}');
 
+        t.unique(['project_id', 'x', 'y']);
+
         t.timestamp('deleted_at').defaultTo(null);
         t.timestamp('created_at').notNullable().defaultTo(knex.raw('now()'));
         t.timestamp('updated_at').notNullable().defaultTo(knex.raw('now()'));
