@@ -1,8 +1,8 @@
 exports.up = function(knex) {
-  knex.schema.hasTable('projects').then(function(exists) {
+  return knex.schema.hasTable('projects').then(function(exists) {
     if (!exists) {
       return knex.schema.createTable('projects', function(t) {
-        t.bigIncrements('id');
+        t.bigIncrements('id').notNullable().primary();
         t.bigInteger('user_id').references('id').inTable('users');
         t.bigInteger('remixed_from').defaultTo(null);
         t.string('version').notNullable();

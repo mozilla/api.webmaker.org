@@ -1,10 +1,10 @@
-'use strict';
+const Promise = require('bluebird');
 
-exports.up = function(knex) {
-  knex.schema.hasTable('users').then(function(exists) {
+exports.up = function(knex, Promise) {
+  return knex.schema.hasTable('users').then(function(exists) {
     if (!exists) {
       return knex.schema.createTable('users', function(t) {
-        t.bigIncrements('id').notNullable();
+        t.bigIncrements('id').notNullable().primary();
         t.string('username').unique().notNullable();
         t.string('language').notNullable().defaultTo('en');
         t.string('country').notNullable().defaultTo('US');

@@ -1,8 +1,8 @@
 exports.up = function(knex) {
-  knex.schema.hasTable('pages').then(function(exists) {
+  return knex.schema.hasTable('pages').then(function(exists) {
     if (!exists) {
       return knex.schema.createTable('pages', function(t) {
-        t.bigIncrements('id').notNullable();
+        t.bigIncrements('id').notNullable().primary();
         t.bigInteger('project_id').references('id').inTable('projects');
         t.integer('x').notNullable();
         t.integer('y').notNullable();
