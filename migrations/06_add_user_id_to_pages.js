@@ -1,6 +1,6 @@
 exports.up = function(knex) {
   return knex.schema.table('pages', function(t) {
-    t.integer('user_id').notNullable().references('id').inTable('users');
+    t.bigInteger('user_id').references('id').inTable('users');
   });
 };
 
