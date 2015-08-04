@@ -21,6 +21,7 @@ var users = require('../handlers/users');
 var projects = require('../handlers/projects');
 var pages = require('../handlers/pages');
 var elements = require('../handlers/elements');
+var bulk = require('../handlers/bulk');
 
 var numericSchema = Joi.alternatives().try(
   Joi.number().integer(),
@@ -154,6 +155,114 @@ var routes = [
       ],
       cors: {
         methods: ['OPTIONS', 'POST', 'GET']
+      }
+    }
+  }, {
+    path: '/users/{user}/bulk',
+    method: 'post',
+    handler: bulk.post,
+    config: {
+      auth: {
+        scope: 'projects'
+      },
+      validate: {
+        params: {
+          user: numericSchema
+        },
+        payload: {
+          actions: Joi.array().required().items(
+            Joi.alternatives().try([
+              Joi.object().keys({
+                type: Joi.string().valid('projects').required(),
+                method: Joi.string().valid('create').required(),
+                data: Joi.object().keys({
+                  title: Joi.string().max(256).required(),
+                  thumbnail: Joi.object().keys({
+                    320: Joi.string().optional()
+                  }).default({})
+                })
+              }),
+              Joi.object().keys({
+                type: Joi.string().valid('projects').required(),
+                method: Joi.string().valid('update').required(),
+                data: Joi.object().keys({
+                  id: Joi.alternatives().try(
+                    Joi.number().integer().required(),
+                    Joi.string().regex(/^\$(\d+)\.(.*)$/)
+                  ),
+                  title: Joi.string().max(256).required()
+                })
+              }),
+              Joi.object().keys({
+                type: Joi.string().valid('pages').required(),
+                method: Joi.string().valid('create').required(),
+                data: Joi.object().keys({
+                  projectId: Joi.alternatives().try(
+                    Joi.number().integer().required(),
+                    Joi.string().regex(/^\$(\d+)\.(.*)$/)
+                  ),
+                  x: Joi.number().integer().required(),
+                  y: Joi.number().integer().required(),
+                  styles: Joi.object().default({}).optional()
+                })
+              }),
+              Joi.object().keys({
+                type: Joi.string().valid('pages').required(),
+                method: Joi.string().valid('update').required(),
+                data: Joi.object().keys({
+                  id: Joi.alternatives().try(
+                    Joi.number().integer().required(),
+                    Joi.string().regex(/^\$(\d+)\.(.*)$/)
+                  ),
+                  x: Joi.number().integer().required(),
+                  y: Joi.number().integer().required(),
+                  styles: Joi.object().default({})
+                })
+              }),
+              Joi.object().keys({
+                type: Joi.string().valid('elements').required(),
+                method: Joi.string().valid('create').required(),
+                data: Joi.object().keys({
+                  pageId: Joi.alternatives().try(
+                    Joi.number().integer().required(),
+                    Joi.string().regex(/^\$(\d+)\.(.*)$/)
+                  ),
+                  type: Joi.string().required(),
+                  styles: Joi.object().default({}),
+                  attributes: Joi.object().default({})
+                })
+              }),
+              Joi.object().keys({
+                type: Joi.string().valid('elements').required(),
+                method: Joi.string().valid('update').required(),
+                data: Joi.object().keys({
+                  id: Joi.alternatives().try(
+                    Joi.number().integer().required(),
+                    Joi.string().regex(/^\$(\d+)\.(.*)$/)
+                  ),
+                  styles: Joi.object().default({}),
+                  attributes: Joi.object().default({})
+                })
+              }),
+              Joi.object().keys({
+                type: Joi.string().valid('projects', 'pages', 'elements').required(),
+                method: Joi.string().valid('remove').required(),
+                data: Joi.object().keys({
+                  id: Joi.alternatives().try(
+                    Joi.number().integer().required(),
+                    Joi.string().regex(/^\$(\d+)\.(.*)$/)
+                  )
+                })
+              })
+            ])
+          ).min(1).max(1000)
+        }
+      },
+      pre: [
+        prerequisites.getUser
+      ],
+      cors: {
+        methods: ['POST', 'OPTIONS']
       }
     }
   }, {

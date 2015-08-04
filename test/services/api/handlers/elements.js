@@ -195,7 +195,7 @@ experiment('Element Handlers', function() {
     });
   });
 
-  experiment('Get single page', function() {
+  experiment('Get single Element', function() {
     test('success', function(done) {
       var opts = configs.get.one.success;
 
