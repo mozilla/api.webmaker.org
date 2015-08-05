@@ -7,7 +7,7 @@ var connString = process.env.POSTGRE_CONNECTION_STRING;
 
 Hoek.assert(connString, 'You must provide a connection string to postgre');
 
-module.exports = function (pg) {
+module.exports = function (pg, createTracer) {
   var postgreAdapter = {
     register: function(server, options, done) {
       function getTransactionClient() {
@@ -450,7 +450,10 @@ module.exports = function (pg) {
         .then(function() {
           return BPromise.resolve(actions);
         })
-        .reduce(reduceActions, [])
+        .then(function(actions) {
+          createTracer('BPromise.reduce', BPromise.reduce);
+          return BPromise.reduce(actions, reduceActions, []);
+        })
         .then(function(results) {
           transactionResults = results;
           return commit(transaction);

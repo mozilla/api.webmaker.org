@@ -6,10 +6,20 @@ try {
   console.warn('Connected to pg using non-native bindings.\n');
 }
 
+var newrelic = require('newrelic');
+var createTracer;
+
+if (!newrelic.createTracer) {
+  // NOP
+  createTracer = function() {};
+} else {
+  createTracer = newrelic.createTracer.bind(newrelic);
+}
+
 exports.register = function api(server, options, next) {
   server.register([
       require('./lib/utils'),
-      require('./lib/postgre')(pg),
+      require('./lib/postgre')(pg, createTracer),
       require('./lib/thumbnails'),
       require('./lib/cache'),
       require('./lib/bulk')
