@@ -154,7 +154,7 @@ exports.register = function(server, options, done) {
 
   // check if a key on the action object should be resolved to a value
   // returned by a previous action in the transaction
-  function generateEveryCallback(processResult, action, actionIndex, txResults) {
+  function generateForEachCallback(processResult, action, actionIndex, txResults) {
     return function everyCallback(key) {
       // if the key's value isn't a reach string, return valid
       if ( !reachRegex.test(action.data[key]) ) {
@@ -347,7 +347,7 @@ exports.register = function(server, options, done) {
   server.method('bulk.getLookupData', getLookupData, { callback: false });
   server.method('bulk.getTxActionResult', getTxActionResult, { callback: false });
   server.method('bulk.getQueryValues', getQueryValues, { callback: false });
-  server.method('bulk.generateEveryCallback', generateEveryCallback, { callback: false });
+  server.method('bulk.generateForEachCallback', generateForEachCallback, { callback: false });
   server.method('bulk.invalidateCaches', invalidateCaches, { callback: false });
   done();
 };

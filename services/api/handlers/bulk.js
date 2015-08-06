@@ -9,6 +9,10 @@ exports.post = function(request, reply) {
         return reply(Boom.wrap(err));
       }
 
+      request.server.methods.newrelic.createTracer(
+        'process cache invalidations',
+        request.server.methods.bulk.invalidateCaches
+      );
       request.server.methods.bulk.invalidateCaches(request, results.map(function(result) {
         return result.raw;
       }));
