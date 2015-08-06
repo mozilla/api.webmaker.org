@@ -7,7 +7,7 @@ var connString = process.env.POSTGRE_CONNECTION_STRING;
 
 Hoek.assert(connString, 'You must provide a connection string to postgre');
 
-module.exports = function (pg, createTracer) {
+module.exports = function (pg) {
   var postgreAdapter = {
     register: function(server, options, done) {
       function getTransactionClient() {
@@ -320,8 +320,10 @@ module.exports = function (pg, createTracer) {
 
             // Check every key of the action's data to see if it should be replaced with
             // the result of a previous action.
-            Object.keys(action.data).forEach(
-              server.methods.bulk.generateEveryCallback(processResult, action, actionIndex, results)
+            var dataKeys = Object.keys(action.data);
+            server.methods.newrelic.createTracer('pipelining action data', dataKeys.forEach);
+            dataKeys.forEach(
+              server.methods.bulk.generateForEachCallback(processResult, action, actionIndex, results)
             );
 
             // if true, everyActionKey() encountered a problem processing data and set
@@ -451,7 +453,7 @@ module.exports = function (pg, createTracer) {
           return BPromise.resolve(actions);
         })
         .then(function(actions) {
-          createTracer('BPromise.reduce', BPromise.reduce);
+          server.methods.newrelic.createTracer('BPromise.reduce', BPromise.reduce);
           return BPromise.reduce(actions, reduceActions, []);
         })
         .then(function(results) {

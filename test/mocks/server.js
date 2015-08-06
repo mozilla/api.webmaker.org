@@ -25,6 +25,10 @@ module.exports = function(done) {
 
     server.decorate('server', 'debug', function() {});
 
+    server.method('newrelic.createTracer', function() {}, {
+      callback: false
+    });
+
     server.register([
         require('../../services/api/lib/utils'),
         require('../../services/api/lib/postgre')(require('pg'), function() {}),
