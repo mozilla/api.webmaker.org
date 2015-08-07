@@ -143,7 +143,7 @@ exports.register = function(server, options, done) {
       'pipelineRegex.exec',
       regexTraceWrapper
     );
-    
+
     var regexResuts = regexTraceWrapper();
     var reachIdx = +regexResuts[1];
     var pipelineString = regexResuts[2];
@@ -166,7 +166,7 @@ exports.register = function(server, options, done) {
     }
     server.methods.newrelic.createTracer(
       'Hoek.reach',
-      reachTraceWrapper()
+      reachTraceWrapper
     );
     value = reachTraceWrapper();
 
