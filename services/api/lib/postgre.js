@@ -314,25 +314,37 @@ module.exports = function (pg) {
         function reduceActions(results, action, actionIndex) {
           // return a Promise of the result of a transaction for this action
           return new BPromise(function(resolve, reject) {
-            var processResult = {
-              invalid: false
-            };
+            // Check the action's data to see if it ids should be replaced with the results of a previous action.
+            var pipelineResult;
+            var pipelineKey = server.methods.bulk.getPipelineIdKey(action.data);
 
-            // Check every key of the action's data to see if it should be replaced with
-            // the result of a previous action.
-            var dataKeys = Object.keys(action.data);
-            server.methods.newrelic.createTracer('pipelining action data', dataKeys.forEach);
-            dataKeys.forEach(
-              server.methods.bulk.generateForEachCallback(processResult, action, actionIndex, results)
-            );
+            if (pipelineKey && server.methods.bulk.isPipelineString(action.data[pipelineKey]) ) {
+              // Create a custom tracer to track the performance of getPipelineValue
+              server.methods.newrelic.createTracer(
+                'pipelining action data',
+                server.methods.bulk.getPipelineValue
+              );
 
-            // if true, everyActionKey() encountered a problem processing data and set
-            // the error details to errorReason and failureData
-            if ( processResult.invalid ) {
-              return reject(Boom.badRequest(
-                processResult.errorReason,
-                processResult.failureData
-              ));
+              // get the id value of a previous action that should replace the pipeline string
+              // in action.data[piplelineKey]
+              pipelineResult = server.methods.bulk.getPipelineValue(
+                action.data,
+                pipelineKey,
+                results,
+                actionIndex
+              );
+
+              // if invalid, we encountered a problem processing the data and assigned
+              // the error details to errorReason and failureData
+              if ( pipelineResult.invalid ) {
+                return reject(Boom.badRequest(
+                  pipelineResult.errorReason,
+                  pipelineResult.failureData
+                ));
+              }
+
+              // all is good and well, assign the result of getResourceId to data[piplelineKey]
+              action.data[pipelineKey] = pipelineResult;
             }
 
             // select query to execute for thie action based on type and method params

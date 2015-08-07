@@ -110,63 +110,64 @@ exports.register = function(server, options, done) {
     }
   }
 
-  function getReplaceFunc(processResult, key, actionIndex, txResults) {
-    // grab the index of the action results to reach into, and grab the value
-    // described by reachString using Hoek.reach()
-    return function replace(match, reachIdx, reachString) {
-      reachIdx = +reachIdx;
-      var value;
-
-      if ( reachIdx < txResults.length ) {
-        value = Hoek.reach(txResults[reachIdx].formatted, reachString);
-      } else {
-        processResult.invalid = true;
-        processResult.errorReason = 'Array reference out of bounds for ' + key + ' in action at index ' + actionIndex;
-        processResult.failureData = {
-          key: key,
-          reachIdx: reachIdx,
-          actionIndex: actionIndex
-        };
-        return;
-      }
-
-      if ( !value ) {
-        processResult.invalid = true;
-        processResult.errorReason = 'Invalid reference to value using key \'' +
-          key +
-          '\' in action at index ' +
-          actionIndex;
-        processResult.failureData = {
-          key: key,
-          reachIdx: reachIdx,
-          actionIndex: actionIndex
-        };
-        return;
-      }
-
-      return value;
-    };
-  }
-
   // matches string like '$0.id' where '$0' is the action result at the
   // 0th index and the value on that object keyed with 'id'
-  var reachRegex = /^\$(\d+)\.(.*)$/;
+  var pipelineRegex = /^\$(\d+)\.(.*)$/;
 
-  // check if a key on the action object should be resolved to a value
-  // returned by a previous action in the transaction
-  function generateForEachCallback(processResult, action, actionIndex, txResults) {
-    return function everyCallback(key) {
-      // if the key's value isn't a reach string, return valid
-      if ( !reachRegex.test(action.data[key]) ) {
-        return processResult;
+  var pipelineKeys = [
+    'id',
+    'projectId',
+    'pageId'
+  ];
+
+  // we only care about pipelining id values contained in the `pipelineKeys` array
+  // return the key in the action data or null if there's no key to pipeline
+  function getPipelineIdKey(data) {
+    for (var i = 0; i < pipelineKeys.length; i++) {
+      if (data[pipelineKeys[i]]) {
+        return pipelineKeys[i];
       }
+    }
+    return null;
+  }
 
-      action.data[key] = action.data[key].replace(
-        reachRegex,
-        getReplaceFunc(processResult, key, actionIndex, txResults)
-      );
-      return processResult;
-    };
+  function isPipelineString(value) {
+    return pipelineRegex.test(value);
+  }
+
+  function getPipelineValue(data, key, txResults, actionIndex) {
+    var regexResuts = pipelineRegex.exec(data[key]);
+    var reachIdx = +regexResuts[1];
+    var pipelineString = regexResuts[2];
+    var value;
+
+    if ( reachIdx >= txResults.length ) {
+      return {
+        invalid: true,
+        errorReason: 'Array reference out of bounds for ' + key + ' in action at index ' + actionIndex,
+        failureData: {
+          key: key,
+          reachIdx: reachIdx,
+          actionIndex: actionIndex
+        }
+      };
+    }
+
+    value = Hoek.reach(txResults[reachIdx].formatted, pipelineString);
+
+    if ( !value ) {
+      return {
+        invalid: true,
+        errorReason: 'Invalid reference to value using key \'' + key + '\' in action at index ' + actionIndex,
+        failureData: {
+          key: key,
+          reachIdx: reachIdx,
+          actionIndex: actionIndex
+        }
+      };
+    }
+
+    return value;
   }
 
   // Check if the key has been processed already,
@@ -347,7 +348,9 @@ exports.register = function(server, options, done) {
   server.method('bulk.getLookupData', getLookupData, { callback: false });
   server.method('bulk.getTxActionResult', getTxActionResult, { callback: false });
   server.method('bulk.getQueryValues', getQueryValues, { callback: false });
-  server.method('bulk.generateForEachCallback', generateForEachCallback, { callback: false });
+  server.method('bulk.getPipelineIdKey', getPipelineIdKey, { callback: false });
+  server.method('bulk.isPipelineString', isPipelineString, { callback: false });
+  server.method('bulk.getPipelineValue', getPipelineValue, { callback: false });
   server.method('bulk.invalidateCaches', invalidateCaches, { callback: false });
   done();
 };
