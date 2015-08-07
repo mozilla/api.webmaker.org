@@ -319,12 +319,6 @@ module.exports = function (pg) {
             var pipelineKey = server.methods.bulk.getPipelineIdKey(action.data);
 
             if (pipelineKey && server.methods.bulk.isPipelineString(action.data[pipelineKey]) ) {
-              // Create a custom tracer to track the performance of getPipelineValue
-              server.methods.newrelic.createTracer(
-                'pipelining action data',
-                server.methods.bulk.getPipelineValue
-              );
-
               // get the id value of a previous action that should replace the pipeline string
               // in action.data[piplelineKey]
               pipelineResult = server.methods.bulk.getPipelineValue(
