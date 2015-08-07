@@ -49,6 +49,25 @@ exports.post = {
 };
 
 exports.get = {
+  oneShallow: function(request, reply) {
+    request.server.methods.projects.findOneShallow(
+      [ request.params.project ],
+      function(err, result) {
+        if (err) {
+          return reply(err);
+        }
+
+        if (!result.rows.length) {
+          return reply(boom.notFound('Project not found'));
+        }
+
+        reply({
+          status: 'success',
+          project: request.server.methods.utils.formatProject(result.rows[0])
+        });
+      }
+    );
+  },
   one: function(request, reply) {
     request.server.methods.projects.findOne(
       [
