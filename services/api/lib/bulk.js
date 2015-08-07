@@ -136,6 +136,10 @@ exports.register = function(server, options, done) {
   }
 
   function getPipelineValue(data, key, txResults, actionIndex) {
+    server.methods.newrelic.createTracer(
+      'pipelineRegex.exec',
+      pipelineRegex.exec
+    );
     var regexResuts = pipelineRegex.exec(data[key]);
     var reachIdx = +regexResuts[1];
     var pipelineString = regexResuts[2];
@@ -153,6 +157,10 @@ exports.register = function(server, options, done) {
       };
     }
 
+    server.methods.newrelic.createTracer(
+      'Hoek.reach',
+      Hoek.reach
+    );
     value = Hoek.reach(txResults[reachIdx].formatted, pipelineString);
 
     if ( !value ) {
