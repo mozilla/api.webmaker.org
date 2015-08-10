@@ -50,6 +50,28 @@ exports.prerequisites = {
 };
 
 exports.get = {
+  findOneShallow: {
+    success: {
+      default: {
+        url: '/projects/1',
+        method: 'get'
+      }
+    },
+    fail : {
+      doesNotExist: {
+        url: '/projects/999999999',
+        method: 'get'
+      },
+      badIdType: {
+        url: '/projects/a',
+        method: 'get'
+      },
+      internalError: {
+        url: '/projects/1',
+        method: 'get'
+      }
+    }
+  },
   discover: {
     success: {
       default: {

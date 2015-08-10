@@ -113,6 +113,12 @@ module.exports = {
     findOneById: "SELECT projects.user_id, projects.id FROM projects WHERE projects.deleted_at IS NULL AND " +
       "projects.id = $1;",
 
+    // Find one project (full data) by ID for route projects/{project_id}
+    // params: project_id
+    findOneShallow: "SELECT " + projectUserCols +
+      " FROM projects INNER JOIN users ON users.id = projects.user_id " +
+      " WHERE projects.deleted_at IS NULL AND projects.id = $1;",
+
     // Retrieve data in a project for remixing (joins pages and elements)
     // params: project_id bigint
     findDataForRemix: "SELECT " + remixCols + " FROM projects LEFT OUTER JOIN pages ON projects.id = " +
