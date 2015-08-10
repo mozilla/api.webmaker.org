@@ -456,6 +456,7 @@ experiment('Project Handlers', function() {
         expect(resp.result.status).to.equal('success');
         expect(resp.result.project).to.exist();
         expect(resp.result.project).to.be.an.object();
+        expect(resp.result.project.author).to.be.an.object();
         done();
       });
     });
