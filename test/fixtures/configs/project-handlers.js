@@ -50,6 +50,14 @@ exports.prerequisites = {
 };
 
 exports.get = {
+  findOneShallow: {
+    success: {
+      default: {
+        url: '/projects/1',
+        method: 'get'
+      }
+    }
+  },
   discover: {
     success: {
       default: {

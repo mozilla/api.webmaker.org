@@ -446,6 +446,20 @@ experiment('Project Handlers', function() {
       });
     });
   });
+  
+  experiment('GET - one project, shallow', function() {
+    test('default', function(done) {
+      var opts = configs.get.findOneShallow.success.default;
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+        expect(resp.result.status).to.equal('success');
+        expect(resp.result.project).to.exist();
+        expect(resp.result.project).to.be.an.object();
+        done();
+      });
+    });
+  });
 
   experiment('GET - Discover by language', function() {
     test('default', function(done) {
