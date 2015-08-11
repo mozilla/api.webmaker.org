@@ -836,6 +836,39 @@ exports.patch = {
   }
 };
 
+exports.delShallow = {
+  success: {
+    moderator: {
+      url: '/projects/4',
+      method: 'delete',
+      headers: moderatorToken
+    }
+  },
+  fail: {
+    params: {
+      project: {
+        notFound: {
+          url: '/projects/999999999',
+          method: 'delete',
+          headers: moderatorToken
+        },
+        notNumber: {
+          url: '/projects/a',
+          method: 'delete',
+          headers: moderatorToken
+        }
+      }
+    },
+    auth: {
+      notModerator: {
+        url: '/projects/9',
+        method: 'delete',
+        headers: userToken
+      }
+    }
+  }
+}
+
 exports.del = {
   success: {
     owner:{

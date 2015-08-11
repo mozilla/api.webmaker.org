@@ -30,6 +30,38 @@ var numericSchema = Joi.alternatives().try(
 
 var routes = [
   {
+    path: '/projects/{project}',
+    method: 'delete',
+    handler: projects.delShallow,
+    config: {
+      validate: {
+        params: {
+          project: numericSchema
+        }
+      },
+      cors: {
+        methods: ['OPTIONS', 'GET', 'PATCH', 'DELETE']
+      }
+    }
+  }, {
+    path: '/projects/{project}',
+    method: 'options',
+    handler: projects.options,
+    config: {
+      validate: {
+        params: {
+          project: numericSchema
+        }
+      },
+      cors: {
+        methods: ['OPTIONS', 'GET', 'PATCH', 'DELETE']
+      },
+      plugins: {
+        lout: false
+      }
+    }
+  },
+  {
     path: '/users',
     method: 'post',
     handler: users.post,

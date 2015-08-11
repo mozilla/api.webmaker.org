@@ -254,6 +254,27 @@ exports.patch = {
   }
 };
 
+exports.delShallow = function(request, reply) {
+  request.server.methods.projects.remove(
+    [
+      request.params.project
+    ],
+    function(err, result) {
+      if(err) {
+        return reply(err);
+      }
+      
+      if (!result.rows.length) {
+        return reply(boom.notFound('Project not found'));
+      }
+
+      reply({
+        status: 'deleted'
+      });
+    }
+  );
+};
+
 exports.del = function(request, reply) {
   request.server.methods.projects.remove(
     [

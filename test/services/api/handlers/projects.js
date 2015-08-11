@@ -497,6 +497,51 @@ experiment('Project Handlers', function() {
     });
   });
 
+  experiment('DELETE - shallow', function() {
+    test('success, moderator', function(done) {
+      var opts = configs.delShallow.success.moderator;
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+        expect(resp.result.status).to.equal('deleted');
+        done();
+      });
+    });
+
+    test('fail, 404 project not found', function(done) {
+      var opts = configs.delShallow.fail.params.project.notFound;
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(404);
+        expect(resp.result.error).to.equal('Not Found');
+        expect(resp.result.message).to.equal('Project not found');
+        done();
+      });
+    });
+
+    test('fail, 400 project_id invalid', function(done) {
+      var opts = configs.delShallow.fail.params.project.notNumber;
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(400);
+        expect(resp.result.error).to.equal('Bad Request');
+        expect(resp.result.message).to.be.a.string();
+        done();
+      });
+    });
+
+    test('fail, not moderator', function(done) {
+      var opts = configs.delShallow.fail.auth.notModerator;
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(403);
+        expect(resp.result.error).to.equal('Forbidden');
+        expect(resp.result.message).to.equal('Insufficient permissions');
+        done();
+      });
+    });
+  });
+
   experiment('GET - Discover by language', function() {
     test('default', function(done) {
       var opts = configs.get.discoverByLanguage.success.default;
