@@ -81,7 +81,7 @@ exports.get = {
         method: 'get'
       },
       pageWithoutElements: {
-        url: '/users/1/projects/1/pages/2',
+        url: '/users/1/projects/1/pages/5',
         method: 'get'
       }
     },
@@ -517,12 +517,12 @@ exports.patch = {
       },
       xy: {
         duplicateCoords: {
-          url: '/users/1/projects/1/pages/2',
+          url: '/users/1/projects/1/pages/1',
           method: 'patch',
           headers: userToken,
           payload: {
             x: 2,
-            y: 0
+            y: 1
           }
         }
       },
@@ -557,12 +557,12 @@ exports.patch = {
 exports.del = {
   success: {
     owner: {
-      url: '/users/1/projects/1/pages/1',
+      url: '/users/1/projects/1/pages/2',
       method: 'delete',
       headers: userToken
     },
     moderator: {
-      url: '/users/1/projects/1/pages/2',
+      url: '/users/1/projects/1/pages/3',
       method: 'delete',
       headers: moderatorToken
     }
@@ -615,7 +615,7 @@ exports.del = {
       },
       page: {
         notFound: {
-          url: '/users/1/projects/1/pages/1',
+          url: '/users/1/projects/1/pages/89',
           method: 'delete',
           headers: userToken
         },
@@ -633,13 +633,13 @@ exports.del = {
     },
     auth: {
       notOwner: {
-        url: '/users/1/projects/1/pages/3',
+        url: '/users/1/projects/1/pages/1',
         method: 'delete',
         headers: userToken2
       }
     },
     error: {
-      url: '/users/1/projects/1/pages/3',
+      url: '/users/1/projects/1/pages/1',
       method: 'delete',
       headers: userToken
     }

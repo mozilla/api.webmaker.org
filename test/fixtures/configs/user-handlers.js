@@ -114,10 +114,10 @@ exports.patch = {
 
 exports.del = {
   success: {
-    url: '/users/1',
+    url: '/users/4',
     method: 'delete',
     headers: {
-      authorization: 'token userToken'
+      authorization: 'token userToken4'
     }
   },
   userNotFound: {

@@ -11,6 +11,12 @@ module.exports = {
     username: 'jon_testing',
     prefLocale: 'en-US'
   },
+  'userToken4': {
+    scope: ['user', 'projects'],
+    id: '4',
+    username: 'kate_testing',
+    prefLocale: 'en-GB'
+  },
   'moderatorToken': {
     scope: ['user', 'projects'],
     id: '3',

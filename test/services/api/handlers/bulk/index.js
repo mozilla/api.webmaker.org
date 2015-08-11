@@ -1,5 +1,5 @@
-var bulkConfig = require('../../../fixtures/configs/bulk-handlers'),
-  userFixtures = require('../../../fixtures/users'),
+var bulkConfig = require('../../../../fixtures/configs/bulk-handlers'),
+  userFixtures = require('../../../../fixtures/users'),
   sinon = require('sinon'),
   Lab = require('lab'),
   lab = exports.lab = Lab.script(),
@@ -19,7 +19,7 @@ function mockErr() {
 }
 
 before(function(done) {
-  require('../../../mocks/server')(function(obj) {
+  require('../../../../mocks/server')(function(obj) {
     server = obj;
     done();
   });
@@ -29,7 +29,7 @@ after(function(done) {
   server.stop(done);
 });
 
-experiment('Bulk Projects API', function() {
+experiment('POST /users/{user}/bulk', function() {
   test('Succeeds - single action', function(done) {
     var opts = bulkConfig.success.singleAction;
 

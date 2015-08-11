@@ -639,7 +639,7 @@ exports.create = {
         }
       },
       error: {
-        url: '/users/1/projects/2/remixes',
+        url: '/users/1/projects/1/remixes',
         method: 'post',
         headers: userToken
       },
@@ -788,7 +788,7 @@ exports.patch = {
         headers: moderatorToken
       },
       unfeature: {
-        url: '/users/1/projects/2/feature',
+        url: '/users/2/projects/4/feature',
         method: 'patch',
         headers: moderatorToken
       }
@@ -901,7 +901,7 @@ exports.options = {
 exports.tail = {
   success: {
     update: {
-      url: '/users/1/projects/1/pages/3',
+      url: '/users/1/projects/1/pages/1',
       method: 'patch',
       headers: userToken,
       payload: {
@@ -915,7 +915,7 @@ exports.tail = {
   },
   noOverwrite: {
     update: {
-      url: '/users/1/projects/1/pages/3',
+      url: '/users/1/projects/1/pages/1',
       method: 'patch',
       headers: userToken,
       payload: {
@@ -937,7 +937,7 @@ exports.tail = {
   },
   elementSuccess: {
     update: {
-      url: '/users/1/projects/1/pages/3/elements/25',
+      url: '/users/1/projects/1/pages/1/elements/1',
       method: 'patch',
       headers: userToken,
       payload: {
@@ -982,7 +982,7 @@ exports.tail = {
     }
   },
   fail: {
-    url: '/users/1/projects/1/pages/3',
+    url: '/users/1/projects/1/pages/1',
     method: 'patch',
     headers: userToken,
     payload: {

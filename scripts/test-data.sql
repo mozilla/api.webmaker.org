@@ -125,9 +125,9 @@ BEGIN
     (4, 1, 'image', empty_json, styles),
     (4, 1,  'text', attributes, empty_json),
     (4, 1,  'text', empty_json, styles),
-    (3, 1,  'link', '{"targetProjectId": "1","targetPageId": "4", "targetUserId": "1"}'::jsonb, empty_json),
+    (4, 1,  'link', '{"targetProjectId": "1","targetPageId": "5", "targetUserId": "1"}'::jsonb, empty_json),
     (3, 1,  'text', attributes, empty_json),
-    (4, 1,  'link', '{"targetProjectId": "1","targetPageId": "3", "targetUserId": "1"}'::jsonb, styles),
+    (4, 1,  'link', '{"targetProjectId": "1","targetPageId": "5", "targetUserId": "1"}'::jsonb, styles),
     (4, 1, 'image', empty_json, styles),
     (4, 1,  'link', '{"targetProjectId": "1","targetPageId": "2", "targetUserId": "1"}'::jsonb, styles);
 
