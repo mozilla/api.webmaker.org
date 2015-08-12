@@ -1,4 +1,6 @@
-var configs = require('../../../../fixtures/configs/page-handlers'),
+var requireTree = require('require-tree'),
+  path = require('path'),
+  pageConfigs = requireTree(path.resolve(__dirname + '../../../../../fixtures/configs/pages')),
   sinon = require('sinon'),
   Lab = require('lab'),
   lab = exports.lab = Lab.script(),
@@ -34,7 +36,7 @@ after(function(done) {
 
 experiment('PATCH /users/{user}/projects/{projects}/pages/{page}', function() {
   test('succeeds with only x in payload', function(done) {
-    var opts = configs.patch.success.onlyX;
+    var opts = pageConfigs.patch.success.onlyX;
 
     server.on('tail', function(request) {
       if ( request.url.path !== opts.url ) {
@@ -63,7 +65,7 @@ experiment('PATCH /users/{user}/projects/{projects}/pages/{page}', function() {
   });
 
   test('succeeds with only y in payload', function(done) {
-    var opts = configs.patch.success.onlyY;
+    var opts = pageConfigs.patch.success.onlyY;
 
     server.on('tail', function(request) {
       if ( request.url.path !== opts.url ) {
@@ -92,7 +94,7 @@ experiment('PATCH /users/{user}/projects/{projects}/pages/{page}', function() {
   });
 
   test('succeeds with only styles in payload', function(done) {
-    var opts = configs.patch.success.onlyStyles;
+    var opts = pageConfigs.patch.success.onlyStyles;
 
     server.on('tail', function(request) {
       if ( request.url.path !== opts.url ) {
@@ -123,7 +125,7 @@ experiment('PATCH /users/{user}/projects/{projects}/pages/{page}', function() {
   });
 
   test('succeeds with all payload params', function(done) {
-    var opts = configs.patch.success.all;
+    var opts = pageConfigs.patch.success.all;
 
     server.on('tail', function(request) {
       if ( request.url.path !== opts.url ) {
@@ -154,7 +156,7 @@ experiment('PATCH /users/{user}/projects/{projects}/pages/{page}', function() {
   });
 
   test('user not found', function(done) {
-    var opts = configs.patch.fail.params.user.notFound;
+    var opts = pageConfigs.patch.fail.params.user.notFound;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -165,7 +167,7 @@ experiment('PATCH /users/{user}/projects/{projects}/pages/{page}', function() {
   });
 
   test('user not number', function(done) {
-    var opts = configs.patch.fail.params.user.notNumber;
+    var opts = pageConfigs.patch.fail.params.user.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -176,7 +178,7 @@ experiment('PATCH /users/{user}/projects/{projects}/pages/{page}', function() {
   });
 
   test('user not integer', function(done) {
-    var opts = configs.patch.fail.params.user.notInteger;
+    var opts = pageConfigs.patch.fail.params.user.notInteger;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -187,7 +189,7 @@ experiment('PATCH /users/{user}/projects/{projects}/pages/{page}', function() {
   });
 
   test('user does not own project', function(done) {
-    var opts = configs.patch.fail.params.user.doesNotOwnProject;
+    var opts = pageConfigs.patch.fail.params.user.doesNotOwnProject;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -198,7 +200,7 @@ experiment('PATCH /users/{user}/projects/{projects}/pages/{page}', function() {
   });
 
   test('project not found', function(done) {
-    var opts = configs.patch.fail.params.project.notFound;
+    var opts = pageConfigs.patch.fail.params.project.notFound;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -209,7 +211,7 @@ experiment('PATCH /users/{user}/projects/{projects}/pages/{page}', function() {
   });
 
   test('project not number', function(done) {
-    var opts = configs.patch.fail.params.project.notNumber;
+    var opts = pageConfigs.patch.fail.params.project.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -220,7 +222,7 @@ experiment('PATCH /users/{user}/projects/{projects}/pages/{page}', function() {
   });
 
   test('project not integer', function(done) {
-    var opts = configs.patch.fail.params.project.notInteger;
+    var opts = pageConfigs.patch.fail.params.project.notInteger;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -231,7 +233,7 @@ experiment('PATCH /users/{user}/projects/{projects}/pages/{page}', function() {
   });
 
   test('page not found', function(done) {
-    var opts = configs.patch.fail.params.page.notFound;
+    var opts = pageConfigs.patch.fail.params.page.notFound;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -242,7 +244,7 @@ experiment('PATCH /users/{user}/projects/{projects}/pages/{page}', function() {
   });
 
   test('page not number', function(done) {
-    var opts = configs.patch.fail.params.page.notNumber;
+    var opts = pageConfigs.patch.fail.params.page.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -253,7 +255,7 @@ experiment('PATCH /users/{user}/projects/{projects}/pages/{page}', function() {
   });
 
   test('page not integer', function(done) {
-    var opts = configs.patch.fail.params.page.notInteger;
+    var opts = pageConfigs.patch.fail.params.page.notInteger;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -264,7 +266,7 @@ experiment('PATCH /users/{user}/projects/{projects}/pages/{page}', function() {
   });
 
   test('page is not part of project', function(done) {
-    var opts = configs.patch.fail.params.project.pageNotInProject;
+    var opts = pageConfigs.patch.fail.params.project.pageNotInProject;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -275,7 +277,7 @@ experiment('PATCH /users/{user}/projects/{projects}/pages/{page}', function() {
   });
 
   test('x not number', function(done) {
-    var opts = configs.patch.fail.payload.x.notNumber;
+    var opts = pageConfigs.patch.fail.payload.x.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -286,7 +288,7 @@ experiment('PATCH /users/{user}/projects/{projects}/pages/{page}', function() {
   });
 
   test('x not integer', function(done) {
-    var opts = configs.patch.fail.payload.x.notInteger;
+    var opts = pageConfigs.patch.fail.payload.x.notInteger;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -297,7 +299,7 @@ experiment('PATCH /users/{user}/projects/{projects}/pages/{page}', function() {
   });
 
   test('y not number', function(done) {
-    var opts = configs.patch.fail.payload.y.notNumber;
+    var opts = pageConfigs.patch.fail.payload.y.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -308,7 +310,7 @@ experiment('PATCH /users/{user}/projects/{projects}/pages/{page}', function() {
   });
 
   test('y not integer', function(done) {
-    var opts = configs.patch.fail.payload.y.notInteger;
+    var opts = pageConfigs.patch.fail.payload.y.notInteger;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -319,7 +321,7 @@ experiment('PATCH /users/{user}/projects/{projects}/pages/{page}', function() {
   });
 
   test('can not update a page with existing coords', function(done) {
-    var opts = configs.patch.fail.payload.xy.duplicateCoords;
+    var opts = pageConfigs.patch.fail.payload.xy.duplicateCoords;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -330,7 +332,7 @@ experiment('PATCH /users/{user}/projects/{projects}/pages/{page}', function() {
   });
 
   test('styles not object', function(done) {
-    var opts = configs.patch.fail.payload.styles.notObject;
+    var opts = pageConfigs.patch.fail.payload.styles.notObject;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -341,7 +343,7 @@ experiment('PATCH /users/{user}/projects/{projects}/pages/{page}', function() {
   });
 
   test('missing all', function(done) {
-    var opts = configs.patch.fail.payload.missingAll;
+    var opts = pageConfigs.patch.fail.payload.missingAll;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -352,7 +354,7 @@ experiment('PATCH /users/{user}/projects/{projects}/pages/{page}', function() {
   });
 
   test('Handles errors from postgre', function(done) {
-    var opts = configs.patch.fail.error;
+    var opts = pageConfigs.patch.fail.error;
     var stub = sinon.stub(server.methods.pages, 'update')
       .callsArgWith(1, mockErr());
 
@@ -366,7 +368,7 @@ experiment('PATCH /users/{user}/projects/{projects}/pages/{page}', function() {
   });
 
   test('pages tail cache error reported', function(done) {
-    var opts = configs.patch.fail.error;
+    var opts = pageConfigs.patch.fail.error;
     var stub = sinon.stub(server.methods.pages.findOne.cache, 'drop')
       .callsArgWith(1, mockErr());
 

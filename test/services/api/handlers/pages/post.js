@@ -1,4 +1,6 @@
-var configs = require('../../../../fixtures/configs/page-handlers'),
+var requireTree = require('require-tree'),
+  path = require('path'),
+  pageConfigs = requireTree(path.resolve(__dirname + '../../../../../fixtures/configs/pages')),
   sinon = require('sinon'),
   Lab = require('lab'),
   lab = exports.lab = Lab.script(),
@@ -34,7 +36,7 @@ after(function(done) {
 
 experiment('POST /users/{user}/projects/{project}/pages', function() {
   test('successfully create page without providing styles param', function(done) {
-    var opts = configs.create.success.emptyStyles;
+    var opts = pageConfigs.post.success.emptyStyles;
     var created;
 
     server.inject(opts, function(resp) {
@@ -59,7 +61,7 @@ experiment('POST /users/{user}/projects/{project}/pages', function() {
   });
 
   test('successfully create page with a styles object', function(done) {
-    var opts = configs.create.success.withStyle;
+    var opts = pageConfigs.post.success.withStyle;
     var created;
 
     server.inject(opts, function(resp) {
@@ -84,7 +86,7 @@ experiment('POST /users/{user}/projects/{project}/pages', function() {
   });
 
   test('successfully create page with negative x & y', function(done) {
-    var opts = configs.create.success.negativeXY;
+    var opts = pageConfigs.post.success.negativeXY;
     var created;
 
     server.inject(opts, function(resp) {
@@ -109,7 +111,7 @@ experiment('POST /users/{user}/projects/{project}/pages', function() {
   });
 
   test('successfully create page with an x & y position that was deleted', function(done) {
-    var opts = configs.create.success.deletedXY;
+    var opts = pageConfigs.post.success.deletedXY;
     var created;
 
     server.inject(opts, function(resp) {
@@ -134,7 +136,7 @@ experiment('POST /users/{user}/projects/{project}/pages', function() {
   });
 
   test('user not found', function(done) {
-    var opts = configs.create.fail.params.user.notFound;
+    var opts = pageConfigs.post.fail.params.user.notFound;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -145,7 +147,7 @@ experiment('POST /users/{user}/projects/{project}/pages', function() {
   });
 
   test('user not number', function(done) {
-    var opts = configs.create.fail.params.user.notNumber;
+    var opts = pageConfigs.post.fail.params.user.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -156,7 +158,7 @@ experiment('POST /users/{user}/projects/{project}/pages', function() {
   });
 
   test('user not integer', function(done) {
-    var opts = configs.create.fail.params.user.notInteger;
+    var opts = pageConfigs.post.fail.params.user.notInteger;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -167,7 +169,7 @@ experiment('POST /users/{user}/projects/{project}/pages', function() {
   });
 
   test('user does not own project', function(done) {
-    var opts = configs.create.fail.params.user.doesNotOwnProject;
+    var opts = pageConfigs.post.fail.params.user.doesNotOwnProject;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -178,7 +180,7 @@ experiment('POST /users/{user}/projects/{project}/pages', function() {
   });
 
   test('project not found', function(done) {
-    var opts = configs.create.fail.params.project.notFound;
+    var opts = pageConfigs.post.fail.params.project.notFound;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -189,7 +191,7 @@ experiment('POST /users/{user}/projects/{project}/pages', function() {
   });
 
   test('project not number', function(done) {
-    var opts = configs.create.fail.params.project.notNumber;
+    var opts = pageConfigs.post.fail.params.project.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -200,7 +202,7 @@ experiment('POST /users/{user}/projects/{project}/pages', function() {
   });
 
   test('project not integer', function(done) {
-    var opts = configs.create.fail.params.project.notInteger;
+    var opts = pageConfigs.post.fail.params.project.notInteger;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -211,7 +213,7 @@ experiment('POST /users/{user}/projects/{project}/pages', function() {
   });
 
   test('x not provided', function(done) {
-    var opts = configs.create.fail.payload.x.notProvided;
+    var opts = pageConfigs.post.fail.payload.x.notProvided;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -222,7 +224,7 @@ experiment('POST /users/{user}/projects/{project}/pages', function() {
   });
 
   test('x not number', function(done) {
-    var opts = configs.create.fail.payload.x.notNumber;
+    var opts = pageConfigs.post.fail.payload.x.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -233,7 +235,7 @@ experiment('POST /users/{user}/projects/{project}/pages', function() {
   });
 
   test('x not integer', function(done) {
-    var opts = configs.create.fail.payload.x.notInteger;
+    var opts = pageConfigs.post.fail.payload.x.notInteger;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -244,7 +246,7 @@ experiment('POST /users/{user}/projects/{project}/pages', function() {
   });
 
   test('y not provided', function(done) {
-    var opts = configs.create.fail.payload.y.notProvided;
+    var opts = pageConfigs.post.fail.payload.y.notProvided;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -255,7 +257,7 @@ experiment('POST /users/{user}/projects/{project}/pages', function() {
   });
 
   test('y not number', function(done) {
-    var opts = configs.create.fail.payload.y.notNumber;
+    var opts = pageConfigs.post.fail.payload.y.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -266,7 +268,7 @@ experiment('POST /users/{user}/projects/{project}/pages', function() {
   });
 
   test('y not integer', function(done) {
-    var opts = configs.create.fail.payload.y.notInteger;
+    var opts = pageConfigs.post.fail.payload.y.notInteger;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -277,7 +279,7 @@ experiment('POST /users/{user}/projects/{project}/pages', function() {
   });
 
   test('can not add a page into a project that has the same coord as another page in the project', function(done) {
-    var opts = configs.create.fail.payload.xy.duplicateCoords;
+    var opts = pageConfigs.post.fail.payload.xy.duplicateCoords;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -288,7 +290,7 @@ experiment('POST /users/{user}/projects/{project}/pages', function() {
   });
 
   test('styles not object', function(done) {
-    var opts = configs.create.fail.payload.styles.notObject;
+    var opts = pageConfigs.post.fail.payload.styles.notObject;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -299,7 +301,7 @@ experiment('POST /users/{user}/projects/{project}/pages', function() {
   });
 
   test('can not create page in another user\'s project', function(done) {
-    var opts = configs.create.fail.auth.wrongUser;
+    var opts = pageConfigs.post.fail.auth.wrongUser;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(403);
@@ -310,7 +312,7 @@ experiment('POST /users/{user}/projects/{project}/pages', function() {
   });
 
   test('Handles errors from postgre', function(done) {
-    var opts = configs.create.fail.error;
+    var opts = pageConfigs.post.fail.error;
     var stub = sinon.stub(server.methods.pages, 'create')
       .callsArgWith(1, mockErr());
 

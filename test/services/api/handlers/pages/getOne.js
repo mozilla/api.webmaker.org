@@ -1,4 +1,6 @@
-var configs = require('../../../../fixtures/configs/page-handlers'),
+var requireTree = require('require-tree'),
+  path = require('path'),
+  pageConfigs = requireTree(path.resolve(__dirname + '../../../../../fixtures/configs/pages')),
   sinon = require('sinon'),
   Lab = require('lab'),
   lab = exports.lab = Lab.script(),
@@ -34,7 +36,7 @@ after(function(done) {
 
 experiment('GET /users/{user}/projects/{project}/pages/{page}', function() {
   test('get page with many elements', function(done) {
-    var opts = configs.get.one.success.pageWithElements;
+    var opts = pageConfigs.get.one.success.pageWithElements;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(200);
@@ -52,7 +54,7 @@ experiment('GET /users/{user}/projects/{project}/pages/{page}', function() {
   });
 
   test('a page with no elements', function(done) {
-    var opts = configs.get.one.success.pageWithoutElements;
+    var opts = pageConfigs.get.one.success.pageWithoutElements;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(200);
@@ -69,7 +71,7 @@ experiment('GET /users/{user}/projects/{project}/pages/{page}', function() {
   });
 
   test('user not found', function(done) {
-    var opts = configs.get.one.fail.params.user.notFound;
+    var opts = pageConfigs.get.one.fail.params.user.notFound;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -80,7 +82,7 @@ experiment('GET /users/{user}/projects/{project}/pages/{page}', function() {
   });
 
   test('user not number', function(done) {
-    var opts = configs.get.one.fail.params.user.notNumber;
+    var opts = pageConfigs.get.one.fail.params.user.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -91,7 +93,7 @@ experiment('GET /users/{user}/projects/{project}/pages/{page}', function() {
   });
 
   test('user not integer', function(done) {
-    var opts = configs.get.one.fail.params.user.notInteger;
+    var opts = pageConfigs.get.one.fail.params.user.notInteger;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -102,7 +104,7 @@ experiment('GET /users/{user}/projects/{project}/pages/{page}', function() {
   });
 
   test('user does not own project', function(done) {
-    var opts = configs.get.one.fail.params.user.doesNotOwnProject;
+    var opts = pageConfigs.get.one.fail.params.user.doesNotOwnProject;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -113,7 +115,7 @@ experiment('GET /users/{user}/projects/{project}/pages/{page}', function() {
   });
 
   test('project not found', function(done) {
-    var opts = configs.get.one.fail.params.project.notFound;
+    var opts = pageConfigs.get.one.fail.params.project.notFound;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -124,7 +126,7 @@ experiment('GET /users/{user}/projects/{project}/pages/{page}', function() {
   });
 
   test('project not number', function(done) {
-    var opts = configs.get.one.fail.params.project.notNumber;
+    var opts = pageConfigs.get.one.fail.params.project.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -135,7 +137,7 @@ experiment('GET /users/{user}/projects/{project}/pages/{page}', function() {
   });
 
   test('project not integer', function(done) {
-    var opts = configs.get.one.fail.params.project.notInteger;
+    var opts = pageConfigs.get.one.fail.params.project.notInteger;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -146,7 +148,7 @@ experiment('GET /users/{user}/projects/{project}/pages/{page}', function() {
   });
 
   test('page is not part of project', function(done) {
-    var opts = configs.get.one.fail.params.project.pageNotInProject;
+    var opts = pageConfigs.get.one.fail.params.project.pageNotInProject;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -157,7 +159,7 @@ experiment('GET /users/{user}/projects/{project}/pages/{page}', function() {
   });
 
   test('page not found', function(done) {
-    var opts = configs.get.one.fail.params.page.notFound;
+    var opts = pageConfigs.get.one.fail.params.page.notFound;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -168,7 +170,7 @@ experiment('GET /users/{user}/projects/{project}/pages/{page}', function() {
   });
 
   test('page not number', function(done) {
-    var opts = configs.get.one.fail.params.page.notNumber;
+    var opts = pageConfigs.get.one.fail.params.page.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -179,7 +181,7 @@ experiment('GET /users/{user}/projects/{project}/pages/{page}', function() {
   });
 
   test('page not integer', function(done) {
-    var opts = configs.get.one.fail.params.page.notInteger;
+    var opts = pageConfigs.get.one.fail.params.page.notInteger;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -190,7 +192,7 @@ experiment('GET /users/{user}/projects/{project}/pages/{page}', function() {
   });
 
   test('Handles errors from postgre', function(done) {
-    var opts = configs.get.one.fail.error;
+    var opts = pageConfigs.get.one.fail.error;
     var stub = sinon.stub(server.methods.pages, 'findOne')
       .callsArgWith(1, mockErr());
 

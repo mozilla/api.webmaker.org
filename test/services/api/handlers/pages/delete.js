@@ -1,4 +1,6 @@
-var configs = require('../../../../fixtures/configs/page-handlers'),
+var requireTree = require('require-tree'),
+  path = require('path'),
+  pageConfigs = requireTree(path.resolve(__dirname + '../../../../../fixtures/configs/pages')),
   sinon = require('sinon'),
   Lab = require('lab'),
   lab = exports.lab = Lab.script(),
@@ -34,7 +36,7 @@ after(function(done) {
 
 experiment('DELETE /users/{user}/projects/{project}/pages/{page}', function() {
   test('success - owner', function(done) {
-    var opts = configs.del.success.owner;
+    var opts = pageConfigs.remove.success.owner;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(200);
@@ -50,7 +52,7 @@ experiment('DELETE /users/{user}/projects/{project}/pages/{page}', function() {
   });
 
   test('success - moderator', function(done) {
-    var opts = configs.del.success.moderator;
+    var opts = pageConfigs.remove.success.moderator;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(200);
@@ -66,7 +68,7 @@ experiment('DELETE /users/{user}/projects/{project}/pages/{page}', function() {
   });
 
   test('user not found', function(done) {
-    var opts = configs.del.fail.params.user.notFound;
+    var opts = pageConfigs.remove.fail.params.user.notFound;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -77,7 +79,7 @@ experiment('DELETE /users/{user}/projects/{project}/pages/{page}', function() {
   });
 
   test('user not number', function(done) {
-    var opts = configs.del.fail.params.user.notNumber;
+    var opts = pageConfigs.remove.fail.params.user.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -88,7 +90,7 @@ experiment('DELETE /users/{user}/projects/{project}/pages/{page}', function() {
   });
 
   test('user not integer', function(done) {
-    var opts = configs.del.fail.params.user.notInteger;
+    var opts = pageConfigs.remove.fail.params.user.notInteger;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -99,7 +101,7 @@ experiment('DELETE /users/{user}/projects/{project}/pages/{page}', function() {
   });
 
   test('user does not own project', function(done) {
-    var opts = configs.del.fail.params.user.doesNotOwnProject;
+    var opts = pageConfigs.remove.fail.params.user.doesNotOwnProject;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -110,7 +112,7 @@ experiment('DELETE /users/{user}/projects/{project}/pages/{page}', function() {
   });
 
   test('project not found', function(done) {
-    var opts = configs.del.fail.params.project.notFound;
+    var opts = pageConfigs.remove.fail.params.project.notFound;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -121,7 +123,7 @@ experiment('DELETE /users/{user}/projects/{project}/pages/{page}', function() {
   });
 
   test('project not number', function(done) {
-    var opts = configs.del.fail.params.project.notNumber;
+    var opts = pageConfigs.remove.fail.params.project.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -132,7 +134,7 @@ experiment('DELETE /users/{user}/projects/{project}/pages/{page}', function() {
   });
 
   test('project not integer', function(done) {
-    var opts = configs.del.fail.params.project.notInteger;
+    var opts = pageConfigs.remove.fail.params.project.notInteger;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -143,7 +145,7 @@ experiment('DELETE /users/{user}/projects/{project}/pages/{page}', function() {
   });
 
   test('page is not part of project', function(done) {
-    var opts = configs.del.fail.params.project.pageNotInProject;
+    var opts = pageConfigs.remove.fail.params.project.pageNotInProject;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -154,7 +156,7 @@ experiment('DELETE /users/{user}/projects/{project}/pages/{page}', function() {
   });
 
   test('page not found', function(done) {
-    var opts = configs.del.fail.params.page.notFound;
+    var opts = pageConfigs.remove.fail.params.page.notFound;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -165,7 +167,7 @@ experiment('DELETE /users/{user}/projects/{project}/pages/{page}', function() {
   });
 
   test('page not number', function(done) {
-    var opts = configs.del.fail.params.page.notNumber;
+    var opts = pageConfigs.remove.fail.params.page.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -176,7 +178,7 @@ experiment('DELETE /users/{user}/projects/{project}/pages/{page}', function() {
   });
 
   test('page not integer', function(done) {
-    var opts = configs.del.fail.params.page.notInteger;
+    var opts = pageConfigs.remove.fail.params.page.notInteger;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -187,7 +189,7 @@ experiment('DELETE /users/{user}/projects/{project}/pages/{page}', function() {
   });
 
   test('Handles errors from postgre', function(done) {
-    var opts = configs.del.fail.error;
+    var opts = pageConfigs.remove.fail.error;
     var stub = sinon.stub(server.methods.pages, 'remove')
       .callsArgWith(1, mockErr());
 

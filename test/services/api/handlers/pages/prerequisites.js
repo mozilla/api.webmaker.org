@@ -1,4 +1,6 @@
-var configs = require('../../../../fixtures/configs/page-handlers'),
+var requireTree = require('require-tree'),
+  path = require('path'),
+  pageConfigs = requireTree(path.resolve(__dirname + '../../../../../fixtures/configs/pages')),
   sinon = require('sinon'),
   Lab = require('lab'),
   lab = exports.lab = Lab.script(),
@@ -34,7 +36,7 @@ after(function(done) {
 
 experiment('Pages prerequisites errors', function() {
   test('getPage pg error', function(done) {
-    var opts = configs.prerequisites.fail;
+    var opts = pageConfigs.prerequisites.fail;
     var stub = sinon.stub(server.methods.pages, 'findOne')
       .callsArgWith(1, mockErr());
 
