@@ -1,4 +1,6 @@
-var configs = require('../../../../fixtures/configs/element-handlers'),
+var requireTree = require('require-tree'),
+  path = require('path'),
+  elementConfigs = requireTree(path.resolve(__dirname + '../../../../../fixtures/configs/elements')),
   sinon = require('sinon'),
   Lab = require('lab'),
   lab = exports.lab = Lab.script(),
@@ -30,7 +32,7 @@ after(function(done) {
 
 experiment('PATCH /users/{user}/projects/{project}/pages/{page}/elements/{element}', function() {
   test('succeeds with only styles in payload', function(done) {
-    var opts = configs.patch.success.onlyStyles;
+    var opts = elementConfigs.patch.success.onlyStyles;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(200);
@@ -52,7 +54,7 @@ experiment('PATCH /users/{user}/projects/{project}/pages/{page}/elements/{elemen
   });
 
   test('succeeds with only attributes in payload', function(done) {
-    var opts = configs.patch.success.onlyAttributes;
+    var opts = elementConfigs.patch.success.onlyAttributes;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(200);
@@ -74,7 +76,7 @@ experiment('PATCH /users/{user}/projects/{project}/pages/{page}/elements/{elemen
   });
 
   test('succeeds with attributes and styles in payload', function(done) {
-    var opts = configs.patch.success.all;
+    var opts = elementConfigs.patch.success.all;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(200);
@@ -96,7 +98,7 @@ experiment('PATCH /users/{user}/projects/{project}/pages/{page}/elements/{elemen
   });
 
   test('user not found', function(done) {
-    var opts = configs.patch.fail.params.user.notFound;
+    var opts = elementConfigs.patch.fail.params.user.notFound;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -107,7 +109,7 @@ experiment('PATCH /users/{user}/projects/{project}/pages/{page}/elements/{elemen
   });
 
   test('user not number', function(done) {
-    var opts = configs.patch.fail.params.user.notNumber;
+    var opts = elementConfigs.patch.fail.params.user.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -118,7 +120,7 @@ experiment('PATCH /users/{user}/projects/{project}/pages/{page}/elements/{elemen
   });
 
   test('user not integer', function(done) {
-    var opts = configs.patch.fail.params.user.notInteger;
+    var opts = elementConfigs.patch.fail.params.user.notInteger;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -129,7 +131,7 @@ experiment('PATCH /users/{user}/projects/{project}/pages/{page}/elements/{elemen
   });
 
   test('user does not own project', function(done) {
-    var opts = configs.patch.fail.params.user.doesNotOwnProject;
+    var opts = elementConfigs.patch.fail.params.user.doesNotOwnProject;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -140,7 +142,7 @@ experiment('PATCH /users/{user}/projects/{project}/pages/{page}/elements/{elemen
   });
 
   test('project not found', function(done) {
-    var opts = configs.patch.fail.params.project.notFound;
+    var opts = elementConfigs.patch.fail.params.project.notFound;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -151,7 +153,7 @@ experiment('PATCH /users/{user}/projects/{project}/pages/{page}/elements/{elemen
   });
 
   test('project not number', function(done) {
-    var opts = configs.patch.fail.params.project.notNumber;
+    var opts = elementConfigs.patch.fail.params.project.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -162,7 +164,7 @@ experiment('PATCH /users/{user}/projects/{project}/pages/{page}/elements/{elemen
   });
 
   test('project not integer', function(done) {
-    var opts = configs.patch.fail.params.project.notInteger;
+    var opts = elementConfigs.patch.fail.params.project.notInteger;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -173,7 +175,7 @@ experiment('PATCH /users/{user}/projects/{project}/pages/{page}/elements/{elemen
   });
 
   test('page not found', function(done) {
-    var opts = configs.patch.fail.params.page.notFound;
+    var opts = elementConfigs.patch.fail.params.page.notFound;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -184,7 +186,7 @@ experiment('PATCH /users/{user}/projects/{project}/pages/{page}/elements/{elemen
   });
 
   test('page not number', function(done) {
-    var opts = configs.patch.fail.params.page.notNumber;
+    var opts = elementConfigs.patch.fail.params.page.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -195,7 +197,7 @@ experiment('PATCH /users/{user}/projects/{project}/pages/{page}/elements/{elemen
   });
 
   test('page not integer', function(done) {
-    var opts = configs.patch.fail.params.page.notInteger;
+    var opts = elementConfigs.patch.fail.params.page.notInteger;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -206,7 +208,7 @@ experiment('PATCH /users/{user}/projects/{project}/pages/{page}/elements/{elemen
   });
 
   test('element not found', function(done) {
-    var opts = configs.patch.fail.params.element.notFound;
+    var opts = elementConfigs.patch.fail.params.element.notFound;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -217,7 +219,7 @@ experiment('PATCH /users/{user}/projects/{project}/pages/{page}/elements/{elemen
   });
 
   test('element not number', function(done) {
-    var opts = configs.patch.fail.params.element.notNumber;
+    var opts = elementConfigs.patch.fail.params.element.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -228,7 +230,7 @@ experiment('PATCH /users/{user}/projects/{project}/pages/{page}/elements/{elemen
   });
 
   test('element not integer', function(done) {
-    var opts = configs.patch.fail.params.element.notInteger;
+    var opts = elementConfigs.patch.fail.params.element.notInteger;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -239,7 +241,7 @@ experiment('PATCH /users/{user}/projects/{project}/pages/{page}/elements/{elemen
   });
 
   test('attributes not object', function(done) {
-    var opts = configs.patch.fail.payload.attributes.notObject;
+    var opts = elementConfigs.patch.fail.payload.attributes.notObject;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -250,7 +252,7 @@ experiment('PATCH /users/{user}/projects/{project}/pages/{page}/elements/{elemen
   });
 
   test('styles not object', function(done) {
-    var opts = configs.patch.fail.payload.styles.notObject;
+    var opts = elementConfigs.patch.fail.payload.styles.notObject;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -261,7 +263,7 @@ experiment('PATCH /users/{user}/projects/{project}/pages/{page}/elements/{elemen
   });
 
   test('missing all payload keys', function(done) {
-    var opts = configs.patch.fail.payload.missingAll;
+    var opts = elementConfigs.patch.fail.payload.missingAll;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -272,7 +274,7 @@ experiment('PATCH /users/{user}/projects/{project}/pages/{page}/elements/{elemen
   });
 
   test('Handles errors from postgre', function(done) {
-    var opts = configs.patch.fail.error;
+    var opts = elementConfigs.patch.fail.error;
     var stub = sinon.stub(server.methods.elements, 'update')
       .callsArgWith(1, mockErr());
 
@@ -286,7 +288,7 @@ experiment('PATCH /users/{user}/projects/{project}/pages/{page}/elements/{elemen
   });
 
   test('element tail cache error reported', function(done) {
-    var opts = configs.patch.fail.error;
+    var opts = elementConfigs.patch.fail.error;
     var stub = sinon.stub(server.methods.elements.findOne.cache, 'drop')
       .callsArgWith(1, mockErr());
 

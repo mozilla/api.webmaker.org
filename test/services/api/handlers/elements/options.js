@@ -1,4 +1,6 @@
-var configs = require('../../../../fixtures/configs/element-handlers'),
+var requireTree = require('require-tree'),
+  path = require('path'),
+  elementConfigs = requireTree(path.resolve(__dirname + '../../../../../fixtures/configs/elements')),
   Lab = require('lab'),
   lab = exports.lab = Lab.script(),
   experiment = lab.experiment,
@@ -21,7 +23,7 @@ after(function(done) {
 
 experiment('OPTIONS /users/{user}/projects/{project}/pages/{page}/elements/{element}', function() {
   test('responds to options requests', function(done) {
-    var opts = configs.options.success;
+    var opts = elementConfigs.options.success;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(200);

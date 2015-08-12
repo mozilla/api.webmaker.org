@@ -1,4 +1,6 @@
-var configs = require('../../../../fixtures/configs/element-handlers'),
+var requireTree = require('require-tree'),
+  path = require('path'),
+  elementConfigs = requireTree(path.resolve(__dirname + '../../../../../fixtures/configs/elements')),
   sinon = require('sinon'),
   Lab = require('lab'),
   lab = exports.lab = Lab.script(),
@@ -30,7 +32,7 @@ after(function(done) {
 
 experiment('Elements prerequisites errors', function() {
   test('getElement pg error', function(done) {
-    var opts = configs.prerequisites.fail;
+    var opts = elementConfigs.prerequisites.fail;
     var stub = sinon.stub(server.methods.elements, 'findOne')
       .callsArgWith(1, mockErr());
 

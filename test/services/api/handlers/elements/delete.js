@@ -1,4 +1,6 @@
-var configs = require('../../../../fixtures/configs/element-handlers'),
+var requireTree = require('require-tree'),
+  path = require('path'),
+  elementConfigs = requireTree(path.resolve(__dirname + '../../../../../fixtures/configs/elements')),
   sinon = require('sinon'),
   Lab = require('lab'),
   lab = exports.lab = Lab.script(),
@@ -30,7 +32,7 @@ after(function(done) {
 
 experiment('DELETE /users/{user}/projects/{project}/pages/{page}/elements/{element}', function() {
   test('success - owner', function(done) {
-    var opts = configs.del.success.owner;
+    var opts = elementConfigs.remove.success.owner;
 
     server.on('tail', function(request) {
       if ( request.url.path !== opts.url ) {
@@ -53,7 +55,7 @@ experiment('DELETE /users/{user}/projects/{project}/pages/{page}/elements/{eleme
   });
 
   test('success - moderator', function(done) {
-    var opts = configs.del.success.moderator;
+    var opts = elementConfigs.remove.success.moderator;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(200);
@@ -69,7 +71,7 @@ experiment('DELETE /users/{user}/projects/{project}/pages/{page}/elements/{eleme
   });
 
   test('user not found', function(done) {
-    var opts = configs.del.fail.params.user.notFound;
+    var opts = elementConfigs.remove.fail.params.user.notFound;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -80,7 +82,7 @@ experiment('DELETE /users/{user}/projects/{project}/pages/{page}/elements/{eleme
   });
 
   test('user not number', function(done) {
-    var opts = configs.del.fail.params.user.notNumber;
+    var opts = elementConfigs.remove.fail.params.user.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -91,7 +93,7 @@ experiment('DELETE /users/{user}/projects/{project}/pages/{page}/elements/{eleme
   });
 
   test('user not integer', function(done) {
-    var opts = configs.del.fail.params.user.notInteger;
+    var opts = elementConfigs.remove.fail.params.user.notInteger;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -102,7 +104,7 @@ experiment('DELETE /users/{user}/projects/{project}/pages/{page}/elements/{eleme
   });
 
   test('user does not own project', function(done) {
-    var opts = configs.del.fail.params.user.doesNotOwnProject;
+    var opts = elementConfigs.remove.fail.params.user.doesNotOwnProject;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(403);
@@ -113,7 +115,7 @@ experiment('DELETE /users/{user}/projects/{project}/pages/{page}/elements/{eleme
   });
 
   test('project not found', function(done) {
-    var opts = configs.del.fail.params.project.notFound;
+    var opts = elementConfigs.remove.fail.params.project.notFound;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -124,7 +126,7 @@ experiment('DELETE /users/{user}/projects/{project}/pages/{page}/elements/{eleme
   });
 
   test('project not number', function(done) {
-    var opts = configs.del.fail.params.project.notNumber;
+    var opts = elementConfigs.remove.fail.params.project.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -135,7 +137,7 @@ experiment('DELETE /users/{user}/projects/{project}/pages/{page}/elements/{eleme
   });
 
   test('project not integer', function(done) {
-    var opts = configs.del.fail.params.project.notInteger;
+    var opts = elementConfigs.remove.fail.params.project.notInteger;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -146,7 +148,7 @@ experiment('DELETE /users/{user}/projects/{project}/pages/{page}/elements/{eleme
   });
 
   test('page not found', function(done) {
-    var opts = configs.del.fail.params.page.notFound;
+    var opts = elementConfigs.remove.fail.params.page.notFound;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -157,7 +159,7 @@ experiment('DELETE /users/{user}/projects/{project}/pages/{page}/elements/{eleme
   });
 
   test('page not number', function(done) {
-    var opts = configs.del.fail.params.page.notNumber;
+    var opts = elementConfigs.remove.fail.params.page.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -168,7 +170,7 @@ experiment('DELETE /users/{user}/projects/{project}/pages/{page}/elements/{eleme
   });
 
   test('page not integer', function(done) {
-    var opts = configs.del.fail.params.page.notInteger;
+    var opts = elementConfigs.remove.fail.params.page.notInteger;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -179,7 +181,7 @@ experiment('DELETE /users/{user}/projects/{project}/pages/{page}/elements/{eleme
   });
 
   test('element not found', function(done) {
-    var opts = configs.del.fail.params.element.notFound;
+    var opts = elementConfigs.remove.fail.params.element.notFound;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -190,7 +192,7 @@ experiment('DELETE /users/{user}/projects/{project}/pages/{page}/elements/{eleme
   });
 
   test('element not number', function(done) {
-    var opts = configs.del.fail.params.element.notNumber;
+    var opts = elementConfigs.remove.fail.params.element.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -201,7 +203,7 @@ experiment('DELETE /users/{user}/projects/{project}/pages/{page}/elements/{eleme
   });
 
   test('element not integer', function(done) {
-    var opts = configs.del.fail.params.element.notInteger;
+    var opts = elementConfigs.remove.fail.params.element.notInteger;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -212,7 +214,7 @@ experiment('DELETE /users/{user}/projects/{project}/pages/{page}/elements/{eleme
   });
 
   test('Only the project owner can delete a page\'s elements', function(done) {
-    var opts = configs.del.fail.auth.notOwner;
+    var opts = elementConfigs.remove.fail.auth.notOwner;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(403);
@@ -223,7 +225,7 @@ experiment('DELETE /users/{user}/projects/{project}/pages/{page}/elements/{eleme
   });
 
   test('Handles errors from postgre', function(done) {
-    var opts = configs.del.fail.error;
+    var opts = elementConfigs.remove.fail.error;
     var stub = sinon.stub(server.methods.elements, 'remove')
       .callsArgWith(1, mockErr());
 

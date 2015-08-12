@@ -1,4 +1,6 @@
-var configs = require('../../../../fixtures/configs/element-handlers'),
+var requireTree = require('require-tree'),
+  path = require('path'),
+  elementConfigs = requireTree(path.resolve(__dirname + '../../../../../fixtures/configs/elements')),
   sinon = require('sinon'),
   Lab = require('lab'),
   lab = exports.lab = Lab.script(),
@@ -30,7 +32,7 @@ after(function(done) {
 
 experiment('POST /users/{user}/projects/{project}/pages/{page}/elements', function() {
   test('successfully create element without providing styles or attributes', function(done) {
-    var opts = configs.create.success.emptyJSON;
+    var opts = elementConfigs.post.success.emptyJSON;
     var created;
 
     server.inject(opts, function(resp) {
@@ -55,7 +57,7 @@ experiment('POST /users/{user}/projects/{project}/pages/{page}/elements', functi
   });
 
   test('successfully create element with provided style', function(done) {
-    var opts = configs.create.success.withStyle;
+    var opts = elementConfigs.post.success.withStyle;
     var created;
 
     server.inject(opts, function(resp) {
@@ -80,7 +82,7 @@ experiment('POST /users/{user}/projects/{project}/pages/{page}/elements', functi
   });
 
   test('user not found', function(done) {
-    var opts = configs.create.fail.params.user.notFound;
+    var opts = elementConfigs.post.fail.params.user.notFound;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -91,7 +93,7 @@ experiment('POST /users/{user}/projects/{project}/pages/{page}/elements', functi
   });
 
   test('user not number', function(done) {
-    var opts = configs.create.fail.params.user.notNumber;
+    var opts = elementConfigs.post.fail.params.user.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -102,7 +104,7 @@ experiment('POST /users/{user}/projects/{project}/pages/{page}/elements', functi
   });
 
   test('user not integer', function(done) {
-    var opts = configs.create.fail.params.user.notInteger;
+    var opts = elementConfigs.post.fail.params.user.notInteger;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -113,7 +115,7 @@ experiment('POST /users/{user}/projects/{project}/pages/{page}/elements', functi
   });
 
   test('user does not own project', function(done) {
-    var opts = configs.create.fail.params.user.doesNotOwnProject;
+    var opts = elementConfigs.post.fail.params.user.doesNotOwnProject;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -124,7 +126,7 @@ experiment('POST /users/{user}/projects/{project}/pages/{page}/elements', functi
   });
 
   test('project not found', function(done) {
-    var opts = configs.create.fail.params.project.notFound;
+    var opts = elementConfigs.post.fail.params.project.notFound;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -135,7 +137,7 @@ experiment('POST /users/{user}/projects/{project}/pages/{page}/elements', functi
   });
 
   test('project not number', function(done) {
-    var opts = configs.create.fail.params.project.notNumber;
+    var opts = elementConfigs.post.fail.params.project.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -146,7 +148,7 @@ experiment('POST /users/{user}/projects/{project}/pages/{page}/elements', functi
   });
 
   test('project not integer', function(done) {
-    var opts = configs.create.fail.params.project.notInteger;
+    var opts = elementConfigs.post.fail.params.project.notInteger;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -157,7 +159,7 @@ experiment('POST /users/{user}/projects/{project}/pages/{page}/elements', functi
   });
 
   test('page not found', function(done) {
-    var opts = configs.create.fail.params.page.notFound;
+    var opts = elementConfigs.post.fail.params.page.notFound;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -168,7 +170,7 @@ experiment('POST /users/{user}/projects/{project}/pages/{page}/elements', functi
   });
 
   test('page not number', function(done) {
-    var opts = configs.create.fail.params.page.notNumber;
+    var opts = elementConfigs.post.fail.params.page.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -179,7 +181,7 @@ experiment('POST /users/{user}/projects/{project}/pages/{page}/elements', functi
   });
 
   test('page not integer', function(done) {
-    var opts = configs.create.fail.params.page.notInteger;
+    var opts = elementConfigs.post.fail.params.page.notInteger;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -190,7 +192,7 @@ experiment('POST /users/{user}/projects/{project}/pages/{page}/elements', functi
   });
 
   test('type not provided', function(done) {
-    var opts = configs.create.fail.payload.type.notProvided;
+    var opts = elementConfigs.post.fail.payload.type.notProvided;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -201,7 +203,7 @@ experiment('POST /users/{user}/projects/{project}/pages/{page}/elements', functi
   });
 
   test('type not string', function(done) {
-    var opts = configs.create.fail.payload.type.notString;
+    var opts = elementConfigs.post.fail.payload.type.notString;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -212,7 +214,7 @@ experiment('POST /users/{user}/projects/{project}/pages/{page}/elements', functi
   });
 
   test('attributes not object', function(done) {
-    var opts = configs.create.fail.payload.attributes.notObject;
+    var opts = elementConfigs.post.fail.payload.attributes.notObject;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -223,7 +225,7 @@ experiment('POST /users/{user}/projects/{project}/pages/{page}/elements', functi
   });
 
   test('styles not object', function(done) {
-    var opts = configs.create.fail.payload.styles.notObject;
+    var opts = elementConfigs.post.fail.payload.styles.notObject;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -234,7 +236,7 @@ experiment('POST /users/{user}/projects/{project}/pages/{page}/elements', functi
   });
 
   test('Handles errors from postgre', function(done) {
-    var opts = configs.create.fail.error;
+    var opts = elementConfigs.post.fail.error;
     var stub = sinon.stub(server.methods.elements, 'create')
       .callsArgWith(1, mockErr());
 

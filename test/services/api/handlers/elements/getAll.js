@@ -1,4 +1,6 @@
-var configs = require('../../../../fixtures/configs/element-handlers'),
+var requireTree = require('require-tree'),
+  path = require('path'),
+  elementConfigs = requireTree(path.resolve(__dirname + '../../../../../fixtures/configs/elements')),
   sinon = require('sinon'),
   Lab = require('lab'),
   lab = exports.lab = Lab.script(),
@@ -30,7 +32,7 @@ after(function(done) {
 
 experiment('GET /users/{user}/projects/{project}/pages/{page}/elements', function() {
   test('many elements', function(done) {
-    var opts = configs.get.all.success.manyElements;
+    var opts = elementConfigs.get.all.success.manyElements;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(200);
@@ -42,7 +44,7 @@ experiment('GET /users/{user}/projects/{project}/pages/{page}/elements', functio
   });
 
   test('no elements', function(done) {
-    var opts = configs.get.all.success.noElements;
+    var opts = elementConfigs.get.all.success.noElements;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(200);
@@ -54,7 +56,7 @@ experiment('GET /users/{user}/projects/{project}/pages/{page}/elements', functio
   });
 
   test('user not found', function(done) {
-    var opts = configs.get.all.fail.params.user.notFound;
+    var opts = elementConfigs.get.all.fail.params.user.notFound;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -65,7 +67,7 @@ experiment('GET /users/{user}/projects/{project}/pages/{page}/elements', functio
   });
 
   test('user not number', function(done) {
-    var opts = configs.get.all.fail.params.user.notNumber;
+    var opts = elementConfigs.get.all.fail.params.user.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -76,7 +78,7 @@ experiment('GET /users/{user}/projects/{project}/pages/{page}/elements', functio
   });
 
   test('user not integer', function(done) {
-    var opts = configs.get.all.fail.params.user.notInteger;
+    var opts = elementConfigs.get.all.fail.params.user.notInteger;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -87,7 +89,7 @@ experiment('GET /users/{user}/projects/{project}/pages/{page}/elements', functio
   });
 
   test('user does not own project', function(done) {
-    var opts = configs.get.all.fail.params.user.doesNotOwnProject;
+    var opts = elementConfigs.get.all.fail.params.user.doesNotOwnProject;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -98,7 +100,7 @@ experiment('GET /users/{user}/projects/{project}/pages/{page}/elements', functio
   });
 
   test('project not found', function(done) {
-    var opts = configs.get.all.fail.params.project.notFound;
+    var opts = elementConfigs.get.all.fail.params.project.notFound;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -109,7 +111,7 @@ experiment('GET /users/{user}/projects/{project}/pages/{page}/elements', functio
   });
 
   test('project not number', function(done) {
-    var opts = configs.get.all.fail.params.project.notNumber;
+    var opts = elementConfigs.get.all.fail.params.project.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -120,7 +122,7 @@ experiment('GET /users/{user}/projects/{project}/pages/{page}/elements', functio
   });
 
   test('project not integer', function(done) {
-    var opts = configs.get.all.fail.params.project.notInteger;
+    var opts = elementConfigs.get.all.fail.params.project.notInteger;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -131,7 +133,7 @@ experiment('GET /users/{user}/projects/{project}/pages/{page}/elements', functio
   });
 
   test('page not found', function(done) {
-    var opts = configs.get.all.fail.params.page.notFound;
+    var opts = elementConfigs.get.all.fail.params.page.notFound;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -142,7 +144,7 @@ experiment('GET /users/{user}/projects/{project}/pages/{page}/elements', functio
   });
 
   test('page not number', function(done) {
-    var opts = configs.get.all.fail.params.page.notNumber;
+    var opts = elementConfigs.get.all.fail.params.page.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -153,7 +155,7 @@ experiment('GET /users/{user}/projects/{project}/pages/{page}/elements', functio
   });
 
   test('page not integer', function(done) {
-    var opts = configs.get.all.fail.params.page.notInteger;
+    var opts = elementConfigs.get.all.fail.params.page.notInteger;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -164,7 +166,7 @@ experiment('GET /users/{user}/projects/{project}/pages/{page}/elements', functio
   });
 
   test('Handles errors from postgre', function(done) {
-    var opts = configs.get.all.fail.error;
+    var opts = elementConfigs.get.all.fail.error;
     var stub = sinon.stub(server.methods.elements, 'findAll')
       .callsArgWith(1, mockErr());
 
