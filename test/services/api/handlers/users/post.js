@@ -1,4 +1,6 @@
-var configs = require('../../../../fixtures/configs/user-handlers'),
+var requireTree = require('require-tree'),
+  path = require('path'),
+  userConfigs = requireTree(path.resolve(__dirname + '../../../../../fixtures/configs/users')),
   sinon = require('sinon'),
   Lab = require('lab'),
   lab = exports.lab = Lab.script(),
@@ -30,7 +32,7 @@ after(function(done) {
 
 experiment('POST /users', function() {
   test('Creates a new user', function(done) {
-    var opts = configs.create.success;
+    var opts = userConfigs.post.success;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(200);
@@ -43,7 +45,7 @@ experiment('POST /users', function() {
   });
 
   test('Does not allow duplicate usernames', function(done) {
-    var opts = configs.create.duplicateUsername;
+    var opts = userConfigs.post.duplicateUsername;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -54,7 +56,7 @@ experiment('POST /users', function() {
   });
 
   test('Does not allow duplicate ids', function(done) {
-    var opts = configs.create.duplicateId;
+    var opts = userConfigs.post.duplicateId;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -65,7 +67,7 @@ experiment('POST /users', function() {
   });
 
   test('create user pg error', function(done) {
-    var opts = configs.create.success;
+    var opts = userConfigs.post.success;
     var stub = sinon.stub(server.methods.users, 'create')
       .callsArgWith(1, mockErr());
 

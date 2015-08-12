@@ -1,4 +1,6 @@
-var configs = require('../../../../fixtures/configs/user-handlers'),
+var requireTree = require('require-tree'),
+  path = require('path'),
+  userConfigs = requireTree(path.resolve(__dirname + '../../../../../fixtures/configs/users')),
   sinon = require('sinon'),
   Lab = require('lab'),
   lab = exports.lab = Lab.script(),
@@ -30,7 +32,7 @@ after(function(done) {
 
 experiment('GET /users/{user}', function() {
   test('Gets user data', function(done) {
-    var opts = configs.get.success;
+    var opts = userConfigs.get.success;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(200);
@@ -49,7 +51,7 @@ experiment('GET /users/{user}', function() {
   });
 
   test('404s with invalid id', function(done) {
-    var opts = configs.get.invalidId;
+    var opts = userConfigs.get.invalidId;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -60,7 +62,7 @@ experiment('GET /users/{user}', function() {
   });
 
   test('401 if fetching another account', function(done) {
-    var opts = configs.get.notYourAccount;
+    var opts = userConfigs.get.notYourAccount;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(401);
@@ -71,7 +73,7 @@ experiment('GET /users/{user}', function() {
   });
 
   test('find user pg error', function(done) {
-    var opts = configs.get.success;
+    var opts = userConfigs.get.success;
     var stub = sinon.stub(server.methods.users, 'find')
       .callsArgWith(1, mockErr());
 

@@ -1,4 +1,6 @@
-var configs = require('../../../../fixtures/configs/user-handlers'),
+var requireTree = require('require-tree'),
+  path = require('path'),
+  userConfigs = requireTree(path.resolve(__dirname + '../../../../../fixtures/configs/users')),
   sinon = require('sinon'),
   Lab = require('lab'),
   lab = exports.lab = Lab.script(),
@@ -30,7 +32,7 @@ after(function(done) {
 
 experiment('PATCH /users/{user}', function() {
   test('Updates user record', function(done) {
-    var opts = configs.patch.updateEverything;
+    var opts = userConfigs.patch.updateEverything;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(200);
@@ -44,7 +46,7 @@ experiment('PATCH /users/{user}', function() {
   });
 
   test('Updates only username', function(done) {
-    var opts = configs.patch.username;
+    var opts = userConfigs.patch.username;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(200);
@@ -56,7 +58,7 @@ experiment('PATCH /users/{user}', function() {
   });
 
   test('Updates only language', function(done) {
-    var opts = configs.patch.language;
+    var opts = userConfigs.patch.language;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(200);
@@ -68,7 +70,7 @@ experiment('PATCH /users/{user}', function() {
   });
 
   test('404s with invalid id', function(done) {
-    var opts = configs.patch.userNotFound;
+    var opts = userConfigs.patch.userNotFound;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -79,7 +81,7 @@ experiment('PATCH /users/{user}', function() {
   });
 
   test('401 if updating wrong account', function(done) {
-    var opts = configs.patch.unauthorized;
+    var opts = userConfigs.patch.unauthorized;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(401);
@@ -90,7 +92,7 @@ experiment('PATCH /users/{user}', function() {
   });
 
   test('Does not allow duplicate usernames', function(done) {
-    var opts = configs.patch.duplicateUsername;
+    var opts = userConfigs.patch.duplicateUsername;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -101,7 +103,7 @@ experiment('PATCH /users/{user}', function() {
   });
 
   test('find user pg error', function(done) {
-    var opts = configs.patch.updateEverything;
+    var opts = userConfigs.patch.updateEverything;
     var stub = sinon.stub(server.methods.users, 'find')
       .callsArgWith(1, mockErr());
 
@@ -115,7 +117,7 @@ experiment('PATCH /users/{user}', function() {
   });
 
   test('update user pg error', function(done) {
-    var opts = configs.patch.updateEverything;
+    var opts = userConfigs.patch.updateEverything;
     var stub = sinon.stub(server.methods.users, 'update')
       .callsArgWith(1, mockErr());
 
@@ -129,7 +131,7 @@ experiment('PATCH /users/{user}', function() {
   });
 
   test('user tail cache error reported', function(done) {
-    var opts = configs.patch.updateEverything;
+    var opts = userConfigs.patch.updateEverything;
     var stub = sinon.stub(server.methods.users.find.cache, 'drop')
       .callsArgWith(1, mockErr());
 

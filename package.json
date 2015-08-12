@@ -15,7 +15,8 @@
     "test:reportcoverage": "npm run test:setup && lab -r lcov | ./node_modules/.bin/coveralls",
     "lint": "npm run jshint && npm run jscs",
     "jshint": "jshint -c node_modules/mofo-style/linters/.jshintrc adapters lib services test server.js",
-    "jscs": "jscs -c node_modules/mofo-style/linters/.jscsrc adapters lib services test server.js"
+    "jscs": "jscs -c node_modules/mofo-style/linters/.jscsrc adapters lib services test server.js",
+    "jscs-fix": "jscs --fix -c node_modules/mofo-style/linters/.jscsrc adapters lib services test server.js"
   },
   "author": "Mozilla Foundation",
   "license": "MPL-2.0",
@@ -45,6 +46,7 @@
     "redis": "^0.12.1",
     "redis-url": "^1.2.0",
     "request": "^2.55.0",
+    "require-tree": "^1.0.1",
     "scooter": "^2.0.1"
   },
   "optionalDependencies": {
@@ -52,7 +54,7 @@
   },
   "devDependencies": {
     "code": "^1.3.0",
-    "jscs": "^1.11.3",
+    "jscs": "^2.1.0",
     "jshint": "^2.6.3",
     "lab": "^5.5.0",
     "mofo-style": "latest",

@@ -1,4 +1,6 @@
-var configs = require('../../../../fixtures/configs/user-handlers'),
+var requireTree = require('require-tree'),
+  path = require('path'),
+  userConfigs = requireTree(path.resolve(__dirname + '../../../../../fixtures/configs/users')),
   sinon = require('sinon'),
   Lab = require('lab'),
   lab = exports.lab = Lab.script(),
@@ -30,7 +32,7 @@ after(function(done) {
 
 experiment('DELETE /users/{user}', function() {
   test('Deletes user record', function(done) {
-    var opts = configs.del.success;
+    var opts = userConfigs.remove.success;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(200);
@@ -40,7 +42,7 @@ experiment('DELETE /users/{user}', function() {
   });
 
   test('404s if user not found', function(done) {
-    var opts = configs.del.userNotFound;
+    var opts = userConfigs.remove.userNotFound;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -51,7 +53,7 @@ experiment('DELETE /users/{user}', function() {
   });
 
   test('Insufficient permissions', function(done) {
-    var opts = configs.del.unauthorized;
+    var opts = userConfigs.remove.unauthorized;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(401);
@@ -62,7 +64,7 @@ experiment('DELETE /users/{user}', function() {
   });
 
   test('find user pg error', function(done) {
-    var opts = configs.del.fail;
+    var opts = userConfigs.remove.fail;
     var stub = sinon.stub(server.methods.users, 'find')
       .callsArgWith(1, mockErr());
 
@@ -76,7 +78,7 @@ experiment('DELETE /users/{user}', function() {
   });
 
   test('delete user pg error', function(done) {
-    var opts = configs.del.fail2;
+    var opts = userConfigs.remove.fail2;
     var stub = sinon.stub(server.methods.users, 'remove')
       .callsArgWith(1, mockErr());
 

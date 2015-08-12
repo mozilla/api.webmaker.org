@@ -1,4 +1,6 @@
-var bulkConfig = require('../../../../fixtures/configs/bulk-handlers'),
+var requireTree = require('require-tree'),
+  path = require('path'),
+  bulkConfig = requireTree(path.resolve(__dirname + '../../../../../fixtures/configs/bulk')),
   userFixtures = require('../../../../fixtures/users'),
   sinon = require('sinon'),
   Lab = require('lab'),
@@ -166,7 +168,7 @@ experiment('POST /users/{user}/bulk', function() {
   });
 
   test('Returns 400 if validation lookup does not return rows' , function(done) {
-    var opts = bulkConfig.failure.lookupNotFound;
+    var opts = bulkConfig.failure.resourceLookupNotFound;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
