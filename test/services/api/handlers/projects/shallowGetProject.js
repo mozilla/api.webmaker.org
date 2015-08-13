@@ -1,4 +1,6 @@
-var configs = require('../../../../fixtures/configs/project-handlers'),
+var requireTree = require('require-tree'),
+  path = require('path'),
+  projectConfigs = requireTree(path.resolve(__dirname + '../../../../../fixtures/configs/projects')),
   sinon = require('sinon'),
   Lab = require('lab'),
   lab = exports.lab = Lab.script(),
@@ -30,7 +32,7 @@ after(function(done) {
 
 experiment('GET - one project, shallow', function() {
   test('default', function(done) {
-    var opts = configs.get.findOneShallow.success.default;
+    var opts = projectConfigs.get.findOneShallow.success.default;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(200);
@@ -43,7 +45,7 @@ experiment('GET - one project, shallow', function() {
   });
 
   test('project does not exist', function(done) {
-    var opts = configs.get.findOneShallow.fail.doesNotExist;
+    var opts = projectConfigs.get.findOneShallow.fail.doesNotExist;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -54,7 +56,7 @@ experiment('GET - one project, shallow', function() {
   });
 
   test('project id must a number', function(done) {
-    var opts = configs.get.findOneShallow.fail.badIdType;
+    var opts = projectConfigs.get.findOneShallow.fail.badIdType;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -64,7 +66,7 @@ experiment('GET - one project, shallow', function() {
   });
 
   test('handles errors from postgre', function(done) {
-    var opts = configs.get.findOneShallow.fail.internalError;
+    var opts = projectConfigs.get.findOneShallow.fail.internalError;
     var stub = sinon.stub(server.methods.projects, 'findOneShallow')
       .callsArgWith(1, mockErr());
 

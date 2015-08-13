@@ -1,4 +1,6 @@
-var configs = require('../../../../fixtures/configs/project-handlers'),
+var requireTree = require('require-tree'),
+  path = require('path'),
+  projectConfigs = requireTree(path.resolve(__dirname + '../../../../../fixtures/configs/projects')),
   sinon = require('sinon'),
   Lab = require('lab'),
   lab = exports.lab = Lab.script(),
@@ -30,7 +32,7 @@ after(function(done) {
 
 experiment('Project prequisite errors', function() {
   test('getUser pg error', function(done) {
-    var opts = configs.prerequisites.fail;
+    var opts = projectConfigs.prerequisites.fail;
     var stub = sinon.stub(server.methods.users, 'find')
       .callsArgWith(1, mockErr());
 
@@ -44,7 +46,7 @@ experiment('Project prequisite errors', function() {
   });
 
   test('getProject pg error', function(done) {
-    var opts = configs.prerequisites.fail;
+    var opts = projectConfigs.prerequisites.fail;
     var stub = sinon.stub(server.methods.projects, 'findOne')
       .callsArgWith(1, mockErr());
 

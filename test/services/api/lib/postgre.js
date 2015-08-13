@@ -1,4 +1,4 @@
-var configs = require('../../../fixtures/configs/project-handlers'),
+var pgConfig = require('../../../fixtures/configs/postgre'),
   userFixtures = require('../../../fixtures/users'),
   sinon = require('sinon'),
   Lab = require('lab'),
@@ -31,7 +31,7 @@ after(function(done) {
 
 experiment('pg plugin error handler', function() {
   test('Handles errors from postgre adapter', function(done) {
-    var opts = configs.pgAdapter.fail;
+    var opts = pgConfig.fail;
     var stub = sinon.stub(server.plugins['webmaker-postgre-adapter'].pg, 'connect')
       .callsArgWith(1, mockErr());
     server.inject(opts, function(resp) {
@@ -44,7 +44,7 @@ experiment('pg plugin error handler', function() {
   });
 
   test('Handles error from pg when making a transaction', function(done) {
-    var opts = configs.pgAdapter.createFail;
+    var opts = pgConfig.createFail;
     var clientStub = {
       query: sinon.stub()
     };
@@ -67,7 +67,7 @@ experiment('pg plugin error handler', function() {
   });
 
   test('handles error if begin query fails', function(done) {
-    var opts = configs.pgAdapter.createFail;
+    var opts = pgConfig.createFail;
     var clientStub = {
       query: sinon.stub()
     };
@@ -92,7 +92,7 @@ experiment('pg plugin error handler', function() {
   });
 
   test('handles error if executeTransaction query fails', function(done) {
-    var opts = configs.pgAdapter.createFail;
+    var opts = pgConfig.createFail;
     var clientStub = {
       query: sinon.stub()
     };
@@ -117,7 +117,7 @@ experiment('pg plugin error handler', function() {
   });
 
   test('handles error if commit query fails', function(done) {
-    var opts = configs.pgAdapter.createFail;
+    var opts = pgConfig.createFail;
     var clientStub = {
       query: sinon.stub()
     };
@@ -143,7 +143,7 @@ experiment('pg plugin error handler', function() {
   });
 
   test('handles error if rollback query fails', function(done) {
-    var opts = configs.pgAdapter.createFail;
+    var opts = pgConfig.createFail;
     var clientStub = {
       query: sinon.stub()
     };
@@ -172,7 +172,7 @@ experiment('pg plugin error handler', function() {
   });
 
   test('remix transaction error', function(done) {
-    var opts = configs.pgAdapter.remixFail;
+    var opts = pgConfig.remixFail;
 
     sinon.stub(server.methods.users, 'find')
       .callsArgWith(1, null, { rows: [ userFixtures.chris_testing ] });
@@ -199,7 +199,7 @@ experiment('pg plugin error handler', function() {
   });
 
   test('Handles error from pg when creating a transaction (remixing)', function(done) {
-    var opts = configs.pgAdapter.remixFail;
+    var opts = pgConfig.remixFail;
 
     sinon.stub(server.methods.users, 'find')
       .callsArgWith(1, null, { rows: [ userFixtures.chris_testing ] });
@@ -226,7 +226,7 @@ experiment('pg plugin error handler', function() {
   });
 
   test('Handles error from pg after rolling back a transaction (remixing)', function(done) {
-    var opts = configs.pgAdapter.remixFail;
+    var opts = pgConfig.remixFail;
     var clientStub = {
       query: sinon.stub()
     };
@@ -252,7 +252,7 @@ experiment('pg plugin error handler', function() {
   });
 
   test('Handles error if rollback fails (remixing)', function(done) {
-    var opts = configs.pgAdapter.remixFail;
+    var opts = pgConfig.remixFail;
 
     sinon.stub(server.methods.users, 'find')
       .callsArgWith(1, null, { rows: [ userFixtures.chris_testing ] });

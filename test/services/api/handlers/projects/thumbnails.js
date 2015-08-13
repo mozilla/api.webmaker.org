@@ -1,4 +1,6 @@
-var configs = require('../../../../fixtures/configs/project-handlers'),
+var requireTree = require('require-tree'),
+  path = require('path'),
+  projectConfigs = requireTree(path.resolve(__dirname + '../../../../../fixtures/configs/projects')),
   sinon = require('sinon'),
   nock = require('nock'),
   Lab = require('lab'),
@@ -98,8 +100,8 @@ experiment('Automatic project thumbnail generation', function() {
   });
 
   test('updating the lowest page id in a project triggers a screenshot update', function(done) {
-    var update = configs.tail.success.update;
-    var check = configs.tail.success.check;
+    var update = projectConfigs.thumbnails.success.update;
+    var check = projectConfigs.thumbnails.success.check;
 
     server.on('tail', function(request) {
       if ( request.url.path !== update.url ) {
@@ -119,9 +121,9 @@ experiment('Automatic project thumbnail generation', function() {
   });
 
   test('Project update does not overwrite thumbnail', function(done) {
-    var update = configs.tail.noOverwrite.update;
-    var check = configs.tail.noOverwrite.check;
-    var updateTitle = configs.tail.noOverwrite.updateTitle;
+    var update = projectConfigs.thumbnails.noOverwrite.update;
+    var check = projectConfigs.thumbnails.noOverwrite.check;
+    var updateTitle = projectConfigs.thumbnails.noOverwrite.updateTitle;
 
     server.on('tail', function(request) {
       if ( request.url.path !== update.url ) {
@@ -144,8 +146,8 @@ experiment('Automatic project thumbnail generation', function() {
   });
 
   test('updating (not) the lowest page id in a project does not trigger a screenshot update', function(done) {
-    var update = configs.tail.noUpdate.update;
-    var check = configs.tail.noUpdate.check;
+    var update = projectConfigs.thumbnails.noUpdate.update;
+    var check = projectConfigs.thumbnails.noUpdate.check;
 
     server.on('tail', function(request) {
       if ( request.url.path !== update.url ) {
@@ -166,8 +168,8 @@ experiment('Automatic project thumbnail generation', function() {
   });
 
   test('updating an element in the lowest page id in a project triggers a screenshot update', function(done) {
-    var update = configs.tail.elementSuccess.update;
-    var check = configs.tail.elementSuccess.check;
+    var update = projectConfigs.thumbnails.elementSuccess.update;
+    var check = projectConfigs.thumbnails.elementSuccess.check;
 
     server.on('tail', function(request) {
       if ( request.url.path !== update.url ) {
@@ -189,8 +191,8 @@ experiment('Automatic project thumbnail generation', function() {
   test('updating an element that is (not) part of the lowest page id in a project ' +
     'does not trigger a screenshot update',
     function(done) {
-      var update = configs.tail.elementNoUpdate.update;
-      var check = configs.tail.elementNoUpdate.check;
+      var update = projectConfigs.thumbnails.elementNoUpdate.update;
+      var check = projectConfigs.thumbnails.elementNoUpdate.check;
 
       server.on('tail', function(request) {
         if ( request.url.path !== update.url ) {
@@ -212,7 +214,7 @@ experiment('Automatic project thumbnail generation', function() {
   );
 
   test('checkPageId handles errors from pg', function(done) {
-    var update = configs.tail.fail;
+    var update = projectConfigs.thumbnails.fail;
     var stub = sinon.stub(server.methods.pages, 'min')
       .callsArgWith(1, mockErr());
 
@@ -233,7 +235,7 @@ experiment('Automatic project thumbnail generation', function() {
   });
 
   test('generateThumbnail handles errors from thumbnail service', function(done) {
-    var update = configs.tail.fail;
+    var update = projectConfigs.thumbnails.fail;
 
     server.once('log', function(event, tags) {
       if ( !tags.error ) {
@@ -251,7 +253,7 @@ experiment('Automatic project thumbnail generation', function() {
   });
 
   test('generateThumbnail handles non 200 statusCodes from thumbnail service', function(done) {
-    var update = configs.tail.fail;
+    var update = projectConfigs.thumbnails.fail;
 
     server.once('log', function(event, tags) {
       if ( !tags.error ) {
@@ -269,7 +271,7 @@ experiment('Automatic project thumbnail generation', function() {
   });
 
   test('updateThumbnail handles errors from pg', function(done) {
-    var update = configs.tail.fail;
+    var update = projectConfigs.thumbnails.fail;
     var stub = sinon.stub(server.methods.projects, 'updateThumbnail')
       .callsArgWith(1, mockErr());
 
@@ -290,7 +292,7 @@ experiment('Automatic project thumbnail generation', function() {
   });
 
   test('findOne tail cache drop error reported', function(done) {
-    var update = configs.tail.elementSuccess.update;
+    var update = projectConfigs.thumbnails.elementSuccess.update;
     var stub = sinon.stub(server.methods.projects.findOne.cache, 'drop')
       .callsArgWith(1, mockErr());
 
@@ -315,7 +317,7 @@ experiment('Automatic Thumbnail Generation Disabled', function() {
     delete process.env.THUMBNAIL_SERVICE_URL;
     require('../../../../mocks/server')(function(testServer) {
       expect(testServer).to.exist();
-      var config = configs.tail.success.update;
+      var config = projectConfigs.thumbnails.success.update;
       testServer.inject(config, function(resp) {
         expect(resp.statusCode).to.equal(200);
         process.env.THUMBNAIL_SERVICE_URL = serviceURL;

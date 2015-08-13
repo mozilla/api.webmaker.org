@@ -1,4 +1,6 @@
-var configs = require('../../../../fixtures/configs/project-handlers'),
+var requireTree = require('require-tree'),
+  path = require('path'),
+  projectConfigs = requireTree(path.resolve(__dirname + '../../../../../fixtures/configs/projects')),
   sinon = require('sinon'),
   Lab = require('lab'),
   lab = exports.lab = Lab.script(),
@@ -30,7 +32,7 @@ after(function(done) {
 
 experiment('GET /users/{user}/projects/{project}', function() {
   test('returns a project', function(done) {
-    var opts = configs.get.one.success;
+    var opts = projectConfigs.get.one.success;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(200);
@@ -43,7 +45,7 @@ experiment('GET /users/{user}/projects/{project}', function() {
   });
 
   test('404 user not found', function(done) {
-    var opts = configs.get.one.fail.params.user.notFound;
+    var opts = projectConfigs.get.one.fail.params.user.notFound;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -54,7 +56,7 @@ experiment('GET /users/{user}/projects/{project}', function() {
   });
 
   test('user param must be numeric', function(done) {
-    var opts = configs.get.one.fail.params.user.notNumber;
+    var opts = projectConfigs.get.one.fail.params.user.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -65,7 +67,7 @@ experiment('GET /users/{user}/projects/{project}', function() {
   });
 
   test('404 project not found', function(done) {
-    var opts = configs.get.one.fail.params.projects.notFound;
+    var opts = projectConfigs.get.one.fail.params.projects.notFound;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -76,7 +78,7 @@ experiment('GET /users/{user}/projects/{project}', function() {
   });
 
   test('project param must be numeric', function(done) {
-    var opts = configs.get.one.fail.params.projects.notNumber;
+    var opts = projectConfigs.get.one.fail.params.projects.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -87,7 +89,7 @@ experiment('GET /users/{user}/projects/{project}', function() {
   });
 
   test('Handles errors from postgre', function(done) {
-    var opts = configs.get.one.fail.error;
+    var opts = projectConfigs.get.one.fail.error;
     var stub = sinon.stub(server.methods.projects, 'findOne')
       .callsArgWith(1, mockErr());
 

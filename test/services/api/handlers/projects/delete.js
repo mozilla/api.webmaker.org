@@ -1,4 +1,6 @@
-var configs = require('../../../../fixtures/configs/project-handlers'),
+var requireTree = require('require-tree'),
+  path = require('path'),
+  projectConfigs = requireTree(path.resolve(__dirname + '../../../../../fixtures/configs/projects')),
   sinon = require('sinon'),
   Lab = require('lab'),
   lab = exports.lab = Lab.script(),
@@ -30,7 +32,7 @@ after(function(done) {
 
 experiment('DELETE /users/{user}/projects/{project}', function() {
   test('success, owner', function(done) {
-    var opts = configs.del.success.owner;
+    var opts = projectConfigs.remove.success.owner;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(200);
@@ -40,7 +42,7 @@ experiment('DELETE /users/{user}/projects/{project}', function() {
   });
 
   test('success, moderator', function(done) {
-    var opts = configs.del.success.moderator;
+    var opts = projectConfigs.remove.success.moderator;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(200);
@@ -50,7 +52,7 @@ experiment('DELETE /users/{user}/projects/{project}', function() {
   });
 
   test('404 user not found', function(done) {
-    var opts = configs.del.fail.params.user.notFound;
+    var opts = projectConfigs.remove.fail.params.user.notFound;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -61,7 +63,7 @@ experiment('DELETE /users/{user}/projects/{project}', function() {
   });
 
   test('invalid user type', function(done) {
-    var opts = configs.del.fail.params.user.notNumber;
+    var opts = projectConfigs.remove.fail.params.user.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -72,7 +74,7 @@ experiment('DELETE /users/{user}/projects/{project}', function() {
   });
 
   test('404 project not found', function(done) {
-    var opts = configs.del.fail.params.project.notFound;
+    var opts = projectConfigs.remove.fail.params.project.notFound;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -83,7 +85,7 @@ experiment('DELETE /users/{user}/projects/{project}', function() {
   });
 
   test('invalid project type', function(done) {
-    var opts = configs.del.fail.params.project.notNumber;
+    var opts = projectConfigs.remove.fail.params.project.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -94,7 +96,7 @@ experiment('DELETE /users/{user}/projects/{project}', function() {
   });
 
   test('cant delete for different user', function(done) {
-    var opts = configs.del.fail.auth.notOwner;
+    var opts = projectConfigs.remove.fail.auth.notOwner;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(403);
@@ -105,7 +107,7 @@ experiment('DELETE /users/{user}/projects/{project}', function() {
   });
 
   test('Handles errors from postgre', function(done) {
-    var opts = configs.del.fail.error;
+    var opts = projectConfigs.remove.fail.error;
     var stub = sinon.stub(server.methods.projects, 'remove')
       .callsArgWith(1, mockErr());
 

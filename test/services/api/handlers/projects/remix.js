@@ -1,4 +1,6 @@
-var configs = require('../../../../fixtures/configs/project-handlers'),
+var requireTree = require('require-tree'),
+  path = require('path'),
+  projectConfigs = requireTree(path.resolve(__dirname + '../../../../../fixtures/configs/projects')),
   userFixtures = require('../../../../fixtures/users'),
   sinon = require('sinon'),
   Lab = require('lab'),
@@ -36,9 +38,9 @@ experiment('POST /user/{users}/projects/{project}/remixes', function() {
   });
 
   test('success', function(done) {
-    var opts = configs.create.remix.success.remix;
-    var checkRemixProject = configs.create.remix.success.checkRemixProject;
-    var checkRemixPages = configs.create.remix.success.checkRemixPages;
+    var opts = projectConfigs.post.remix.success.remix;
+    var checkRemixProject = projectConfigs.post.remix.success.checkRemixProject;
+    var checkRemixPages = projectConfigs.post.remix.success.checkRemixPages;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(200);
@@ -81,7 +83,7 @@ experiment('POST /user/{users}/projects/{project}/remixes', function() {
   });
 
   test('can remix project as a new user', function(done) {
-    var opts = configs.create.remix.success.newUserFromRemix;
+    var opts = projectConfigs.post.remix.success.newUserFromRemix;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(200);
@@ -90,7 +92,7 @@ experiment('POST /user/{users}/projects/{project}/remixes', function() {
   });
 
   test('404 user not found', function(done) {
-    var opts = configs.create.remix.fail.params.user.notFound;
+    var opts = projectConfigs.post.remix.fail.params.user.notFound;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -101,7 +103,7 @@ experiment('POST /user/{users}/projects/{project}/remixes', function() {
   });
 
   test('invalid user type', function(done) {
-    var opts = configs.create.remix.fail.params.user.notNumber;
+    var opts = projectConfigs.post.remix.fail.params.user.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -112,7 +114,7 @@ experiment('POST /user/{users}/projects/{project}/remixes', function() {
   });
 
   test('404 project not found', function(done) {
-    var opts = configs.create.remix.fail.params.project.notFound;
+    var opts = projectConfigs.post.remix.fail.params.project.notFound;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -123,7 +125,7 @@ experiment('POST /user/{users}/projects/{project}/remixes', function() {
   });
 
   test('invalid project type', function(done) {
-    var opts = configs.create.remix.fail.params.project.notNumber;
+    var opts = projectConfigs.post.remix.fail.params.project.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -134,7 +136,7 @@ experiment('POST /user/{users}/projects/{project}/remixes', function() {
   });
 
   test('handles errors from postgre', function(done) {
-    var opts = configs.create.remix.fail.error;
+    var opts = projectConfigs.post.remix.fail.error;
     var stub = sinon.stub(server.methods.projects, 'remix')
       .callsArgWith(2, mockErr());
 
@@ -148,7 +150,7 @@ experiment('POST /user/{users}/projects/{project}/remixes', function() {
   });
 
   test('handles error if findDataForRemix fails', function(done) {
-    var opts = configs.create.remix.fail.error;
+    var opts = projectConfigs.post.remix.fail.error;
     var stub = sinon.stub(server.methods.projects, 'findDataForRemix')
       .callsArgWith(1, mockErr());
 
@@ -162,7 +164,7 @@ experiment('POST /user/{users}/projects/{project}/remixes', function() {
   });
 
   test('handles error if getTokenUserFails', function(done) {
-    var opts = configs.create.remix.fail.newUserFromRemix;
+    var opts = projectConfigs.post.remix.fail.newUserFromRemix;
     sinon.stub(server.methods.users, 'find')
       .onFirstCall()
       .callsArgWith(1, null, {

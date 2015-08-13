@@ -1,4 +1,6 @@
-var configs = require('../../../../fixtures/configs/project-handlers'),
+var requireTree = require('require-tree'),
+  path = require('path'),
+  projectConfigs = requireTree(path.resolve(__dirname + '../../../../../fixtures/configs/projects')),
   sinon = require('sinon'),
   Lab = require('lab'),
   lab = exports.lab = Lab.script(),
@@ -30,7 +32,7 @@ after(function(done) {
 
 experiment('POST /users/{user}/projects', function() {
   test('success, no thumbnail', function(done) {
-    var opts = configs.create.new.success.withoutThumbnail;
+    var opts = projectConfigs.post.new.success.withoutThumbnail;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(200);
@@ -53,7 +55,7 @@ experiment('POST /users/{user}/projects', function() {
   });
 
   test('success, with thumbnail', function(done) {
-    var opts = configs.create.new.success.withThumbnail;
+    var opts = projectConfigs.post.new.success.withThumbnail;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(200);
@@ -64,7 +66,7 @@ experiment('POST /users/{user}/projects', function() {
   });
 
   test('Creates new user from token', function(done) {
-    var opts = configs.create.new.success.userFromToken;
+    var opts = projectConfigs.post.new.success.userFromToken;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(200);
@@ -75,7 +77,7 @@ experiment('POST /users/{user}/projects', function() {
   });
 
   test('invalid title type', function(done) {
-    var opts = configs.create.new.fail.payload.title;
+    var opts = projectConfigs.post.new.fail.payload.title;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -86,7 +88,7 @@ experiment('POST /users/{user}/projects', function() {
   });
 
   test('invalid thumbnail type', function(done) {
-    var opts = configs.create.new.fail.payload.thumb;
+    var opts = projectConfigs.post.new.fail.payload.thumb;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -97,7 +99,7 @@ experiment('POST /users/{user}/projects', function() {
   });
 
   test('invalid thumbnail key value', function(done) {
-    var opts = configs.create.new.fail.payload.thumbValue;
+    var opts = projectConfigs.post.new.fail.payload.thumbValue;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -108,7 +110,7 @@ experiment('POST /users/{user}/projects', function() {
   });
 
   test('invalid thumbnail key name', function(done) {
-    var opts = configs.create.new.fail.payload.thumbKey;
+    var opts = projectConfigs.post.new.fail.payload.thumbKey;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -119,7 +121,7 @@ experiment('POST /users/{user}/projects', function() {
   });
 
   test('Title length > 256 characters', function(done) {
-    var opts = configs.create.new.fail.payload.titleLength;
+    var opts = projectConfigs.post.new.fail.payload.titleLength;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -130,7 +132,7 @@ experiment('POST /users/{user}/projects', function() {
   });
 
   test('404 user not found', function(done) {
-    var opts = configs.create.new.fail.params.user.notFound;
+    var opts = projectConfigs.post.new.fail.params.user.notFound;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -141,7 +143,7 @@ experiment('POST /users/{user}/projects', function() {
   });
 
   test('invalid user type', function(done) {
-    var opts = configs.create.new.fail.params.user.notNumber;
+    var opts = projectConfigs.post.new.fail.params.user.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -152,7 +154,7 @@ experiment('POST /users/{user}/projects', function() {
   });
 
   test('cant create for different user', function(done) {
-    var opts = configs.create.new.fail.auth.wrongUser;
+    var opts = projectConfigs.post.new.fail.auth.wrongUser;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(403);
@@ -163,7 +165,7 @@ experiment('POST /users/{user}/projects', function() {
   });
 
   test('new user from token - handles errors from postgre', function(done) {
-    var opts = configs.create.new.fail.auth.userFromToken;
+    var opts = projectConfigs.post.new.fail.auth.userFromToken;
     var stub = sinon.stub(server.methods.users, 'create')
       .callsArgWith(1, mockErr());
 
@@ -177,7 +179,7 @@ experiment('POST /users/{user}/projects', function() {
   });
 
   test('handles errors from postgre', function(done) {
-    var opts = configs.create.new.fail.error;
+    var opts = projectConfigs.post.new.fail.error;
     var stub = sinon.stub(server.methods.projects, 'create')
       .callsArgWith(1, mockErr());
 

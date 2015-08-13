@@ -1,4 +1,6 @@
-var configs = require('../../../../fixtures/configs/project-handlers'),
+var requireTree = require('require-tree'),
+  path = require('path'),
+  projectConfigs = requireTree(path.resolve(__dirname + '../../../../../fixtures/configs/projects')),
   sinon = require('sinon'),
   Lab = require('lab'),
   lab = exports.lab = Lab.script(),
@@ -30,7 +32,7 @@ after(function(done) {
 
 experiment('Patch /users/{user}/projects/{project}', function() {
   test('update title succeeds', function(done) {
-    var opts = configs.patch.update.success.title;
+    var opts = projectConfigs.patch.update.success.title;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(200);
@@ -41,7 +43,7 @@ experiment('Patch /users/{user}/projects/{project}', function() {
   });
 
   test('update with a thumbnail object succeeds, does not update thumbnail', function(done) {
-    var opts = configs.patch.update.success.withThumbnailKey;
+    var opts = projectConfigs.patch.update.success.withThumbnailKey;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(200);
@@ -53,7 +55,7 @@ experiment('Patch /users/{user}/projects/{project}', function() {
   });
 
   test('invalid user param', function(done) {
-    var opts = configs.patch.update.fail.param.user;
+    var opts = projectConfigs.patch.update.fail.param.user;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -64,7 +66,7 @@ experiment('Patch /users/{user}/projects/{project}', function() {
   });
 
   test('invalid project param', function(done) {
-    var opts = configs.patch.update.fail.param.project;
+    var opts = projectConfigs.patch.update.fail.param.project;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -75,7 +77,7 @@ experiment('Patch /users/{user}/projects/{project}', function() {
   });
 
   test('invalid title type', function(done) {
-    var opts = configs.patch.update.fail.payload.title;
+    var opts = projectConfigs.patch.update.fail.payload.title;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -85,7 +87,7 @@ experiment('Patch /users/{user}/projects/{project}', function() {
     });
   });
   test('Title length > 256 characters', function(done) {
-      var opts = configs.patch.update.fail.payload.titleLength;
+      var opts = projectConfigs.patch.update.fail.payload.titleLength;
 
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(400);
@@ -96,7 +98,7 @@ experiment('Patch /users/{user}/projects/{project}', function() {
     });
 
   test('cant update another user\'s project', function(done) {
-    var opts = configs.patch.update.fail.auth.wrongUser;
+    var opts = projectConfigs.patch.update.fail.auth.wrongUser;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(403);
@@ -107,7 +109,7 @@ experiment('Patch /users/{user}/projects/{project}', function() {
   });
 
   test('moderator cant update another user\'s project', function(done) {
-    var opts = configs.patch.update.fail.auth.wrongUser;
+    var opts = projectConfigs.patch.update.fail.auth.wrongUser;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(403);
@@ -118,7 +120,7 @@ experiment('Patch /users/{user}/projects/{project}', function() {
   });
 
   test('Handles errors from postgre', function(done) {
-    var opts = configs.patch.update.fail.error;
+    var opts = projectConfigs.patch.update.fail.error;
     var stub = sinon.stub(server.methods.projects, 'update')
       .callsArgWith(1, mockErr());
 
@@ -132,7 +134,7 @@ experiment('Patch /users/{user}/projects/{project}', function() {
   });
 
   test('project tail cache error reported', function(done) {
-    var opts = configs.patch.update.fail.error;
+    var opts = projectConfigs.patch.update.fail.error;
     var stub = sinon.stub(server.methods.projects.findOne.cache, 'drop')
       .callsArgWith(1, mockErr());
 

@@ -1,4 +1,6 @@
-var configs = require('../../../../fixtures/configs/project-handlers'),
+var requireTree = require('require-tree'),
+  path = require('path'),
+  projectConfigs = requireTree(path.resolve(__dirname + '../../../../../fixtures/configs/projects')),
   sinon = require('sinon'),
   Lab = require('lab'),
   lab = exports.lab = Lab.script(),
@@ -30,7 +32,7 @@ after(function(done) {
 
 experiment('PATCH /users/{user}/projects/{project}/feature', function() {
   test('features a project', function(done) {
-    var opts = configs.patch.feature.success.feature;
+    var opts = projectConfigs.patch.feature.success.feature;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(200);
@@ -42,7 +44,7 @@ experiment('PATCH /users/{user}/projects/{project}/feature', function() {
   });
 
   test('unfeatures a featured a project', function(done) {
-    var opts = configs.patch.feature.success.unfeature;
+    var opts = projectConfigs.patch.feature.success.unfeature;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(200);
@@ -54,7 +56,7 @@ experiment('PATCH /users/{user}/projects/{project}/feature', function() {
   });
 
   test('404 user not found', function(done) {
-    var opts = configs.patch.feature.fail.params.user.notFound;
+    var opts = projectConfigs.patch.feature.fail.params.user.notFound;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -65,7 +67,7 @@ experiment('PATCH /users/{user}/projects/{project}/feature', function() {
   });
 
   test('user can not be non-numeric', function(done) {
-    var opts = configs.patch.feature.fail.params.user.notNumber;
+    var opts = projectConfigs.patch.feature.fail.params.user.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -76,7 +78,7 @@ experiment('PATCH /users/{user}/projects/{project}/feature', function() {
   });
 
   test('404 project not found', function(done) {
-    var opts = configs.patch.feature.fail.params.project.notFound;
+    var opts = projectConfigs.patch.feature.fail.params.project.notFound;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(404);
@@ -87,7 +89,7 @@ experiment('PATCH /users/{user}/projects/{project}/feature', function() {
   });
 
   test('project can not be non-numeric', function(done) {
-    var opts = configs.patch.feature.fail.params.project.notNumber;
+    var opts = projectConfigs.patch.feature.fail.params.project.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -98,7 +100,7 @@ experiment('PATCH /users/{user}/projects/{project}/feature', function() {
   });
 
   test('must be moderator', function(done) {
-    var opts = configs.patch.feature.fail.auth.notMod;
+    var opts = projectConfigs.patch.feature.fail.auth.notMod;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(403);
@@ -109,7 +111,7 @@ experiment('PATCH /users/{user}/projects/{project}/feature', function() {
   });
 
   test('Handles errors from postgre', function(done) {
-    var opts = configs.patch.feature.fail.error;
+    var opts = projectConfigs.patch.feature.fail.error;
     var stub = sinon.stub(server.methods.projects, 'feature')
       .callsArgWith(1, mockErr());
 

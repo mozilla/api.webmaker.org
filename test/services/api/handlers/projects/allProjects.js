@@ -1,4 +1,6 @@
-var configs = require('../../../../fixtures/configs/project-handlers'),
+var requireTree = require('require-tree'),
+  path = require('path'),
+  projectConfigs = requireTree(path.resolve(__dirname + '../../../../../fixtures/configs/projects')),
   sinon = require('sinon'),
   Lab = require('lab'),
   lab = exports.lab = Lab.script(),
@@ -30,7 +32,7 @@ after(function(done) {
 
 experiment('GET /projects', function() {
   test('default', function(done) {
-    var opts = configs.get.all.success.default;
+    var opts = projectConfigs.get.all.success.default;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(200);
@@ -43,7 +45,7 @@ experiment('GET /projects', function() {
   });
 
   test('can change count', function(done) {
-    var opts = configs.get.all.success.changeCount;
+    var opts = projectConfigs.get.all.success.changeCount;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(200);
@@ -56,7 +58,7 @@ experiment('GET /projects', function() {
   });
 
   test('can change page', function(done) {
-    var opts = configs.get.all.success.changePage;
+    var opts = projectConfigs.get.all.success.changePage;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(200);
@@ -69,7 +71,7 @@ experiment('GET /projects', function() {
   });
 
   test('returns 0 results when page out of range', function(done) {
-    var opts = configs.get.all.success.returnsNoneWhenPageTooHigh;
+    var opts = projectConfigs.get.all.success.returnsNoneWhenPageTooHigh;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(200);
@@ -82,7 +84,7 @@ experiment('GET /projects', function() {
   });
 
   test('count can not be negative', function(done) {
-    var opts = configs.get.all.fail.query.count.negative;
+    var opts = projectConfigs.get.all.fail.query.count.negative;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -93,7 +95,7 @@ experiment('GET /projects', function() {
   });
 
   test('count can not be greater than 100', function(done) {
-    var opts = configs.get.all.fail.query.count.tooHigh;
+    var opts = projectConfigs.get.all.fail.query.count.tooHigh;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -104,7 +106,7 @@ experiment('GET /projects', function() {
   });
 
   test('count can not be non-numeric', function(done) {
-    var opts = configs.get.all.fail.query.count.notNumber;
+    var opts = projectConfigs.get.all.fail.query.count.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -115,7 +117,7 @@ experiment('GET /projects', function() {
   });
 
   test('page can not be negative', function(done) {
-    var opts = configs.get.all.fail.query.page.negative;
+    var opts = projectConfigs.get.all.fail.query.page.negative;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -126,7 +128,7 @@ experiment('GET /projects', function() {
   });
 
   test('page can not be greater than 50', function(done) {
-    var opts = configs.get.all.fail.query.page.tooHigh;
+    var opts = projectConfigs.get.all.fail.query.page.tooHigh;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -137,7 +139,7 @@ experiment('GET /projects', function() {
   });
 
   test('page can not be non-numeric', function(done) {
-    var opts = configs.get.all.fail.query.page.notNumber;
+    var opts = projectConfigs.get.all.fail.query.page.notNumber;
 
     server.inject(opts, function(resp) {
       expect(resp.statusCode).to.equal(400);
@@ -148,7 +150,7 @@ experiment('GET /projects', function() {
   });
 
   test('Handles errors from postgre', function(done) {
-    var opts = configs.get.all.fail.error;
+    var opts = projectConfigs.get.all.fail.error;
     var stub = sinon.stub(server.methods.projects, 'findAll')
       .callsArgWith(1, mockErr());
 
