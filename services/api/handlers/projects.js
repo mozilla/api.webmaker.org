@@ -39,6 +39,13 @@ exports.post = {
           return reply(err);
         }
 
+        request.server.methods.cache.invalidateKeys(
+          'projects',
+          'findUsersProjects',
+          request.params.user,
+          request.tail('drop projects.findUsersProjects cache')
+        );
+
         reply({
           status: 'remixed',
           project: request.server.methods.utils.formatProject(result)
