@@ -146,6 +146,10 @@ module.exports = function (pg) {
         executeQuery(queries.users.remove, values, done);
       }, {});
 
+      server.method('projects.findOneShallow', function(values, done) {
+        executeQuery(queries.projects.findOneShallow, values, done);
+      }, {});
+
       server.method('projects.create', function(values, done) {
         var project;
         var page;

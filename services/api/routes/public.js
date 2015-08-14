@@ -44,6 +44,20 @@ var routes = [
       }
     }
   }, {
+    path: '/projects/{project}',
+    method: 'get',
+    handler: projects.get.oneShallow,
+    config: {
+      validate: {
+        params: {
+          project: numericSchema
+        }
+      },
+      cors: {
+        methods: ['GET', 'PATCH', 'OPTIONS', 'DELETE']
+      }
+    }
+  }, {
     path: '/users/{user}/projects',
     method: 'get',
     handler: projects.get.allByUser,
