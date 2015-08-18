@@ -9,13 +9,13 @@ exports.post = function(request, reply) {
         return reply(Boom.wrap(err));
       }
 
-      request.server.methods.newrelic.createTracer(
-        'process cache invalidations',
-        request.server.methods.bulk.invalidateCaches
-      );
-      request.server.methods.bulk.invalidateCaches(request, results.map(function(result) {
+      var rawResults = results.map(function(result) {
         return result.raw;
-      }));
+      });
+
+      request.server.methods.bulk.invalidateCaches(request, rawResults);
+
+      request.server.methods.projects.processBulkThumbnailRequests(request, rawResults);
 
       reply({
         status: 'success',

@@ -98,9 +98,8 @@ exports.patch = {
         }
 
         var thumbTail = request.tail('updating project thumbnail');
-        process.nextTick(function() {
-          request.server.methods.projects.checkPageId(request.pre.page, thumbTail);
-        });
+
+        request.server.methods.projects.checkPageId(request.pre.page, thumbTail);
 
         request.server.methods.cache.invalidateKey(
           'elements',

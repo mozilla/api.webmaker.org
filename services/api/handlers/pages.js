@@ -118,9 +118,8 @@ exports.patch = {
 
         var page = request.server.methods.utils.formatPage(result.rows);
         var thumbTail = request.tail('updating project thumbnail');
-        process.nextTick(function() {
-          request.server.methods.projects.checkPageId(page, thumbTail);
-        });
+
+        request.server.methods.projects.checkPageId(page, thumbTail);
 
         request.server.methods.cache.invalidateKey(
           'pages',

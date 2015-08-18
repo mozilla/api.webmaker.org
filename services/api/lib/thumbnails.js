@@ -4,7 +4,18 @@ exports.register = function(server, options, done) {
   var qs = require('querystring');
   var request = require('request');
   var pageRenderUrl = process.env.PAGE_RENDER_URL;
-  var req;
+
+  var req = request.defaults({
+    baseUrl: process.env.THUMBNAIL_SERVICE_URL,
+    method: 'post',
+    json: true,
+    headers: {
+      accept: 'application/json'
+    },
+    body: {
+      wait: true
+    }
+  });
 
   function buildPageRenderUrl(user, project, page) {
     var urlObj = url.parse(pageRenderUrl);
@@ -72,45 +83,87 @@ exports.register = function(server, options, done) {
   // Check if the given page has the lowest id in its parent project
   // If it is, then request a new thumbnail
   function checkPageId(page, tail) {
-    if ( !process.env.THUMBNAIL_SERVICE_URL ) {
-      return tail();
-    }
-
-    server.methods.pages.min([
-      page.project_id
-    ], function(err, result) {
-      if ( err ) {
-        server.log('error', {
-          details: 'Error querying DB for lowest page ID in project: ' + page.project_id,
-          error: err
-        });
-        return tail(err);
-      }
-      var row = result.rows[0];
-
-      if ( row.page_id !== page.id ) {
-        server.debug('Thumbnail update not required');
+    process.nextTick(function() {
+      if ( !process.env.THUMBNAIL_SERVICE_URL ) {
         return tail();
       }
+      server.methods.pages.min([
+        page.project_id
+      ], function(err, result) {
+        if ( err ) {
+          server.log('error', {
+            details: 'Error querying DB for lowest page ID in project: ' + page.project_id,
+            error: err
+          });
+          return tail(err);
+        }
 
-      server.debug('Updating thumbnail for project');
-      generateThumbnail(row, tail);
+        var row = result.rows[0];
+
+        if ( !row || row.page_id !== page.id ) {
+          server.debug('Thumbnail update not required');
+          return tail();
+        }
+
+        server.debug('Updating thumbnail for project');
+        generateThumbnail(row, tail);
+      });
     });
   }
 
-  req = request.defaults({
-    baseUrl: process.env.THUMBNAIL_SERVICE_URL,
-    method: 'post',
-    json: true,
-    headers: {
-      accept: 'application/json'
-    },
-    body: {
-      wait: true
-    }
-  });
+  // We need only check if a thumbnail update is necessary for the lowest pageId in a given set of actions
+  function processBulkThumbnailRequests(request, rawResults) {
+    // reduce this array into a list of thumbnail checks to do
+    rawResults.filter(function(result) {
+      // project updates, and any kind of delete don't trigger thumbnail changes.
+      return result.type !== 'projects' && result.method !== 'remove';
+    }).map(function(result) {
+      var rowData = result.rows[0];
+      var projectId = rowData.project_id;
+      var pageId = rowData.page_id || rowData.id;
 
-  server.method('projects.checkPageId', checkPageId);
+      return {
+        project_id: +projectId,
+        page_id: + pageId
+      };
+    }).reduce(function(thumbnailUpdates, result) {
+      // save the data we'll look at to some local vars
+      var newPageId = +(result.page_id || result.id);
+      var newProjectId = +result.project_id;
+      var resultData;
+      var resultDataPageId;
+
+      // iterate over existing thumbnail updates to enable some comparisons
+      for (var i = 0; i < thumbnailUpdates.length; i++) {
+        resultData = thumbnailUpdates[i];
+        resultDataPageId = +(resultData.page_id || resultData.id);
+        if (+resultData.project_id !== newProjectId) {
+          continue;
+        }
+        if (newPageId < resultDataPageId) {
+          break;
+        }
+        return thumbnailUpdates;
+      }
+
+      thumbnailUpdates.push({
+        id: result.id || result.page_id,
+        project_id: result.project_id
+      });
+
+      return thumbnailUpdates;
+    }, [])
+    .map(function(result) {
+      checkPageId(result, request.tail('updating project thumbnail'));
+    });
+  }
+
+  server.method('projects.checkPageId', checkPageId, {
+    callback: false
+  });
+  server.method('projects.processBulkThumbnailRequests', processBulkThumbnailRequests, {
+    callback: false
+  });
   done();
 };
 
