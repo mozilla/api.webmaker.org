@@ -111,42 +111,55 @@ exports.register = function(server, options, done) {
     });
   }
 
+  // project updates, and any kind of delete don't trigger thumbnail changes.
+  function filterRawResult(result) {
+    return result.type !== 'projects' && result.method !== 'remove';
+  }
+
+  // extract just the page_id and project_id from the result data
+  function transformResult(result) {
+    var rowData = result.rows[0];
+    var projectId = rowData.project_id;
+    var pageId = rowData.page_id || rowData.id;
+
+    return {
+      project_id: +projectId,
+      page_id: +pageId
+    };
+  }
+
+  // reduce the array of actions into an array of checks to perform, to determine if a thumbnail update is required
+  function reduceIntoUpdates(pendingChecks, result) {
+    var resultData;
+
+    // iterate over existing thumbnail updates for comparisons with current action
+    for (var i = 0; i < pendingChecks.length; i++) {
+      resultData = pendingChecks[i];
+      if (resultData.project_id !== result.project_id) {
+        continue;
+      }
+      if (result.page_id < resultData.page_id) {
+        break;
+      }
+      return pendingChecks;
+    }
+
+    pendingChecks.push(result);
+    return pendingChecks;
+  }
+
+  // pass each resulting action into checkPageId, generating a request tail
+  // for each check (we don't want to block the request on these checks)
+  function checkAction(request, action) {
+    checkPageId(action, request.tail('updating project thumbnail'));
+  }
+
   // We need only check if a thumbnail update is necessary for the lowest pageId in a given set of actions
   function processBulkThumbnailRequests(request, rawResults) {
-    // reduce this array into a list of thumbnail checks to do
-    rawResults.filter(function(result) {
-      // project updates, and any kind of delete don't trigger thumbnail changes.
-      return result.type !== 'projects' && result.method !== 'remove';
-    }).map(function(result) {
-      var rowData = result.rows[0];
-      var projectId = rowData.project_id;
-      var pageId = rowData.page_id || rowData.id;
-
-      return {
-        project_id: +projectId,
-        page_id: + pageId
-      };
-    }).reduce(function(pendingUpdates, result) {
-      var resultData;
-
-      // iterate over existing thumbnail updates to enable some comparisons
-      for (var i = 0; i < pendingUpdates.length; i++) {
-        resultData = pendingUpdates[i];
-        if (resultData.project_id !== result.project_id) {
-          continue;
-        }
-        if (result.page_id < resultData.page_id) {
-          break;
-        }
-        return pendingUpdates;
-      }
-
-      pendingUpdates.push(result);
-      return pendingUpdates;
-    }, [])
-    .map(function(result) {
-      checkPageId(result, request.tail('updating project thumbnail'));
-    });
+    rawResults.filter(filterRawResult)
+    .map(transformResult)
+    .reduce(reduceIntoUpdates, [])
+    .forEach(checkAction.bind(this, request));
   }
 
   server.method('projects.checkPageId', checkPageId, {
