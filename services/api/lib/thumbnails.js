@@ -126,32 +126,23 @@ exports.register = function(server, options, done) {
         project_id: +projectId,
         page_id: + pageId
       };
-    }).reduce(function(thumbnailUpdates, result) {
-      // save the data we'll look at to some local vars
-      var newPageId = +(result.page_id || result.id);
-      var newProjectId = +result.project_id;
+    }).reduce(function(pendingUpdates, result) {
       var resultData;
-      var resultDataPageId;
 
       // iterate over existing thumbnail updates to enable some comparisons
-      for (var i = 0; i < thumbnailUpdates.length; i++) {
-        resultData = thumbnailUpdates[i];
-        resultDataPageId = +(resultData.page_id || resultData.id);
-        if (+resultData.project_id !== newProjectId) {
+      for (var i = 0; i < pendingUpdates.length; i++) {
+        resultData = pendingUpdates[i];
+        if (resultData.project_id !== result.project_id) {
           continue;
         }
-        if (newPageId < resultDataPageId) {
+        if (result.page_id < resultData.page_id) {
           break;
         }
-        return thumbnailUpdates;
+        return pendingUpdates;
       }
 
-      thumbnailUpdates.push({
-        id: result.id || result.page_id,
-        project_id: result.project_id
-      });
-
-      return thumbnailUpdates;
+      pendingUpdates.push(result);
+      return pendingUpdates;
     }, [])
     .map(function(result) {
       checkPageId(result, request.tail('updating project thumbnail'));
