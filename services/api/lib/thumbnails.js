@@ -101,7 +101,7 @@ exports.register = function(server, options, done) {
         var row = result.rows[0];
 
         // ensure the id values are both Number types
-        if ( !row || +row.page_id !== +page.id ) {
+        if ( !row || row.page_id !== page.id ) {
           server.debug('Thumbnail update not required');
           return tail();
         }
@@ -124,8 +124,8 @@ exports.register = function(server, options, done) {
     var pageId = rowData.page_id || rowData.id;
 
     return {
-      project_id: +projectId,
-      id: +pageId
+      project_id: projectId,
+      id: pageId
     };
   }
 
