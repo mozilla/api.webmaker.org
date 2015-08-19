@@ -3,6 +3,7 @@ exports.register = function(server, options, done) {
   var url = require('url');
   var qs = require('querystring');
   var request = require('request');
+  var bigInt = require('big-integer');
   var pageRenderUrl = process.env.PAGE_RENDER_URL;
 
   var req = request.defaults({
@@ -100,6 +101,7 @@ exports.register = function(server, options, done) {
 
         var row = result.rows[0];
 
+        // ensure the id values are both Number types
         if ( !row || row.page_id !== page.id ) {
           server.debug('Thumbnail update not required');
           return tail();
@@ -123,8 +125,8 @@ exports.register = function(server, options, done) {
     var pageId = rowData.page_id || rowData.id;
 
     return {
-      project_id: +projectId,
-      page_id: +pageId
+      project_id: projectId,
+      id: pageId
     };
   }
 
@@ -138,7 +140,7 @@ exports.register = function(server, options, done) {
       if (resultData.project_id !== result.project_id) {
         continue;
       }
-      if (result.page_id < resultData.page_id) {
+      if (bigInt(result.id).lt(resultData.id)) {
         break;
       }
       return pendingChecks;
