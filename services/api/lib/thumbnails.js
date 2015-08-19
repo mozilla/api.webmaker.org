@@ -80,8 +80,8 @@ exports.register = function(server, options, done) {
     });
   }
 
-  // Check if the given page has the lowest id in its parent project
-  // If it is, then request a new thumbnail
+  // Check if the given page has the lowest id of all pages in its parent project
+  // In most cases, this means the first page created when a project is created (situated at 0,0)
   function checkPageId(page, tail) {
     process.nextTick(function() {
       if ( !process.env.THUMBNAIL_SERVICE_URL ) {
