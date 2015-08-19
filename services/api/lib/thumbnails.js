@@ -3,6 +3,7 @@ exports.register = function(server, options, done) {
   var url = require('url');
   var qs = require('querystring');
   var request = require('request');
+  var bigInt = require('big-integer');
   var pageRenderUrl = process.env.PAGE_RENDER_URL;
 
   var req = request.defaults({
@@ -139,7 +140,7 @@ exports.register = function(server, options, done) {
       if (resultData.project_id !== result.project_id) {
         continue;
       }
-      if (result.id < resultData.id) {
+      if (bigInt(result.id).lt(resultData.id)) {
         break;
       }
       return pendingChecks;
