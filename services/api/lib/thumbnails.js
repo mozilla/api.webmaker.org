@@ -125,7 +125,7 @@ exports.register = function(server, options, done) {
 
     return {
       project_id: +projectId,
-      page_id: +pageId
+      id: +pageId
     };
   }
 
@@ -139,7 +139,7 @@ exports.register = function(server, options, done) {
       if (resultData.project_id !== result.project_id) {
         continue;
       }
-      if (result.page_id < resultData.page_id) {
+      if (result.id < resultData.id) {
         break;
       }
       return pendingChecks;
