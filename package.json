@@ -24,6 +24,7 @@
     "url": "https://github.com/mozilla/api.webmaker.org"
   },
   "dependencies": {
+    "async": "^1.4.2",
     "big-integer": "^1.5.6",
     "blankie": "^1.1.0",
     "bluebird": "^2.9.34",
