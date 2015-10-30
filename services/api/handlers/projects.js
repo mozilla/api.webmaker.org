@@ -9,7 +9,8 @@ exports.post = {
         request.server.methods.utils.version(),
         request.payload.title,
         JSON.stringify(request.payload.thumbnail),
-        request.payload.description
+        request.payload.description,
+        request.pre.tags
       ],
       function(err, result) {
         if ( err ) {
@@ -69,6 +70,31 @@ exports.post = {
 };
 
 exports.get = {
+  withTag: function(request, reply) {
+    request.server.methods.projects.findWithTags(
+      [ JSON.stringify([request.params.tag]),
+        request.query.count,
+        request.pre.offset
+      ],
+      function(err, result) {
+        if ( err ) {
+          return reply(err);
+        }
+
+        reply({
+          status: 'success',
+          projects: result.rows.map(function(project) {
+            return request.server.methods.utils.formatProject(project);
+          })
+        });
+      }
+    );
+  },
+  featuredTags: function(request, reply) {
+    reply({
+      featured: request.server.featuredTags()
+    });
+  },
   oneShallow: function(request, reply) {
     request.server.methods.projects.findOneShallow(
       [ request.params.project ],
@@ -226,6 +252,7 @@ exports.patch = {
       [
         request.pre.title,
         request.pre.description,
+        request.pre.tags,
         request.params.project
       ],
       function(err, result) {

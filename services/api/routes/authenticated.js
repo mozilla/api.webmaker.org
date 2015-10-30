@@ -146,13 +146,15 @@ var routes = [
           thumbnail: Joi.object().keys({
             320: Joi.string().optional()
           }).default({}),
-          description: Joi.string().max(100).default('')
+          description: Joi.string().max(140).default('')
         }
       },
       pre: [
         prerequisites.getUser,
         prerequisites.getTokenUser,
-        prerequisites.canCreate
+        prerequisites.canCreate,
+        prerequisites.setDescription,
+        prerequisites.extractTags
       ],
       cors: {
         methods: ['OPTIONS', 'POST', 'GET']
@@ -284,7 +286,7 @@ var routes = [
         payload: {
           title: Joi.string().max(250).optional(),
           thumbnail: Joi.object().optional(),
-          description: Joi.string().max(100).optional()
+          description: Joi.string().max(140).optional()
         }
       },
       pre: [
@@ -293,7 +295,8 @@ var routes = [
         prerequisites.getProject,
         prerequisites.canWrite,
         prerequisites.setTitle,
-        prerequisites.setDescription
+        prerequisites.setDescription,
+        prerequisites.extractTags
       ],
       cors: {
         methods: ['OPTIONS', 'GET', 'PATCH', 'DELETE']

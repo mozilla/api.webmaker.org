@@ -246,7 +246,22 @@ exports.setDescription = {
       return reply(request.payload.description);
     }
 
-    reply(request.pre.project.description);
+    if (request.pre.project) {
+      return reply(request.pre.project.description);
+    }
+
+    reply('');
+  }
+};
+
+exports.extractTags = {
+  assign: 'tags',
+  method: function(request, reply) {
+    var metadata = {
+      tags: request.server.methods.utils.extractTags(request.pre.description)
+    };
+
+    reply(JSON.stringify(metadata));
   }
 };
 

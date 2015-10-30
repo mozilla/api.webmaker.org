@@ -8,7 +8,8 @@ var projectCols = [
   "projects.updated_at",
   "projects.thumbnail",
   "projects.user_id",
-  "projects.description"
+  "projects.description",
+  "projects.metadata->'tags' as tags"
 ].join(", ");
 
 var projectUserCols = [
@@ -55,6 +56,7 @@ var remixCols = [
   "projects.title AS project_title",
   "projects.thumbnail AS project_thumbnail",
   "projects.description AS project_description",
+  "projects.metadata AS project_metadata",
   "pages.id AS page_id",
   "pages.project_id AS project_id",
   "pages.x AS page_x",
@@ -91,9 +93,10 @@ module.exports = {
   projects: {
     // Create project
     // Params:user_id bigint, remixed_from bigint, version varchar, title varchar, thumbnail jsonb
-    create: "INSERT INTO projects (user_id, remixed_from, version, title, thumbnail, description)" +
-      " VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, user_id, remixed_from, version, title, featured," +
-      " created_at, updated_at, thumbnail, description;",
+
+    create: "INSERT INTO projects (user_id, remixed_from, version, title, thumbnail, description, metadata)" +
+      " VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id, user_id, remixed_from, version, title, featured," +
+      " created_at, updated_at, thumbnail, description, metadata->'tags' AS tags;",
 
     // Find all projects, sorted by created_at DESC
     // Params: limit integer, offset integer
@@ -121,6 +124,10 @@ module.exports = {
       " FROM projects INNER JOIN users ON users.id = projects.user_id " +
       " WHERE projects.deleted_at IS NULL AND projects.id = $1;",
 
+    findWithTag: "SELECT " + projectUserCols + " FROM projects INNER JOIN users ON users.id = projects.user_id" +
+      " WHERE projects.deleted_at is NULL AND projects.deleted_at IS NULL AND projects.metadata->'tags' @> $1::jsonb" +
+      " ORDER BY created_at DESC LIMIT $2 OFFSET $3",
+
     // Retrieve data in a project for remixing (joins pages and elements)
     // params: project_id bigint
     findDataForRemix: "SELECT " + remixCols + " FROM projects LEFT OUTER JOIN pages ON projects.id = " +
@@ -129,9 +136,9 @@ module.exports = {
 
     // Update project
     // Params title varchar, project_id bigint
-    update: "UPDATE projects SET (title, description) = ($1, $2) WHERE deleted_at IS NULL" +
-      " AND id = $3 RETURNING id, user_id, remixed_from, version, title, featured," +
-      " created_at, updated_at, thumbnail, description;",
+    update: "UPDATE projects SET (title, description, metadata) = ($1, $2, $3) WHERE deleted_at IS NULL" +
+      " AND id = $4 RETURNING id, user_id, remixed_from, version, title, featured, description, metadata" +
+      " created_at, updated_at, thumbnail;",
 
     // Update project thumbnail
     // Params thumbnail jsonb, project_id bigint

@@ -46,26 +46,26 @@ BEGIN
   bobby_id := get_user_id('bobby_testing');
 
   -- create some test project data
-  INSERT INTO projects (user_id, remixed_From, version, title, thumbnail, featured) VALUES
-    (chris_id, NULL, 'test', 'test_project_1', empty_json, FALSE),
-    (chris_id, NULL, 'test', 'test_project_2', thumb, TRUE),
-    (jon_id, NULL, 'test', 'test_project_3', empty_json, FALSE),
-    (jon_id, NULL, 'test', 'test_project_4', thumb, TRUE),
-    (andrew_id, NULL, 'test', 'test_project_5', empty_json, FALSE),
-    (andrew_id, NULL, 'test', 'test_project_6', thumb, TRUE),
-    (chris_id, NULL, 'test', 'test_project_7', empty_json, TRUE),
-    (andrew_id, NULL, 'test', 'test_project_8', empty_json, TRUE),
-    (jon_id, NULL, 'test', 'test_project_9', empty_json, TRUE),
-    (andrew_id, NULL, 'test', 'test_project_10', empty_json, TRUE),
-    (atique_id, NULL, 'test', 'test_project_11', empty_json, TRUE),
-    (atique_id, NULL, 'test', 'test_project_12', empty_json, TRUE),
-    (ina_id, NULL, 'test', 'test_project_13', empty_json, TRUE),
-    (ina_id, NULL, 'test', 'test_project_14', empty_json, TRUE),
-    (ina_id, NULL, 'test', 'test_project_15', empty_json, TRUE),
-    (bobby_id, NULL, 'test', 'test_project_16', empty_json, TRUE),
-    (bobby_id, NULL, 'test', 'test_project_17', empty_json, TRUE),
-    (bobby_id, NULL, 'test', 'test_project_18', empty_json, TRUE),
-    (bobby_id, NULL, 'test', 'test_project_19', empty_json, TRUE);
+  INSERT INTO projects (user_id, remixed_From, version, title, thumbnail, featured, description, metadata) VALUES
+    (chris_id, NULL, 'test', 'test_project_1', empty_json, FALSE, '', '{}'),
+    (chris_id, NULL, 'test', 'test_project_2', thumb, TRUE, '', '{}'),
+    (jon_id, NULL, 'test', 'test_project_3', empty_json, FALSE, '', '{}'),
+    (jon_id, NULL, 'test', 'test_project_4', thumb, TRUE, '', '{}'),
+    (andrew_id, NULL, 'test', 'test_project_5', empty_json, FALSE, '', '{}'),
+    (andrew_id, NULL, 'test', 'test_project_6', thumb, TRUE, '', '{}'),
+    (chris_id, NULL, 'test', 'test_project_7', empty_json, TRUE, '', '{}'),
+    (andrew_id, NULL, 'test', 'test_project_8', empty_json, TRUE, '', '{}'),
+    (jon_id, NULL, 'test', 'test_project_9', empty_json, TRUE, '', '{}'),
+    (andrew_id, NULL, 'test', 'test_project_10', empty_json, TRUE, '', '{}'),
+    (atique_id, NULL, 'test', 'test_project_11', empty_json, TRUE, '', '{}'),
+    (atique_id, NULL, 'test', 'test_project_12', empty_json, TRUE, '', '{}'),
+    (ina_id, NULL, 'test', 'test_project_13', empty_json, TRUE, '#mozilla', '{"tags":["mozilla"]}'),
+    (ina_id, NULL, 'test', 'test_project_14', empty_json, TRUE, '', '{}'),
+    (ina_id, NULL, 'test', 'test_project_15', empty_json, TRUE, '', '{}'),
+    (bobby_id, NULL, 'test', 'test_project_16', empty_json, TRUE, '', '{}'),
+    (bobby_id, NULL, 'test', 'test_project_17', empty_json, TRUE, '', '{}'),
+    (bobby_id, NULL, 'test', 'test_project_18', empty_json, TRUE, '', '{}'),
+    (bobby_id, NULL, 'test', 'test_project_19', empty_json, TRUE, '', '{}');
 
   -- create some remixes
   INSERT INTO projects (user_id, remixed_From, version, title, thumbnail) VALUES

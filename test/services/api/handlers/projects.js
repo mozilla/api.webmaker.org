@@ -1268,6 +1268,28 @@ experiment('Project Handlers', function() {
         });
       });
 
+      test('Parses hashtags out of description', function(done) {
+        var opts = configs.create.new.success.noDuplicateTags;
+
+        server.inject(opts, function(resp) {
+          expect(resp.statusCode).to.equal(200);
+          expect(resp.result.project.tags).to.exist();
+          expect(resp.result.project.tags).to.include(['parse', 'tags']);
+          done();
+        });
+      });
+
+      test('does not parse duplicate hashtags', function(done) {
+        var opts = configs.create.new.success.parsesTags;
+
+        server.inject(opts, function(resp) {
+          expect(resp.statusCode).to.equal(200);
+          expect(resp.result.project.tags).to.exist();
+          expect(resp.result.project.tags).to.include(['parse', 'tags']);
+          done();
+        });
+      });
+
       test('invalid title type', function(done) {
         var opts = configs.create.new.fail.payload.title;
 
@@ -1422,14 +1444,14 @@ experiment('Project Handlers', function() {
               var otherFixedLink = pagesResp.result.pages[1].elements[2];
               expect(fixedLink.attributes.targetUserId).to.equal('2');
               expect(fixedLink.attributes.targetProjectId).to.equal(projectId);
-              expect(fixedLink.attributes.targetPageId).to.equal('29');
+              expect(fixedLink.attributes.targetPageId).to.equal('31');
               expect(wasAlreadyBrokenLink.attributes.targetUserId).to.equal('2');
               expect(wasAlreadyBrokenLink.attributes.targetProjectId).to.equal(projectId);
               // original project page deleted/missing, targetPageId was deleted
               expect(wasAlreadyBrokenLink.attributes.targetPageId).to.not.exist();
               expect(otherFixedLink.attributes.targetUserId).to.equal('2');
               expect(otherFixedLink.attributes.targetProjectId).to.equal(projectId);
-              expect(otherFixedLink.attributes.targetPageId).to.equal('28');
+              expect(otherFixedLink.attributes.targetPageId).to.equal('30');
               done();
             });
           });
@@ -2168,6 +2190,7 @@ experiment('Project Handlers', function() {
     });
   });
 
+<<<<<<< df512a67d7bb2dbcb5db204bc6f7dc4be45111c4
   experiment('View Counting', function() {
     test('First view can be counted (upsert the new row)', function(done) {
       server.inject(configs.views.firstView, function(resp) {
@@ -2215,6 +2238,18 @@ experiment('Project Handlers', function() {
       server.inject(configs.views.subsequentView, function(resp) {
         server.methods.projects.findOneById.restore();
         expect(resp.statusCode).to.equal(500);
+        done();
+      });
+    });
+  });
+
+  experiment('GET - featured tags', function() {
+    test('succeeds', function(done) {
+      var opts = configs.get.featuredTags;
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+        expect(resp.result.featured).to.include(['mozilla', 'firefox']);
         done();
       });
     });

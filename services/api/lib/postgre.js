@@ -150,6 +150,10 @@ module.exports = function (pg) {
         executeQuery(queries.projects.findOneShallow, values, done);
       }, {});
 
+      server.method('projects.findWithTags', function(values, done) {
+        executeQuery(queries.projects.findWithTag, values, done);
+      }, {});
+
       server.method('projects.create', function(values, done) {
         var project;
         var page;
@@ -208,7 +212,8 @@ module.exports = function (pg) {
               server.methods.utils.version(),
               dataToRemix.title,
               dataToRemix.thumbnail,
-              dataToRemix.description
+              dataToRemix.description,
+              dataToRemix.metadata
             ]
           );
         }).then(function(result) {

@@ -431,6 +431,10 @@ exports.get = {
         method: 'get'
       }
     }
+  },
+  featuredTags: {
+    url: '/featured-tags',
+    method: 'get'
   }
 };
 
@@ -463,6 +467,24 @@ exports.create = {
           title: 'new_from_token'
         },
         headers: newFromToken
+      },
+      parsesTags: {
+        url: '/users/1/projects',
+        method: 'post',
+        payload: {
+          title: 'tag parsing',
+          description: '#parse these #tags'
+        },
+        headers: userToken
+      },
+      noDuplicateTags: {
+        url: '/users/1/projects',
+        method: 'post',
+        payload: {
+          title: 'tag parsing',
+          description: '#parse these #tags, but don\'t #parse them twice'
+        },
+        headers: userToken
       }
     },
     fail: {
