@@ -1,0 +1,6 @@
+BEGIN;
+
+ALTER TABLE projects
+ADD COLUMN description text NOT NULL DEFAULT '';
+
+COMMIT;
