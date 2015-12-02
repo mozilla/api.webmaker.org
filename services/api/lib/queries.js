@@ -7,7 +7,8 @@ var projectCols = [
   "projects.created_at",
   "projects.updated_at",
   "projects.thumbnail",
-  "projects.user_id"
+  "projects.user_id",
+  "projects.description"
 ].join(", ");
 
 var projectUserCols = [
@@ -53,6 +54,7 @@ var remixCols = [
   "projects.id AS project_id",
   "projects.title AS project_title",
   "projects.thumbnail AS project_thumbnail",
+  "projects.description AS project_description",
   "pages.id AS page_id",
   "pages.project_id AS project_id",
   "pages.x AS page_x",
@@ -89,9 +91,9 @@ module.exports = {
   projects: {
     // Create project
     // Params:user_id bigint, remixed_from bigint, version varchar, title varchar, thumbnail jsonb
-    create: "INSERT INTO projects (user_id, remixed_from, version, title, thumbnail)" +
-      " VALUES ($1, $2, $3, $4, $5) RETURNING id, user_id, remixed_from, version, title, featured," +
-      " created_at, updated_at, thumbnail;",
+    create: "INSERT INTO projects (user_id, remixed_from, version, title, thumbnail, description)" +
+      " VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, user_id, remixed_from, version, title, featured," +
+      " created_at, updated_at, thumbnail, description;",
 
     // Find all projects, sorted by created_at DESC
     // Params: limit integer, offset integer
@@ -127,9 +129,9 @@ module.exports = {
 
     // Update project
     // Params title varchar, project_id bigint
-    update: "UPDATE projects SET (title) = ($1) WHERE deleted_at IS NULL" +
-      " AND id = $2 RETURNING id, user_id, remixed_from, version, title, featured," +
-      " created_at, updated_at, thumbnail;",
+    update: "UPDATE projects SET (title, description) = ($1, $2) WHERE deleted_at IS NULL" +
+      " AND id = $3 RETURNING id, user_id, remixed_from, version, title, featured," +
+      " created_at, updated_at, thumbnail, description;",
 
     // Update project thumbnail
     // Params thumbnail jsonb, project_id bigint

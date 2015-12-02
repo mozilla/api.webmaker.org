@@ -677,7 +677,16 @@ exports.patch = {
           title: 'newww',
           thumbnail: {
             '320': 'will not work'
-          }
+          },
+          description: 'this is a newww-er description'
+        },
+        headers: userToken
+      },
+      withoutTitle: {
+        url: '/users/1/projects/1',
+        method: 'patch',
+        payload: {
+          description: 'this is a newww-erer description'
         },
         headers: userToken
       }

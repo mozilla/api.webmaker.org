@@ -145,7 +145,8 @@ var routes = [
           remixed_from: Joi.number().integer().optional(),
           thumbnail: Joi.object().keys({
             320: Joi.string().optional()
-          }).default({})
+          }).default({}),
+          description: Joi.string().max(100).default('')
         }
       },
       pre: [
@@ -179,7 +180,8 @@ var routes = [
                   title: Joi.string().max(256).required(),
                   thumbnail: Joi.object().keys({
                     320: Joi.string().optional()
-                  }).default({})
+                  }).default({}),
+                  description: Joi.string(100).default('')
                 })
               }),
               Joi.object().keys({
@@ -190,7 +192,8 @@ var routes = [
                     Joi.number().integer().required(),
                     Joi.string().regex(/^\$(\d+)\.(.*)$/)
                   ),
-                  title: Joi.string().max(256).required()
+                  title: Joi.string().max(256).required(),
+                  description: Joi.string().max(100).default('')
                 })
               }),
               Joi.object().keys({
@@ -279,15 +282,18 @@ var routes = [
           project: numericSchema
         },
         payload: {
-          title: Joi.string().max(250).required(),
-          thumbnail: Joi.object().optional()
+          title: Joi.string().max(250).optional(),
+          thumbnail: Joi.object().optional(),
+          description: Joi.string().max(100).optional()
         }
       },
       pre: [
         prerequisites.getUser,
         prerequisites.getTokenUser,
         prerequisites.getProject,
-        prerequisites.canWrite
+        prerequisites.canWrite,
+        prerequisites.setTitle,
+        prerequisites.setDescription
       ],
       cors: {
         methods: ['OPTIONS', 'GET', 'PATCH', 'DELETE']

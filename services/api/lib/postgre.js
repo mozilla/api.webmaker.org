@@ -207,7 +207,8 @@ module.exports = function (pg) {
               dataToRemix.id,
               server.methods.utils.version(),
               dataToRemix.title,
-              dataToRemix.thumbnail
+              dataToRemix.thumbnail,
+              dataToRemix.description
             ]
           );
         }).then(function(result) {

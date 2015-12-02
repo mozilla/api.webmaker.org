@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS "projects"
   updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   deleted_at timestamp DEFAULT NULL,
   thumbnail jsonb NOT NULL DEFAULT '{}'::JSONB,
+  description text NOT NULL DEFAULT '',
   CONSTRAINT projects_id_pk PRIMARY KEY (id)
 );
 

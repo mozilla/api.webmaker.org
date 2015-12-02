@@ -28,6 +28,7 @@ function formatProject(project) {
   formatted.title = project.title;
   formatted.remixed_from = project.remixed_from;
   formatted.featured = project.featured;
+  formatted.description = project.description;
 
   // Updates/creates don't include user data
   if ( project.username ) {
@@ -161,6 +162,7 @@ function formatRemixData(rows) {
     id: rows[0].project_id,
     title: rows[0].project_title,
     thumbnail: rows[0].project_thumbnail,
+    description: rows[0].project_description,
     pages: pages
   };
 }

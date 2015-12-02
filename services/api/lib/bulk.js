@@ -9,12 +9,14 @@ exports.register = function(server, options, done) {
           null,
           server.methods.utils.version(),
           data.title,
-          JSON.stringify(data.thumbnail)
+          JSON.stringify(data.thumbnail),
+          data.description
         ];
       },
       update: function(userId, data) {
         return [
           data.title,
+          data.description,
           data.id
         ];
       },

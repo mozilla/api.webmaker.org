@@ -1558,6 +1558,20 @@ experiment('Project Handlers', function() {
         expect(resp.result.status).to.equal('updated');
         expect(resp.result.project.title).to.equal('newww');
         expect(resp.result.project.thumbnail[320]).to.not.equal('will not work');
+        expect(resp.result.project.description).to.equal('this is a newww-er description');
+        done();
+      });
+    });
+
+    test('update without a title key succeeds', function(done) {
+      var opts = configs.patch.update.success.withoutTitle;
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+        expect(resp.result.status).to.equal('updated');
+        expect(resp.result.project.title).to.equal('newww');
+        expect(resp.result.project.thumbnail[320]).to.not.equal('will not work');
+        expect(resp.result.project.description).to.equal('this is a newww-erer description');
         done();
       });
     });

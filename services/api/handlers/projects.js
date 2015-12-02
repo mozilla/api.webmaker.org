@@ -8,7 +8,8 @@ exports.post = {
         null,
         request.server.methods.utils.version(),
         request.payload.title,
-        JSON.stringify(request.payload.thumbnail)
+        JSON.stringify(request.payload.thumbnail),
+        request.payload.description
       ],
       function(err, result) {
         if ( err ) {
@@ -204,9 +205,15 @@ exports.get = {
 
 exports.patch = {
   update: function(request, reply) {
+    // hapi sets a pre-value to null if you pass reply an empty string :/
+    if (!request.pre.description) {
+      request.pre.description = '';
+    }
+
     request.server.methods.projects.update(
       [
-        request.payload.title,
+        request.pre.title,
+        request.pre.description,
         request.params.project
       ],
       function(err, result) {

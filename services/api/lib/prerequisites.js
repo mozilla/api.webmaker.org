@@ -227,3 +227,25 @@ exports.isMod = function(request, reply) {
   }
   reply(boom.forbidden('Insufficient permissions'));
 };
+
+exports.setTitle = {
+  assign: 'title',
+  method: function(request, reply) {
+    if ( request.payload.title ) {
+      return reply(request.payload.title);
+    }
+
+    reply(request.pre.project.title);
+  }
+};
+
+exports.setDescription = {
+  assign: 'description',
+  method: function(request, reply) {
+    if (request.payload.description) {
+      return reply(request.payload.description);
+    }
+
+    reply(request.pre.project.description);
+  }
+};
