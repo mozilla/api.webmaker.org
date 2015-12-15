@@ -57,6 +57,12 @@ CREATE TABLE IF NOT EXISTS "elements"
   CONSTRAINT elements_id_pk PRIMARY KEY (id)
 );
 
+CREATE TABLE IF NOT EXISTS project_views
+(
+  project_id bigint REFERENCES projects(id),
+  view_count bigint NOT NULL DEFAULT 0
+);
+
 /* Indexes */
 CREATE UNIQUE INDEX pages_xyid_unique_idx ON pages (project_id, x, y) WHERE (deleted_at IS NULL);
 CREATE INDEX user_idx_id_deleted_at ON users (id, deleted_at);
@@ -65,6 +71,7 @@ CREATE INDEX deleted_at_remixed_from_idx on projects (deleted_at, remixed_from);
 CREATE INDEX deleted_at_featured_idx on projects (deleted_at, featured);
 CREATE INDEX project_id_deleted_at_idx ON pages (project_id, deleted_at);
 CREATE INDEX deleted_at_page_id_idx ON elements (deleted_at, page_id);
+CREATE INDEX project_views_idx ON project_views (id);
 
 /* Triggers */
 CREATE OR REPLACE FUNCTION update_updated_at()
