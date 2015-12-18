@@ -167,7 +167,11 @@ module.exports = {
       "     WHEN $1 THEN 1" +
       "     ELSE 2" +
       "   END, " +
-      " projects.created_at DESC LIMIT $2 OFFSET $3;"
+      " projects.created_at DESC LIMIT $2 OFFSET $3;",
+
+    incrementViewCount: "WITH upsert AS (UPDATE project_views SET view_count = view_count + 1 WHERE project_id = $1" +
+      " RETURNING *) INSERT INTO project_views (project_id, view_count) SELECT $1, 1 WHERE NOT EXISTS" +
+      " (SELECT * FROM upsert);"
   },
   pages: {
     // Create page

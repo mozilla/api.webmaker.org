@@ -257,6 +257,20 @@ var routes = [
       }
     }
   }, {
+    path: '/view-project/{project}',
+    method: 'options',
+    handler: projects.options,
+    config: {
+      validate: {
+        params: {
+          project: numericSchema
+        }
+      },
+      cors: {
+        methods: ['POST', 'OPTIONS']
+      }
+    }
+  }, {
     path: '/users/{user}/projects/{project}/pages',
     method: 'get',
     handler: pages.get.all,

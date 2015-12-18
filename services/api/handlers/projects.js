@@ -53,6 +53,18 @@ exports.post = {
         });
       }
     );
+  },
+  view: function(request, reply) {
+    request.server.methods.projects.incrementViewCount(
+      [request.params.project],
+      function(err) {
+        if (err) {
+          return reply(err);
+        }
+
+        reply('ok');
+      }
+    );
   }
 };
 

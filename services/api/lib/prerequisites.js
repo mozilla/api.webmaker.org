@@ -249,3 +249,26 @@ exports.setDescription = {
     reply(request.pre.project.description);
   }
 };
+
+exports.isValidView = function(request, reply) {
+  request.server.methods.projects.findOneById(
+    [
+      request.params.project
+    ],
+    function(err, result) {
+      if ( err ) {
+        return reply(err);
+      }
+
+      if ( !result.rows.length ) {
+        return reply(boom.badRequest('Project does not exist'));
+      }
+
+      if (result.rows[0].user_id === request.auth.credentials.id) {
+        return reply(boom.badRequest('Can not count self-views'));
+      }
+
+      reply();
+    }
+  );
+};

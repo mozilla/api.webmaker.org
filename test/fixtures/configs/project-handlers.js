@@ -999,3 +999,26 @@ exports.tail = {
     }
   }
 };
+
+exports.views = {
+  firstView: {
+    url: '/view-project/1',
+    method: 'post',
+    headers: userToken2
+  },
+  subsequentView: {
+    url: '/view-project/1',
+    method: 'post',
+    headers: userToken2
+  },
+  ownView: {
+    url: '/view-project/1',
+    method: 'post',
+    headers: userToken
+  },
+  badProject: {
+    url: '/view-project/1234',
+    method: 'post',
+    headers: userToken
+  }
+};

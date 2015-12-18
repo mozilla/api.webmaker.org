@@ -586,6 +586,14 @@ module.exports = function (pg) {
         }
       });
 
+      server.method('projects.incrementViewCount', function(values, done) {
+        executeQuery(queries.projects.incrementViewCount, values, done);
+      }, {});
+
+      server.method('projects.findOneById', function(values, done) {
+        executeQuery(queries.projects.findOneById, values, done);
+      }, {});
+
       server.method('projects.update', function(values, done) {
         executeQuery(queries.projects.update, values, done);
       }, {});

@@ -2167,4 +2167,56 @@ experiment('Project Handlers', function() {
       });
     });
   });
+
+  experiment('View Counting', function() {
+    test('First view can be counted (upsert the new row)', function(done) {
+      server.inject(configs.views.firstView, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+        done();
+      });
+    });
+
+    test('subsequent views are counted', function(done) {
+      server.inject(configs.views.subsequentView, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+        done();
+      });
+    });
+
+    test('Does not count own-views', function(done) {
+      server.inject(configs.views.ownView, function(resp) {
+        expect(resp.statusCode).to.equal(400);
+        done();
+      });
+    });
+
+    test('project must exist', function(done) {
+      server.inject(configs.views.badProject, function(resp) {
+        expect(resp.statusCode).to.equal(400);
+        done();
+      });
+    });
+
+    test('handles errors if upsert query fails', function(done) {
+      sinon.stub(server.methods.projects, 'incrementViewCount')
+        .callsArgWith(1, mockErr());
+
+      server.inject(configs.views.subsequentView, function(resp) {
+        server.methods.projects.incrementViewCount.restore();
+        expect(resp.statusCode).to.equal(500);
+        done();
+      });
+    });
+
+    test('handles errors if findOneById (project) query fails', function(done) {
+      sinon.stub(server.methods.projects, 'findOneById')
+        .callsArgWith(1, mockErr());
+
+      server.inject(configs.views.subsequentView, function(resp) {
+        server.methods.projects.findOneById.restore();
+        expect(resp.statusCode).to.equal(500);
+        done();
+      });
+    });
+  });
 });

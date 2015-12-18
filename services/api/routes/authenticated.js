@@ -566,6 +566,26 @@ var routes = [
         methods: ['GET', 'PATCH', 'DELETE', 'OPTIONS']
       }
     }
+  }, {
+    path: '/view-project/{project}',
+    method: 'post',
+    handler: projects.post.view,
+    config: {
+      auth: {
+        scope: 'projects'
+      },
+      validate: {
+        params: {
+          project: numericSchema
+        }
+      },
+      pre: [
+        prerequisites.isValidView
+      ],
+      cors: {
+        methods: ['POST', 'OPTIONS']
+      }
+    }
   }
 ];
 
