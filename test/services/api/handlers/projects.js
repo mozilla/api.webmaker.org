@@ -2190,7 +2190,6 @@ experiment('Project Handlers', function() {
     });
   });
 
-<<<<<<< df512a67d7bb2dbcb5db204bc6f7dc4be45111c4
   experiment('View Counting', function() {
     test('First view can be counted (upsert the new row)', function(done) {
       server.inject(configs.views.firstView, function(resp) {
