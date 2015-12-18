@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS "projects"
   deleted_at timestamp DEFAULT NULL,
   thumbnail jsonb NOT NULL DEFAULT '{}'::JSONB,
   description text NOT NULL DEFAULT '',
+  metadata jsonb DEFAULT '{"tags":[]}'::jsonb,
   CONSTRAINT projects_id_pk PRIMARY KEY (id)
 );
 
@@ -72,6 +73,7 @@ CREATE INDEX deleted_at_featured_idx on projects (deleted_at, featured);
 CREATE INDEX project_id_deleted_at_idx ON pages (project_id, deleted_at);
 CREATE INDEX deleted_at_page_id_idx ON elements (deleted_at, page_id);
 CREATE INDEX project_views_idx ON project_views (id);
+CREATE INDEX ON projects USING gin ((metadata -> 'tags'));
 
 /* Triggers */
 CREATE OR REPLACE FUNCTION update_updated_at()

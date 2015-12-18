@@ -29,6 +29,7 @@ function formatProject(project) {
   formatted.remixed_from = project.remixed_from;
   formatted.featured = project.featured;
   formatted.description = project.description;
+  formatted.tags = project.tags;
 
   // Updates/creates don't include user data
   if ( project.username ) {
@@ -163,14 +164,38 @@ function formatRemixData(rows) {
     title: rows[0].project_title,
     thumbnail: rows[0].project_thumbnail,
     description: rows[0].project_description,
+    metadata: rows[0].project_metadata,
     pages: pages
   };
+}
+
+function extractTags(description) {
+  var tagRegex = /#([A-Za-z\d]+)/g;
+  var tags = [];
+  var tag;
+
+  if (description && description.length) {
+    while ((tag = tagRegex.exec(description)) !== null) {
+      if (tags.indexOf(tag[1]) === -1) {
+        tags.push(tag[1]);
+      }
+    }
+  }
+
+  return tags;
 }
 
 var API_VERSION = process.env.API_VERSION;
 
 function version() {
   return API_VERSION;
+}
+
+var FEATURED_TAGS = process.env.FEATURED_TAGS;
+FEATURED_TAGS = FEATURED_TAGS.split(' ').map((tag) => tag.trim());
+
+function featuredTags() {
+  return FEATURED_TAGS;
 }
 
 exports.register = function(server, options, done) {
@@ -180,7 +205,9 @@ exports.register = function(server, options, done) {
   server.method('utils.formatPages', formatPages, { callback: false });
   server.method('utils.formatElement', formatElement, { callback: false });
   server.method('utils.formatRemixData', formatRemixData, { callback: false });
+  server.method('utils.extractTags', extractTags, { callback: false });
   server.method('utils.version', version, { callback: false });
+  server.decorate('server', 'featuredTags', featuredTags);
   done();
 };
 

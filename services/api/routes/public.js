@@ -44,6 +44,36 @@ var routes = [
       }
     }
   }, {
+    path: '/featured-tags',
+    method: 'get',
+    handler: projects.get.featuredTags,
+    config: {
+      cors: {
+        methods: ['GET', 'OPTIONS']
+      }
+    }
+  }, {
+    path: '/projects/tagged/{tag}',
+    method: 'get',
+    handler: projects.get.withTag,
+    config: {
+      validate: {
+        query: {
+          count: Joi.number().integer().min(1).max(100).default(10),
+          page:Joi.number().integer().min(1).max(50).default(1)
+        },
+        params: {
+          tag: Joi.string().max(140)
+        }
+      },
+      pre: [
+        prerequisites.calculateOffset
+      ],
+      cors: {
+        methods: ['GET', 'OPTIONS']
+      }
+    }
+  }, {
     path: '/projects/{project}',
     method: 'get',
     handler: projects.get.oneShallow,
@@ -110,6 +140,15 @@ var routes = [
       },
       cors: {
         methods: ['GET', 'PATCH', 'OPTIONS', 'DELETE']
+      }
+    }
+  }, {
+    path: '/featured-tags',
+    method: 'options',
+    handler: projects.options,
+    config: {
+      cors: {
+        methods: ['GET', 'OPTIONS']
       }
     }
   }, {
