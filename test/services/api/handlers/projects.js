@@ -2266,18 +2266,6 @@ experiment('Project Handlers', function() {
     });
   });
 
-  experiment('GET - featured tags', function() {
-    test('succeeds', function(done) {
-      var opts = configs.get.featuredTags;
-
-      server.inject(opts, function(resp) {
-        expect(resp.statusCode).to.equal(200);
-        expect(resp.result.featured).to.include(['mozilla', 'firefox']);
-        done();
-      });
-    });
-  });
-
   experiment('GET - projects/tagged/MOZILLA does not care about case', function() {
     test('succeeds', function(done) {
       var opts = configs.get.tagged;
