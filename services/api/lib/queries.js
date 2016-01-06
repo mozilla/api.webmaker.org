@@ -137,7 +137,7 @@ module.exports = {
     // Update project
     // Params title varchar, project_id bigint
     update: "UPDATE projects SET (title, description, metadata) = ($1, $2, $3) WHERE deleted_at IS NULL" +
-      " AND id = $4 RETURNING id, user_id, remixed_from, version, title, featured, description, metadata" +
+      " AND id = $4 RETURNING id, user_id, remixed_from, version, title, featured, description, metadata->'tags' as tags," +
       " created_at, updated_at, thumbnail;",
 
     // Update project thumbnail

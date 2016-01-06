@@ -273,7 +273,7 @@ exports.patch = {
           request.params.user,
           request.tail('drop projects.findUsersProjects cache')
         );
-
+console.log(result.rows);
         reply({
           status: 'updated',
           project: request.server.methods.utils.formatProject(result.rows[0])
