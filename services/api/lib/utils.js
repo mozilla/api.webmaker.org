@@ -1,3 +1,5 @@
+'use strict';
+
 function formatUser(user) {
   var formatted = {};
   formatted.id = user.id;
@@ -176,8 +178,9 @@ function extractTags(description) {
 
   if (description && description.length) {
     while ((tag = tagRegex.exec(description)) !== null) {
-      if (tags.indexOf(tag[1]) === -1) {
-        tags.push(tag[1]);
+      let extractedTag = tag[1].toLowerCase();
+      if (tags.indexOf(extractedTag) === -1) {
+        tags.push(extractedTag);
       }
     }
   }
@@ -192,7 +195,7 @@ function version() {
 }
 
 var FEATURED_TAGS = process.env.FEATURED_TAGS;
-FEATURED_TAGS = FEATURED_TAGS.split(' ').map((tag) => tag.trim());
+FEATURED_TAGS = FEATURED_TAGS.split(' ').map((tag) => tag.trim().toLowerCase());
 
 function featuredTags() {
   return FEATURED_TAGS;

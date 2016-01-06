@@ -1290,6 +1290,18 @@ experiment('Project Handlers', function() {
         });
       });
 
+      test('hashtags are all lowercased', function(done) {
+        var opts = configs.create.new.success.ignoreCase;
+
+        server.inject(opts, function(resp) {
+          expect(resp.statusCode).to.equal(200);
+          expect(resp.result.project.tags).to.exist();
+          expect(resp.result.project.tags.length).to.equal(1);
+          expect(resp.result.project.tags).to.include(['mozilla']);
+          done();
+        });
+      });
+
       test('invalid title type', function(done) {
         var opts = configs.create.new.fail.payload.title;
 
@@ -1444,14 +1456,14 @@ experiment('Project Handlers', function() {
               var otherFixedLink = pagesResp.result.pages[1].elements[2];
               expect(fixedLink.attributes.targetUserId).to.equal('2');
               expect(fixedLink.attributes.targetProjectId).to.equal(projectId);
-              expect(fixedLink.attributes.targetPageId).to.equal('31');
+              expect(fixedLink.attributes.targetPageId).to.equal('32');
               expect(wasAlreadyBrokenLink.attributes.targetUserId).to.equal('2');
               expect(wasAlreadyBrokenLink.attributes.targetProjectId).to.equal(projectId);
               // original project page deleted/missing, targetPageId was deleted
               expect(wasAlreadyBrokenLink.attributes.targetPageId).to.not.exist();
               expect(otherFixedLink.attributes.targetUserId).to.equal('2');
               expect(otherFixedLink.attributes.targetProjectId).to.equal(projectId);
-              expect(otherFixedLink.attributes.targetPageId).to.equal('30');
+              expect(otherFixedLink.attributes.targetPageId).to.equal('31');
               done();
             });
           });
@@ -2249,6 +2261,20 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(200);
         expect(resp.result.featured).to.include(['mozilla', 'firefox']);
+        done();
+      });
+    });
+  });
+
+  experiment('GET - projects/tagged/MOZILLA does not care about case', function() {
+    test('succeeds', function(done) {
+      var opts = configs.get.tagged;
+
+      server.inject(opts, function(resp) {
+        expect(resp.statusCode).to.equal(200);
+        expect(resp.result.projects.length).to.equal(2);
+        expect(resp.result.projects[0].tags.length).to.equal(1);
+        expect(resp.result.projects[0].tags).to.include('mozilla');
         done();
       });
     });
