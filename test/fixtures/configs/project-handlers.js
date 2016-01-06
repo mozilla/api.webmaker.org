@@ -724,6 +724,38 @@ exports.patch = {
           description: 'this is a newww-erer description'
         },
         headers: userToken
+      },
+      updateDescriptionWithTag: {
+        url: '/users/1/projects/1',
+        method: 'patch',
+        payload: {
+          description: 'this is #tagged'
+        },
+        headers: userToken
+      },
+      canChangeTag: {
+        url: '/users/1/projects/1',
+        method: 'patch',
+        payload: {
+          description: 'this is a #different #tag'
+        },
+        headers: userToken
+      },
+      noDuplicates: {
+        url: '/users/1/projects/1',
+        method: 'patch',
+        payload: {
+          description: '#mozilla #Mozilla #MOZILLA'
+        },
+        headers: userToken
+      },
+      canClearTags: {
+        url: '/users/1/projects/1',
+        method: 'patch',
+        payload: {
+          description: 'no moar tags'
+        },
+        headers: userToken
       }
     },
     fail: {
