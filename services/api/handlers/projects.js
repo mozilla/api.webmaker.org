@@ -72,7 +72,7 @@ exports.post = {
 exports.get = {
   withTag: function(request, reply) {
     request.server.methods.projects.findWithTags(
-      [ JSON.stringify([request.params.tag]),
+      [ JSON.stringify([request.params.tag.toLowerCase()]),
         request.query.count,
         request.pre.offset
       ],
