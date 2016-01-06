@@ -435,6 +435,10 @@ exports.get = {
   featuredTags: {
     url: '/featured-tags',
     method: 'get'
+  },
+  tagged: {
+    url: '/projects/tagged/MOZILLA',
+    method: 'get'
   }
 };
 
@@ -483,6 +487,15 @@ exports.create = {
         payload: {
           title: 'tag parsing',
           description: '#parse these #tags, but don\'t #parse them twice'
+        },
+        headers: userToken
+      },
+      ignoreCase: {
+        url: '/users/1/projects',
+        method: 'post',
+        payload: {
+          title: 'tag parsing',
+          description: '#Mozilla #mozilla #MOZILLA'
         },
         headers: userToken
       }
