@@ -733,11 +733,11 @@ exports.patch = {
         },
         headers: userToken
       },
-      canChangeTag: {
+      canChangeTags: {
         url: '/users/1/projects/1',
         method: 'patch',
         payload: {
-          description: 'this is a #different #tag'
+          description: 'this has #different #tags'
         },
         headers: userToken
       },

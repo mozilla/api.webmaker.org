@@ -1616,41 +1616,41 @@ experiment('Project Handlers', function() {
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(200);
         expect(resp.result.status).to.equal('updated');
-        expect(resp.result.tags).to.include('tagged');
+        expect(resp.result.project.tags).to.include('tagged');
         done();
       });
     });
 
     test('can change tags', function(done) {
-      var opts = configs.patch.update.success.withoutTitle;
+      var opts = configs.patch.update.success.canChangeTags;
 
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(200);
         expect(resp.result.status).to.equal('updated');
-        expect(resp.result.tags).to.include('different');
+        expect(resp.result.project.tags).to.include('different', 'tags');
         done();
       });
     });
 
     test('No duplicate tags, including those of different case', function(done) {
-      var opts = configs.patch.update.success.withoutTitle;
+      var opts = configs.patch.update.success.noDuplicates;
 
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(200);
         expect(resp.result.status).to.equal('updated');
-        expect(resp.result.tags.length).to.equal(1);
-        expect(resp.result.tags).to.include('mozilla');
+        expect(resp.result.project.tags.length).to.equal(1);
+        expect(resp.result.project.tags).to.include('mozilla');
         done();
       });
     });
 
     test('tag array cleared if desc contains no hashtags', function(done) {
-      var opts = configs.patch.update.success.withoutTitle;
+      var opts = configs.patch.update.success.canClearTags;
 
       server.inject(opts, function(resp) {
         expect(resp.statusCode).to.equal(200);
         expect(resp.result.status).to.equal('updated');
-        expect(resp.result.tags.length).to.equal(0);
+        expect(resp.result.project.tags.length).to.equal(0);
         done();
       });
     });
