@@ -212,8 +212,8 @@ module.exports = function (pg) {
               server.methods.utils.version(),
               dataToRemix.title,
               dataToRemix.thumbnail,
-              dataToRemix.description,
-              dataToRemix.metadata
+              '',
+              { tags: [] }
             ]
           );
         }).then(function(result) {

@@ -55,7 +55,6 @@ var remixCols = [
   "projects.id AS project_id",
   "projects.title AS project_title",
   "projects.thumbnail AS project_thumbnail",
-  "projects.description AS project_description",
   "projects.metadata AS project_metadata",
   "pages.id AS page_id",
   "pages.project_id AS project_id",
