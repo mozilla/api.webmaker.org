@@ -165,7 +165,6 @@ function formatRemixData(rows) {
     id: rows[0].project_id,
     title: rows[0].project_title,
     thumbnail: rows[0].project_thumbnail,
-    description: rows[0].project_description,
     metadata: rows[0].project_metadata,
     pages: pages
   };
