@@ -57,7 +57,7 @@
     "jscs": "^1.11.3",
     "jshint": "^2.6.3",
     "lab": "^5.5.0",
-    "mofo-style": "latest",
+    "mofo-style": "1.1.0",
     "nock": "^2.2.0",
     "sinon": "^1.14.1"
   },
