@@ -1584,6 +1584,17 @@ experiment('Project Handlers', function() {
       });
     });
 
+    test('update empty description succeeds', function(done) {
+      var opts = configs.patch.update.success.description;
+
+      server.inject(opts, function (resp) {
+        expect(resp.statusCode).to.equal(200);
+        expect(resp.result.status).to.equal('updated');
+        expect(resp.result.project.description).to.equal('');
+        done();
+      });
+    });
+
     test('update with a thumbnail object succeeds, does not update thumbnail', function(done) {
       var opts = configs.patch.update.success.withThumbnailKey;
 
