@@ -1584,7 +1584,7 @@ experiment('Project Handlers', function() {
       });
     });
 
-    test ('update empty description succeeds', function(done) {
+    test('update empty description succeeds', function(done) {
       var opts = configs.patch.update.success.updateEmptyDescription;
 
       server.inject(opts, function (resp) {
