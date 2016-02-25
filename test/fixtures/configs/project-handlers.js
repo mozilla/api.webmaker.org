@@ -46,14 +46,6 @@ exports.prerequisites = {
       title: 'new'
     },
     headers: userToken
-  },
-  descriptionFail: {
-    url: '/users/1/projects/1',
-    method: 'patch',
-    payload: {
-      description: ''
-    },
-    headers: userToken
   }
 };
 
