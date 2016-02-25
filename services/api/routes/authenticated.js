@@ -286,7 +286,7 @@ var routes = [
         payload: {
           title: Joi.string().max(250).optional(),
           thumbnail: Joi.object().optional(),
-          description: Joi.string().max(140).optional()
+          description: Joi.string().max(140).allow('').optional()
         }
       },
       pre: [
