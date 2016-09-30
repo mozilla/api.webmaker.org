@@ -14,11 +14,11 @@ module.exports = function (pg) {
         return new BPromise(function(resolve, reject) {
           pg.connect(connString, function(err, client, release) {
             if ( err ) {
-              server.debug(err);
+              server.log('debug', err);
               return reject(err);
             }
 
-            server.debug('PG client created', client);
+            server.log('debug', 'PG client created', client);
             resolve({
               client: client,
               release: release
@@ -31,11 +31,11 @@ module.exports = function (pg) {
         return new BPromise(function(resolve, reject) {
           transaction.client.query('BEGIN', function(err, result) {
             if ( err ) {
-              server.debug('Failed to begin transaction', err);
+              server.log('debug', 'Failed to begin transaction', err);
               return reject(err);
             }
 
-            server.debug('Transaction started');
+            server.log('debug', 'Transaction started');
             resolve(result);
           });
         });
@@ -43,17 +43,17 @@ module.exports = function (pg) {
 
       function executeTransaction(transaction, text, values) {
         return new BPromise(function(resolve, reject) {
-          server.debug(format('Executing Transaction Query: %s - params: %s', text, values.join(', ')));
+          server.log('debug', format('Executing Transaction Query: %s - params: %s', text, values.join(', ')));
           transaction.client.query({
             text: text,
             values: values
           }, function(err, result) {
             if ( err ) {
-              server.debug('Query Execution Failed', err);
+              server.log('debug', 'Query Execution Failed', err);
               return reject(err);
             }
 
-            server.debug('Transaction Query completed successfully');
+            server.log('debug', 'Transaction Query completed successfully');
             resolve(result);
           });
         });
@@ -63,11 +63,11 @@ module.exports = function (pg) {
         return new BPromise(function(resolve, reject) {
           transaction.client.query('COMMIT', function(err, result) {
             if ( err ) {
-              server.debug('Failed to commit transaction', err);
+              server.log('debug', 'Failed to commit transaction', err);
               return reject(err);
             }
 
-            server.debug('Transaction committed to db, releasing connection to pool');
+            server.log('debug', 'Transaction committed to db, releasing connection to pool');
             transaction.release();
             resolve(result);
           });
@@ -80,18 +80,18 @@ module.exports = function (pg) {
           transaction.client.query('ROLLBACK', function(err, result) {
             transaction.release();
             if ( err ) {
-              server.debug('Transaction rollback failed', err);
+              server.log('debug', 'Transaction rollback failed', err);
               return reject(err);
             }
 
-            server.debug('Transaction rolled back');
+            server.log('debug', 'Transaction rolled back');
             resolve(result);
           });
         });
       }
 
       function executeQuery(text, values, callback) {
-        server.debug(format('Executing Query: %s - params: %s', text, values.join(', ')));
+        server.log('debug', format('Executing Query: %s - params: %s', text, values.join(', ')));
         pg.connect(connString, function(err, client, release) {
           if ( err ) {
             return callback(err);
@@ -103,7 +103,7 @@ module.exports = function (pg) {
           }, function(err, result) {
             release();
             if ( err ) {
-              server.debug('Error executing query', err);
+              server.log('debug', 'Error executing query', err);
               return callback(err);
             }
 
@@ -113,7 +113,7 @@ module.exports = function (pg) {
               ttl = 0;
             }
 
-            server.debug('Query succeeded', result);
+            server.log('debug', 'Query succeeded', result);
             callback(null, result, ttl);
           });
         });
@@ -130,7 +130,8 @@ module.exports = function (pg) {
           segment: 'users.find',
           expiresIn: 1000 * 60 * 60 * 24,
           staleIn: 1000 * 60 * 60 * 12,
-          staleTimeout: 50
+          staleTimeout: 50,
+          generateTimeout: 1000
         },
         generateKey: function(args) {
           // user ID
@@ -497,7 +498,8 @@ module.exports = function (pg) {
       }, {
         cache: {
           segment: 'projects.findAll',
-          expiresIn: 1000 * 15
+          expiresIn: 1000 * 15,
+          generateTimeout: 1000
         },
         generateKey: function(args) {
           // count + offset
@@ -510,7 +512,8 @@ module.exports = function (pg) {
       }, {
         cache: {
           segment: 'projects.findUsersProjects',
-          expiresIn: 1000 * 60
+          expiresIn: 1000 * 60,
+          generateTimeout: 1000
         },
         generateKey: function(args) {
           // user ID + limit + offset
@@ -525,7 +528,8 @@ module.exports = function (pg) {
           segment: 'projects.findOne',
           expiresIn: 1000 * 60 * 5,
           staleIn: 1000 * 60,
-          staleTimeout: 50
+          staleTimeout: 50,
+          generateTimeout: 1000
         },
         generateKey: function(args) {
           // project ID + user ID
@@ -538,7 +542,8 @@ module.exports = function (pg) {
       }, {
         cache: {
           segment: 'projects.findRemixes',
-          expiresIn: 1000 * 15
+          expiresIn: 1000 * 15,
+          generateTimeout: 1000
         },
         generateKey: function(args) {
           // project ID + user ID
@@ -553,7 +558,8 @@ module.exports = function (pg) {
           segment: 'projects.findDataForRemix',
           expiresIn: 1000 * 60 * 5,
           staleIn: 1000 * 60,
-          staleTimeout: 100
+          staleTimeout: 100,
+          generateTimeout: 1000
         },
         generateKey: function(args) {
           // project ID
@@ -568,7 +574,8 @@ module.exports = function (pg) {
           segment: 'projects.findFeatured',
           expiresIn: 1000 * 60 * 60,
           staleIn: 1000 * 60 * 5,
-          staleTimeout: 100
+          staleTimeout: 100,
+          generateTimeout: 1000
         },
         generateKey: function(args) {
           // count + offset
@@ -583,7 +590,8 @@ module.exports = function (pg) {
           segment: 'projects.findFeaturedByLanguage',
           expiresIn: 1000 * 60 * 60,
           staleIn: 1000 * 60 * 5,
-          staleTimeout: 100
+          staleTimeout: 100,
+          generateTimeout: 1000
         },
         generateKey: function(args) {
           // count + offset
@@ -626,7 +634,8 @@ module.exports = function (pg) {
           segment: 'pages.findAll',
           expiresIn: 1000 * 60,
           staleIn: 1000 * 30,
-          staleTimeout: 100
+          staleTimeout: 100,
+          generateTimeout: 1000
         },
         generateKey: function(args) {
           // projectId
@@ -641,7 +650,8 @@ module.exports = function (pg) {
           segment: 'pages.findOne',
           expiresIn: 1000 * 60,
           staleIn: 1000 * 30,
-          staleTimeout: 100
+          staleTimeout: 100,
+          generateTimeout: 1000
         },
         generateKey: function(args) {
           // page id
@@ -672,7 +682,8 @@ module.exports = function (pg) {
           segment: 'elements.findAll',
           expiresIn: 1000 * 60,
           staleIn: 1000 * 30,
-          staleTimeout: 100
+          staleTimeout: 100,
+          generateTimeout: 1000
         },
         generateKey: function(args) {
           // pageId
@@ -687,7 +698,8 @@ module.exports = function (pg) {
           segment: 'elements.findOne',
           expiresIn: 1000 * 60,
           staleIn: 1000 * 30,
-          staleTimeout: 100
+          staleTimeout: 100,
+          generateTimeout: 1000
         },
         generateKey: function(args) {
           // elementId

@@ -103,11 +103,11 @@ exports.register = function(server, options, done) {
 
         // ensure the id values are both Number types
         if ( !row || row.page_id !== page.id ) {
-          server.debug('Thumbnail update not required');
+          server.log('debug', 'Thumbnail update not required');
           return tail();
         }
 
-        server.debug('Updating thumbnail for project');
+        server.log('debug', 'Updating thumbnail for project');
         generateThumbnail(row, tail);
       });
     });
