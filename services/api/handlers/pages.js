@@ -101,7 +101,7 @@ exports.patch = {
     if ( !styles ) {
       styles = request.pre.page.styles;
     }
-    
+
     request.server.methods.pages.update(
       [
         x,
