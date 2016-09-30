@@ -88,6 +88,7 @@ exports.patch = {
     var styles = request.payload.styles;
     var x = request.payload.x;
     var y = request.payload.y;
+    var thumbTail = request.tail('updating project thumbnail');
 
     if ( !x ) {
       x = request.pre.page.x;
@@ -100,7 +101,7 @@ exports.patch = {
     if ( !styles ) {
       styles = request.pre.page.styles;
     }
-
+    
     request.server.methods.pages.update(
       [
         x,
@@ -117,7 +118,6 @@ exports.patch = {
         }
 
         var page = request.server.methods.utils.formatPage(result.rows);
-        var thumbTail = request.tail('updating project thumbnail');
 
         request.server.methods.projects.checkPageId(page, thumbTail);
 
