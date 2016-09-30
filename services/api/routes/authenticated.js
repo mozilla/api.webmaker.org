@@ -37,9 +37,7 @@ var routes = [
       auth: {
         scope: 'user'
       },
-      cors: {
-        methods: ['POST', 'OPTIONS']
-      },
+      cors: true,
       description: 'Create a user account'
     }
   }, {
@@ -50,9 +48,7 @@ var routes = [
       auth: {
         scope: 'user'
       },
-      cors: {
-        methods: ['POST', 'OPTIONS']
-      },
+      cors: true,
       plugins: {
         lout: false
       }
@@ -70,9 +66,7 @@ var routes = [
           user: numericSchema
         }
       },
-      cors: {
-        methods: ['OPTIONS', 'GET', 'PATCH', 'DELETE']
-      }
+      cors: true
     }
   }, {
     path: '/users/{user}',
@@ -92,9 +86,7 @@ var routes = [
           language: Joi.string().min(2).max(20).regex(locale.languageRegex)
         }
       },
-      cors: {
-        methods: ['OPTIONS', 'GET', 'PATCH', 'DELETE']
-      }
+      cors: true
     }
   }, {
     path: '/users/{user}',
@@ -109,9 +101,7 @@ var routes = [
           user: numericSchema
         }
       },
-      cors: {
-        methods: ['OPTIONS', 'GET', 'PATCH', 'DELETE']
-      }
+      cors: true
     }
   }, {
     path: '/users/{user}',
@@ -121,9 +111,7 @@ var routes = [
       auth: {
         scope: 'user'
       },
-      cors: {
-        methods: ['OPTIONS', 'GET', 'PATCH', 'DELETE']
-      },
+      cors: true,
       plugins: {
         lout: false
       }
@@ -156,9 +144,7 @@ var routes = [
         prerequisites.setDescription,
         prerequisites.extractTags
       ],
-      cors: {
-        methods: ['OPTIONS', 'POST', 'GET']
-      }
+      cors: true
     }
   }, {
     path: '/users/{user}/bulk',
@@ -266,9 +252,7 @@ var routes = [
       pre: [
         prerequisites.getUser
       ],
-      cors: {
-        methods: ['POST', 'OPTIONS']
-      }
+      cors: true
     }
   }, {
     path: '/users/{user}/projects/{project}',
@@ -298,9 +282,7 @@ var routes = [
         prerequisites.setDescription,
         prerequisites.extractTags
       ],
-      cors: {
-        methods: ['OPTIONS', 'GET', 'PATCH', 'DELETE']
-      }
+      cors: true
     }
   }, {
     path: '/users/{user}/projects/{project}',
@@ -322,9 +304,7 @@ var routes = [
         prerequisites.getProject,
         prerequisites.canDelete
       ],
-      cors: {
-        methods: ['OPTIONS', 'GET', 'PATCH', 'DELETE']
-      }
+      cors: true
     }
   }, {
     path: '/users/{user}/projects/{project}/remixes',
@@ -345,9 +325,7 @@ var routes = [
         prerequisites.getTokenUser,
         prerequisites.prepareRemix
       ],
-      cors: {
-        methods: ['OPTIONS', 'GET', 'POST']
-      }
+      cors: true
     }
   }, {
     path: '/users/{user}/projects/{project}/feature',
@@ -369,9 +347,7 @@ var routes = [
         prerequisites.getProject,
         prerequisites.isMod
       ],
-      cors: {
-        methods: ['OPTIONS', 'POST']
-      }
+      cors: true
     }
   }, {
     path: '/users/{user}/projects/{project}/feature',
@@ -387,9 +363,7 @@ var routes = [
           project: numericSchema
         }
       },
-      cors: {
-        methods: ['OPTIONS', 'POST']
-      }
+      cors: true
     }
   }, {
     path: '/users/{user}/projects/{project}/pages',
@@ -416,9 +390,7 @@ var routes = [
         prerequisites.getProject,
         prerequisites.canWrite
       ],
-      cors: {
-        methods: ['GET', 'POST', 'OPTIONS']
-      }
+      cors: true
     }
   }, {
     path: '/users/{user}/projects/{project}/pages/{page}',
@@ -447,9 +419,7 @@ var routes = [
         prerequisites.getPage,
         prerequisites.canWrite
       ],
-      cors: {
-        methods: ['GET', 'PATCH', 'DELETE', 'OPTIONS']
-      }
+      cors: true
     }
   },
   {
@@ -474,9 +444,7 @@ var routes = [
         prerequisites.getPage,
         prerequisites.canDelete
       ],
-      cors: {
-        methods: ['GET', 'PATCH', 'DELETE', 'OPTIONS']
-      }
+      cors: true
     }
   }, {
     path: '/users/{user}/projects/{project}/pages/{page}/elements',
@@ -505,9 +473,7 @@ var routes = [
         prerequisites.getPage,
         prerequisites.canWrite
       ],
-      cors: {
-        methods: ['GET', 'POST', 'OPTIONS']
-      }
+      cors: true
     }
   }, {
     path: '/users/{user}/projects/{project}/pages/{page}/elements/{element}',
@@ -537,9 +503,7 @@ var routes = [
         prerequisites.getElement,
         prerequisites.canWrite
       ],
-      cors: {
-        methods: ['GET', 'PATCH', 'DELETE', 'OPTIONS']
-      }
+      cors: true
     }
   }, {
     path: '/users/{user}/projects/{project}/pages/{page}/elements/{element}',
@@ -565,9 +529,7 @@ var routes = [
         prerequisites.getElement,
         prerequisites.canDelete
       ],
-      cors: {
-        methods: ['GET', 'PATCH', 'DELETE', 'OPTIONS']
-      }
+      cors: true
     }
   }, {
     path: '/view-project/{project}',
@@ -585,9 +547,7 @@ var routes = [
       pre: [
         prerequisites.isValidView
       ],
-      cors: {
-        methods: ['POST', 'OPTIONS']
-      }
+      cors: true
     }
   }
 ];

@@ -39,18 +39,14 @@ var routes = [
       pre: [
         prerequisites.calculateOffset
       ],
-      cors: {
-        methods: ['GET', 'OPTIONS']
-      }
+      cors: true
     }
   }, {
     path: '/featured-tags',
     method: 'get',
     handler: projects.get.featuredTags,
     config: {
-      cors: {
-        methods: ['GET', 'OPTIONS']
-      }
+      cors: true
     }
   }, {
     path: '/projects/tagged/{tag}',
@@ -69,9 +65,7 @@ var routes = [
       pre: [
         prerequisites.calculateOffset
       ],
-      cors: {
-        methods: ['GET', 'OPTIONS']
-      }
+      cors: true
     }
   }, {
     path: '/projects/{project}',
@@ -83,9 +77,7 @@ var routes = [
           project: numericSchema
         }
       },
-      cors: {
-        methods: ['GET', 'PATCH', 'OPTIONS', 'DELETE']
-      }
+      cors: true
     }
   }, {
     path: '/users/{user}/projects',
@@ -105,9 +97,7 @@ var routes = [
         prerequisites.getUser,
         prerequisites.calculateOffset
       ],
-      cors: {
-        methods: ['GET', 'POST', 'OPTIONS']
-      }
+      cors: true
     }
   }, {
     path: '/users/{user}/projects/{project}',
@@ -123,9 +113,7 @@ var routes = [
       pre: [
         prerequisites.getUser
       ],
-      cors: {
-        methods: ['GET', 'PATCH', 'OPTIONS', 'DELETE']
-      }
+      cors: true
     }
   }, {
     path: '/users/{user}/projects/{project}',
@@ -138,18 +126,14 @@ var routes = [
           project: numericSchema
         }
       },
-      cors: {
-        methods: ['GET', 'PATCH', 'OPTIONS', 'DELETE']
-      }
+      cors: true
     }
   }, {
     path: '/featured-tags',
     method: 'options',
     handler: projects.options,
     config: {
-      cors: {
-        methods: ['GET', 'OPTIONS']
-      }
+      cors: true
     }
   }, {
     path: '/users/{user}/projects',
@@ -165,9 +149,7 @@ var routes = [
           page: Joi.number().integer().min(1).default(1)
         }
       },
-      cors: {
-        methods: ['GET', 'OPTIONS']
-      }
+      cors: true
     }
   }, {
     path: '/users/{user}/bulk',
@@ -179,9 +161,7 @@ var routes = [
           user: numericSchema
         }
       },
-      cors: {
-        methods: ['POST', 'OPTIONS']
-      }
+      cors: true
     }
   }, {
     path: '/projects',
@@ -194,9 +174,7 @@ var routes = [
           page:Joi.number().integer().min(1)
         }
       },
-      cors: {
-        methods: ['GET', 'OPTIONS']
-      }
+      cors: true
     }
   }, {
     path: '/users/{user}/projects/{project}/remixes',
@@ -218,9 +196,7 @@ var routes = [
         prerequisites.getProject,
         prerequisites.calculateOffset
       ],
-      cors: {
-        methods: ['GET', 'POST', 'OPTIONS']
-      }
+      cors: true
     }
   }, {
     path: '/discover',
@@ -236,18 +212,14 @@ var routes = [
       pre: [
         prerequisites.calculateOffset
       ],
-      cors: {
-        methods: ['GET', 'OPTIONS']
-      }
+      cors: true
     }
   }, {
     path: '/discover',
     method: 'options',
     handler: projects.options,
     config: {
-      cors: {
-        methods: ['GET', 'OPTIONS']
-      }
+      cors: true
     }
   }, {
     path: '/discover/{language}',
@@ -267,18 +239,14 @@ var routes = [
       pre: [
         prerequisites.calculateOffset
       ],
-      cors: {
-        methods: ['GET', 'OPTIONS']
-      }
+      cors: true
     }
   }, {
     path: '/discover/{locale}',
     method: 'options',
     handler: projects.options,
     config: {
-      cors: {
-        methods: ['GET', 'OPTIONS']
-      }
+      cors: true
     }
   }, {
     path: '/users/{user}/projects/{project}/remixes',
@@ -291,9 +259,7 @@ var routes = [
           project: numericSchema
         }
       },
-      cors: {
-        methods: ['GET', 'POST', 'OPTIONS']
-      }
+      cors: true
     }
   }, {
     path: '/view-project/{project}',
@@ -305,9 +271,7 @@ var routes = [
           project: numericSchema
         }
       },
-      cors: {
-        methods: ['POST', 'OPTIONS']
-      }
+      cors: true
     }
   }, {
     path: '/users/{user}/projects/{project}/pages',
@@ -324,9 +288,7 @@ var routes = [
         prerequisites.getUser,
         prerequisites.getProject
       ],
-      cors: {
-        methods: ['GET', 'POST', 'OPTIONS']
-      }
+      cors: true
     }
   }, {
     path: '/users/{user}/projects/{project}/pages',
@@ -339,9 +301,7 @@ var routes = [
           project: numericSchema
         }
       },
-      cors: {
-        methods: ['GET', 'POST', 'OPTIONS']
-      }
+      cors: true
     }
   }, {
     path: '/users/{user}/projects/{project}/pages/{page}',
@@ -359,9 +319,7 @@ var routes = [
         prerequisites.getUser,
         prerequisites.getProject
       ],
-      cors: {
-        methods: ['GET', 'PATCH', 'DELETE', 'OPTIONS']
-      }
+      cors: true
     }
   }, {
     path: '/users/{user}/projects/{project}/pages/{page}',
@@ -375,9 +333,7 @@ var routes = [
           page: numericSchema
         }
       },
-      cors: {
-        methods: ['GET', 'PATCH', 'DELETE', 'OPTIONS']
-      }
+      cors: true
     }
   }, {
     path: '/users/{user}/projects/{project}/pages/{page}/elements',
@@ -396,9 +352,7 @@ var routes = [
         prerequisites.getProject,
         prerequisites.getPage
       ],
-      cors: {
-        methods: ['GET', 'POST', 'OPTIONS']
-      }
+      cors: true
     }
   }, {
     path: '/users/{user}/projects/{project}/pages/{page}/elements',
@@ -412,9 +366,7 @@ var routes = [
           page: numericSchema
         }
       },
-      cors: {
-        methods: ['GET', 'POST', 'OPTIONS']
-      }
+      cors: true
     }
   }, {
     path: '/users/{user}/projects/{project}/pages/{page}/elements/{element}',
@@ -434,9 +386,7 @@ var routes = [
         prerequisites.getProject,
         prerequisites.getPage
       ],
-      cors: {
-        methods: ['GET', 'PATCH', 'DELETE', 'OPTIONS']
-      }
+      cors: true
     }
   }, {
     path: '/users/{user}/projects/{project}/pages/{page}/elements/{element}',
@@ -451,33 +401,7 @@ var routes = [
           element: numericSchema
         }
       },
-      cors: {
-        methods: ['GET', 'PATCH', 'DELETE', 'OPTIONS']
-      }
-    }
-  }, {
-    path: '/docs/css/style.css',
-    method: 'get',
-    handler: {
-      file: './node_modules/lout/public/css/style.css'
-    },
-    config: {
-      plugins: {
-        lout: false
-      },
-      cors: false
-    }
-  }, {
-    path: '/',
-    method: 'get',
-    handler: function(request, reply) {
-      reply.redirect('/docs');
-    },
-    config: {
-      plugins: {
-        lout: false
-      },
-      cors: false
+      cors: true
     }
   }
 ];

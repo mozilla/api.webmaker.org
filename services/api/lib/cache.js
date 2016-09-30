@@ -7,7 +7,7 @@ exports.register = function(server, options, next) {
   var cacheName = 'hapi-cache';
 
   function debug(data) {
-    server.debug({
+    server.log('debug', {
       message: 'invalidating cache',
       data: data
     });

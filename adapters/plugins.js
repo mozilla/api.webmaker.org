@@ -4,7 +4,7 @@ module.exports = [
     register: require('blankie'),
     options: require('../lib/csp')
   },
-  require('lout'),
   require('hapi-auth-bearer-token'),
-  require('hapi-version')
+  require('hapi-version'),
+  require('inert')
 ];
